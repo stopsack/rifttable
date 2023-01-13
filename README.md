@@ -4,6 +4,8 @@
 # Automated, Reproducible Generation of Results Tables: Bridging the Rift Between Epidemiologists and Their Data
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/stopsack/rifttable/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stopsack/rifttable/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Tables are the key format in which epidemiologists present their

@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 # Automated, Reproducible Generation of Results Tables: Bridging the Rift Between Epidemiologists and Their Data
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/stopsack/rifttable/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stopsack/rifttable/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Tables are the key format in which epidemiologists present their results. Many results tables in applied studies merely show point estimates and confidence intervals, or even p-values, from regression models: a “growing rift between epidemiologists and their data” ([Rothman 2017](https://doi.org/10.1007/s10654-017-0314-3)). “Actual,” descriptive data, such as counts stratified by exposure and a main confounder or effect modifier, are often lacking. 
