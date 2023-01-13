@@ -22,9 +22,6 @@ table_regress <- function(data, estimand, event, time, time2, outcome,
                           is_trend = FALSE, nmin = NA,
                           to = "-") {
   xlevels <- data %>% dplyr::pull(.data$.exposure) %>% levels()
-  if(is.null(xlevels) & stringr::str_detect(string = estimand,
-                                            pattern = "rmtl"))
-    xlevels <- "Overall"
 
   if(stringr::str_detect(string = estimand, pattern = "_joint") &
      is_trend == FALSE) {  # trends must be stratum-specific
@@ -136,23 +133,17 @@ table_regress <- function(data, estimand, event, time, time2, outcome,
     bootrepeats <- 1000
   }
 
-  # Extract follow-up time for RMTL:
-  rmtl_noci <- FALSE
+  # Extract follow-up time for survival data:
   if(stringr::str_detect(string = estimand,
-                         pattern = "rmtl|rmtdiff|survdiff|cumincdiff")) {
+                         pattern = "survdiff|cumincdiff")) {
     timepoint <- stringr::str_remove_all(
       string = estimand,
-      pattern = "rmtl|rmtdiff|_joint|survdiff|cumincdiff|\\(ci\\)|\\h")
-    rmtl_noci <- dplyr::if_else(stringr::str_detect(string = estimand,
-                                                    pattern = "rmtl") &
-                                  !stringr::str_detect(string = estimand,
-                                                       pattern = "\\(ci\\)"),
-                                true = TRUE, false = FALSE)
+      pattern = "_joint|survdiff|cumincdiff|\\(ci\\)|\\h")
     estimand_joint <- stringr::str_extract(string = estimand,
                                            pattern = "_joint|")
     estimand <- stringr::str_extract(
       string = estimand,
-      pattern = "rmtdiff|rmtl|cumincdiff|survdiff")
+      pattern = "cumincdiff|survdiff")
     surv_cuminc <- dplyr::if_else(estimand == "survdiff",
                                   true = "survival", false = "cuminc")
     estimand <- paste0(estimand, estimand_joint)
@@ -270,53 +261,6 @@ table_regress <- function(data, estimand, event, time, time2, outcome,
                     tau = tau, method = "fn",
                     data = data)
                 },
-                rmtdiff =,
-                rmtdiff_joint =,
-                rmtl = {
-                  reference <- 0
-                  exponent <- FALSE
-                  to <- dplyr::if_else(is.null(to), true = " to ", false = to)
-                  if(confounders == "") {
-                    if(is.na(time2))
-                      estimate_rmtl(data = data,
-                                    exposure = ".exposure",
-                                    time = time,
-                                    event = event,
-                                    tau = timepoint)
-                    else
-                      estimate_rmtl(data = data,
-                                    exposure = ".exposure",
-                                    time = time, time2 = time2,
-                                    event = event,
-                                    tau = timepoint)
-                  } else {
-                    if(length(confounders) > 1 |
-                       stringr::str_detect(string = confounders,
-                                           pattern = "\\+"))
-                      stop(paste("For RMTL, the 'confounders' variable is used",
-                                 "to specifify user-defined weights. More than",
-                                 "one variable was given:", confounders))
-                    if(!(confounders %in% names(data))) {
-                      stop(paste("The weights for RMTL, given via the",
-                                 "'confounders' variable, were not found",
-                                 "tn the data:", confounders))
-                    }
-                    if(is.na(time2))
-                      estimate_rmtl(data = data,
-                                    exposure = ".exposure",
-                                    time = time,
-                                    event = event,
-                                    weight = confounders,
-                                    tau = timepoint)
-                    else
-                      estimate_rmtl(data = data,
-                                    exposure = ".exposure",
-                                    time = time, time2 = time2,
-                                    event = event,
-                                    weight = confounders,
-                                    tau = timepoint)
-                  }
-                },
                 survdiff =,
                 survdiff_joint = ,
                 cumincdiff = ,
@@ -352,13 +296,6 @@ table_regress <- function(data, estimand, event, time, time2, outcome,
                                              .data$conf.low,
                                              .data$conf.high),
                          .funs = exp) },
-    # RMTL/its difference via estimate_rmtl() have no tidy()
-    rmtdiff_joint =,
-    rmtdiff = { purrr::pluck(fit, "rmtdiff") %>%
-        dplyr::slice(-1) %>%  # remove first line with reference
-        dplyr::mutate(term = paste0(".exposure", .data$exposure)) },
-    rmtl = { purrr::pluck(fit, "rmtl") %>%
-        dplyr::mutate(term = paste0(".exposure", .data$exposure)) },
     # survdiff_ci() already returns tidy-ish data:
     survdiff =,
     survdiff_joint = ,
@@ -439,19 +376,13 @@ table_regress <- function(data, estimand, event, time, time2, outcome,
           is.na(.data$conf.low) |
           as.character(.data$conf.low) == "NA" ~
           "--",
-        rmtl_noci == TRUE ~
-          .data$estimate,
-        # includes "rmtl (ci)":
         TRUE ~
           paste0(.data$estimate, " (",
                  .data$conf.low, to,
                  .data$conf.high, ")")),
       res = dplyr::if_else(
         (is.na(.data$estimate) | .data$ref_rrrd == TRUE) &
-          dplyr::row_number() == 1 &
-          !stringr::str_detect(
-            string = estimand,
-            pattern = "rmtl"),
+          dplyr::row_number() == 1,
         true = paste(reference, "(reference)"),
         false = .data$res),
       res = dplyr::if_else(.data$.per_stratum < nmin,

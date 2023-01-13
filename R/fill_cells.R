@@ -67,7 +67,7 @@ fill_cells <- function(data, event, time, time2, outcome,
   # Check that time and event variable exist, if needed
   if(stringr::str_detect(
     string = type,
-    pattern = "events|hr|rate|time|medsurv|medfu|maxfu|cuminc|rmtl|rmtdiff|^surv")) {
+    pattern = "events|hr|rate|time|medsurv|medfu|maxfu|cuminc|^surv")) {
     if(!(event %in% names(data)))
       stop(paste0("Survival data using type = '", type, "' requested, but ",
                   "event variable '", event, "' is not valid for the dataset."))
@@ -114,7 +114,7 @@ fill_cells <- function(data, event, time, time2, outcome,
         ratio_digits[1],
       stringr::str_detect(
         string = type,
-        pattern = "^diff|mean|median|quantreg|medsurv|medfu|maxfu|rmtl|rmtdiff|^sd|range") ~
+        pattern = "^diff|mean|median|quantreg|medsurv|medfu|maxfu|^sd|range") ~
         diff_digits[1],
       stringr::str_detect(
         string = type,
@@ -131,10 +131,8 @@ fill_cells <- function(data, event, time, time2, outcome,
 
   if(stringr::str_detect(
     string = type,
-    pattern = "hr|^rr|rd|irr|fold|foldlog|^diff|or|quantreg|rmtl|rmtdiff|survdiff|cumincdiff")) {
-    if(is.na(exposure) &   # no exposure variable given
-       !stringr::str_detect(string = type,
-                            pattern = "rmtl")) {
+    pattern = "hr|^rr|rd|irr|fold|foldlog|^diff|or|quantreg|survdiff|cumincdiff")) {
+    if(is.na(exposure)) {  # no exposure variable given
       return(tibble::tibble(.exposure = "Overall", res = ""))
     } else {
       res_cat <- table_regress(data = data,

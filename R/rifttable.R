@@ -107,8 +107,6 @@
 #'        to obtain models with stratification by, e.g., \code{site}.
 #'        For Poisson models, can add \code{"+ offset(log(persontime))"}
 #'        to define, e.g., \code{persontime} as the offset.
-#'        For differences in restricted mean time lost (\code{rmtdiff}) with
-#'        weighting, provide a single variable name with user-defined weights.
 #'   *  \code{type} The statistic requested (case-insensitive):
 #'
 #'      Comparative estimates with 95% confidence intervals:
@@ -138,12 +136,6 @@
 #'        model after log transformation of the outcome
 #'        (i.e., ratio of geometric means).
 #'      * \code{"or"} Odds ratio from logistic regression.
-#'      * \code{"rmtdiff"} Difference in restricted mean time lost. Provide
-#'        time horizon, e.g., \code{"rmtdiff 2.5"} to evaluate differences in
-#'        restricted mean time lost over the first 2.5 years of follow up.
-#'        The first non-censoring event will be taken as the outcome.
-#'        See \code{confounders} for how to provide weights. Uses
-#'        \code{\link[khsmisc]{estimate_rmtl}}.
 #'      * \code{"survdiff"} Difference in survival from Kaplan-Meier estimator.
 #'        Provide time horizon, e.g., \code{"survdiff 2.5"} to evaluate
 #'        differences in survival at 2.5 years. Cannot not handle confounders.
@@ -207,12 +199,6 @@
 #'        survival for censoring.
 #'      * \code{"medfu (iqr)"} Median and interquartile range for follow-up.
 #'      * \code{"maxfu"} Maximum follow-up time.
-#'      * \code{"rmtl"} Restricted mean time lost. Provide
-#'        time horizon, e.g., \code{"rmtl 2.5"} to evaluate restricted mean
-#'        time lost over the first 2.5 years of follow up.
-#'        The first non-censoring event will be taken as the outcome.
-#'        See \code{confounders} for how to provide weights. Uses
-#'        \code{\link[khsmisc]{estimate_rmtl}}.
 #'      * \code{"mean"} Mean.
 #'      * \code{"mean (ci)"} Mean and 95% CI.
 #'      * \code{"mean (sd)"} Mean and standard deviation.
@@ -229,7 +215,7 @@
 #'      stratum of the \code{effect_modifier}. Append \code{"_joint"}
 #'      to \code{"hr"}, \code{"rr"}, \code{"rd"}, \code{"irr"},
 #'      \code{"irrrob"}, \code{"diff"}, \code{"fold"}, \code{"foldlog"},
-#'      \code{"quantreg"}, \code{"or"}, or \code{"rmtdiff"} to
+#'      \code{"quantreg"}, or \code{"or"} to
 #'      obtain "joint" models for exposure and effect modifier that have a
 #'      single reference category.
 #'      Example: \code{type = "hr_joint"}. The reference categories
@@ -328,7 +314,6 @@
 #'   "  Rate/1000 py (95% CI)",    NULL,     "",           "rate (ci)",
 #'   "  Unadjusted HR (95% CI)",   NULL,     "",           "hr",
 #'   "  Age-adjusted HR (95% CI)", NULL,     "+ age",      "hr",
-#'   "  2-year restricted mean time lost", NULL, "",       "rmtl2",
 #'   "",                           NULL,     "",           "blank",
 #'   "**Stratified models**",      NULL,     "",           "",
 #'   "*ECOG PS1* (events/N)",      1,        "",           "events/total",
