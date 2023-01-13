@@ -640,7 +640,7 @@ rifttable <- function(design, data, layout = "rows", factor = 1000,
       dplyr::mutate(result = purrr::map2(
         .x = .data$result,
         .y = .data$result2,
-        .f = ~full_join(.x, .y,
+        .f = ~dplyr::full_join(.x, .y,
                         by = ".exposure",
                         suffix = c(".1",
                                    ".2")))) %>%
@@ -709,7 +709,7 @@ rifttable <- function(design, data, layout = "rows", factor = 1000,
         }
         res %>%
           dplyr::group_by(.data$.exposure) %>%
-          dplyr::mutate(.exposure = if_else(.data$whichres == "res.1",
+          dplyr::mutate(.exposure = dplyr::if_else(.data$whichres == "res.1",
                                             true = paste0(.data$.exposure),
                                             false = "")) %>%
           dplyr::ungroup() %>%

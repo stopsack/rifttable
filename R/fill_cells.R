@@ -33,7 +33,7 @@ fill_cells <- function(data, event, time, time2, outcome,
     data <- data %>% dplyr::rename(.exposure = dplyr::one_of(exposure))
 
     # Check that exposure is categorical
-    if(!(class(data %>% pull(.data$.exposure))[1] %in% c("factor", "character",
+    if(!(class(data %>% dplyr::pull(.data$.exposure))[1] %in% c("factor", "character",
                                                          "logical")))
       warning(paste0("Exposure variable '", exposure,
                      "' is not categorical (factor, character, or logical). ",
@@ -48,7 +48,7 @@ fill_cells <- function(data, event, time, time2, outcome,
     if(!(trend %in% names(data)))
       stop(paste0("Trend variable '", trend, "' is not valid for the dataset."))
     data <- data %>% dplyr::rename(.trend = dplyr::one_of(trend))
-    if(class(data %>% pull(.data$.trend))[1] != "numeric")
+    if(class(data %>% dplyr::pull(.data$.trend))[1] != "numeric")
       stop(paste0("Trend variable '", trend,
                   "' is not continuous (numeric)."))
   }
@@ -135,7 +135,7 @@ fill_cells <- function(data, event, time, time2, outcome,
     if(is.na(exposure) &   # no exposure variable given
        !stringr::str_detect(string = type,
                             pattern = "rmtl")) {
-      return(tibble(.exposure = "Overall", res = ""))
+      return(tibble::tibble(.exposure = "Overall", res = ""))
     } else {
       res_cat <- table_regress(data = data,
                                estimand = type,

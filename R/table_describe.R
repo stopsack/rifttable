@@ -106,39 +106,39 @@ table_counts <- function(data, event, time, time2, outcome,
       type == "time"                  ~
         paste(trimws(format(round(sum(.data$time), digits = digits),
                             nsmall = digits))),
-      type == "total"                 ~ paste(n()),
-      type == "outcomes/total"        ~ paste(sum(.data$outcome), n(),
+      type == "total"                 ~ paste(dplyr::n()),
+      type == "outcomes/total"        ~ paste(sum(.data$outcome), dplyr::n(),
                                               sep = "/"),
       type == "events/time"           ~
         paste(sum(.data$event),
               trimws(format(round(sum(.data$time), digits = digits),
                             nsmall = digits)),
               sep = "/"),
-      type == "events/total"          ~ paste(sum(.data$event), n(),
+      type == "events/total"          ~ paste(sum(.data$event), dplyr::n(),
                                               sep = "/"),
       type == "cases/controls"        ~ paste(sum(.data$outcome),
                                               sum(!.data$outcome),
                                               sep = "/"),
       type == "risk"                  ~
-        paste0(trimws(format(round(sum(.data$outcome) / n() *
-                                     if_else(risk_percent == TRUE,
+        paste0(trimws(format(round(sum(.data$outcome) / dplyr::n() *
+                                     dplyr::if_else(risk_percent == TRUE,
                                              true = 100, false = 1),
                                    digits = digits), nsmall = digits)),
-               if_else(risk_percent == TRUE, true = "%", false = "")),
+               dplyr::if_else(risk_percent == TRUE, true = "%", false = "")),
       type == "risk (ci)"             ~
-        paste0(trimws(format(round(sum(.data$outcome) / n() *
-                                     if_else(risk_percent == TRUE,
+        paste0(trimws(format(round(sum(.data$outcome) / dplyr::n() *
+                                     dplyr::if_else(risk_percent == TRUE,
                                              true = 100, false = 1),
                                    digits = digits), nsmall = digits)),
-               if_else(risk_percent == TRUE, true = "%", false = ""), " (",
+               dplyr::if_else(risk_percent == TRUE, true = "%", false = ""), " (",
                trimws(format(round(scoreci(success = sum(.data$outcome),
-                                           total = n())$conf.low *
-                                     if_else(risk_percent == TRUE,
+                                           total = dplyr::n())$conf.low *
+                                     dplyr::if_else(risk_percent == TRUE,
                                              true = 100, false = 1),
                                    digits = digits), nsmall = digits)), to,
                trimws(format(round(scoreci(success = sum(.data$outcome),
-                                           total = n())$conf.high *
-                                     if_else(risk_percent == TRUE,
+                                           total = dplyr::n())$conf.high *
+                                     dplyr::if_else(risk_percent == TRUE,
                                              true = 100, false = 1),
                                    digits = digits), nsmall = digits)), ")"),
       type == "rate"                  ~
@@ -160,18 +160,18 @@ table_counts <- function(data, event, time, time2, outcome,
                                    digits = digits), nsmall = digits)), ")"),
       type == "outcomes (risk)" ~
         paste0(sum(.data$outcome), " (",
-               trimws(format(round(sum(.data$outcome) / n() *
-                                     if_else(risk_percent == TRUE,
+               trimws(format(round(sum(.data$outcome) / dplyr::n() *
+                                     dplyr::if_else(risk_percent == TRUE,
                                              true = 100, false = 1),
                                    digits = digits), nsmall = digits)),
-               if_else(risk_percent == TRUE, true = "%", false = ""), ")"),
+               dplyr::if_else(risk_percent == TRUE, true = "%", false = ""), ")"),
       type == "outcomes/total (risk)" ~
-        paste0(sum(.data$outcome), "/", n(), " (",
-               trimws(format(round(sum(.data$outcome) / n() *
-                                     if_else(risk_percent == TRUE,
+        paste0(sum(.data$outcome), "/", dplyr::n(), " (",
+               trimws(format(round(sum(.data$outcome) / dplyr::n() *
+                                     dplyr::if_else(risk_percent == TRUE,
                                              true = 100, false = 1),
                                    digits = digits), nsmall = digits)),
-               if_else(risk_percent == TRUE, true = "%", false = ""), ")"),
+               dplyr::if_else(risk_percent == TRUE, true = "%", false = ""), ")"),
       type == "events/time (rate)"    ~
         paste0(sum(.data$event), "/",
                trimws(format(round(sum(.data$time), digits = 0), nsmall = 0)),
@@ -268,18 +268,18 @@ table_counts <- function(data, event, time, time2, outcome,
               (1 - (summary(fit) %>%
                       purrr::pluck("surv") %>%
                       dplyr::last())) *
-                if_else(risk_percent == TRUE,
+                dplyr::if_else(risk_percent == TRUE,
                         true = 100, false = 1),
               digits = digits), nsmall = digits)),
-              if_else(risk_percent == TRUE, true = "%", false = ""))
+              dplyr::if_else(risk_percent == TRUE, true = "%", false = ""))
           } else {
             paste0(trimws(format(round(
               (1 - (summary(fit, times = timepoint) %>%
                       purrr::pluck("surv"))) *
-                if_else(risk_percent == TRUE,
+                dplyr::if_else(risk_percent == TRUE,
                         true = 100, false = 1),
               digits = digits), nsmall = digits)),
-              if_else(risk_percent == TRUE, true = "%", false = ""))
+              dplyr::if_else(risk_percent == TRUE, true = "%", false = ""))
           }
         } else { "" },
       type == "cuminc (ci)" ~
@@ -301,21 +301,21 @@ table_counts <- function(data, event, time, time2, outcome,
 
           paste0(trimws(format(round((1 - (fit %>% purrr::pluck("surv") %>%
                                              dplyr::last())) *
-                                       if_else(risk_percent == TRUE,
+                                       dplyr::if_else(risk_percent == TRUE,
                                                true = 100, false = 1),
                                      digits = digits),
                                nsmall = digits)),
-                 if_else(risk_percent == TRUE, true = "%", false = ""), " (",
+                 dplyr::if_else(risk_percent == TRUE, true = "%", false = ""), " (",
                  trimws(format(round((1 - (fit %>% purrr::pluck("upper") %>%
                                              dplyr::last())) *
-                                       if_else(risk_percent == TRUE,
+                                       dplyr::if_else(risk_percent == TRUE,
                                                true = 100, false = 1),
                                      digits = digits),
                                nsmall = digits)),
                  to,
                  trimws(format(round((1 - (fit %>% purrr::pluck("lower") %>%
                                              dplyr::last())) *
-                                       if_else(risk_percent == TRUE,
+                                       dplyr::if_else(risk_percent == TRUE,
                                                true = 100, false = 1),
                                      digits = digits),
                                nsmall = digits)), ")")
@@ -335,18 +335,18 @@ table_counts <- function(data, event, time, time2, outcome,
               summary(fit) %>%
                 purrr::pluck("surv") %>%
                 dplyr::last() *
-                if_else(risk_percent == TRUE,
+                dplyr::if_else(risk_percent == TRUE,
                         true = 100, false = 1),
               digits = digits), nsmall = digits)),
-              if_else(risk_percent == TRUE, true = "%", false = ""))
+              dplyr::if_else(risk_percent == TRUE, true = "%", false = ""))
           } else {
             paste0(trimws(format(round(
               summary(fit, times = timepoint) %>%
                 purrr::pluck("surv") *
-                if_else(risk_percent == TRUE,
+                dplyr::if_else(risk_percent == TRUE,
                         true = 100, false = 1),
               digits = digits), nsmall = digits)),
-              if_else(risk_percent == TRUE, true = "%", false = ""))
+              dplyr::if_else(risk_percent == TRUE, true = "%", false = ""))
           }
         } else { "" },
       type == "surv (ci)" ~
@@ -368,21 +368,21 @@ table_counts <- function(data, event, time, time2, outcome,
 
           paste0(trimws(format(round(fit %>% purrr::pluck("surv") %>%
                                        dplyr::last() *
-                                       if_else(risk_percent == TRUE,
+                                       dplyr::if_else(risk_percent == TRUE,
                                                true = 100, false = 1),
                                      digits = digits),
                                nsmall = digits)),
-                 if_else(risk_percent == TRUE, true = "%", false = ""), " (",
+                 dplyr::if_else(risk_percent == TRUE, true = "%", false = ""), " (",
                  trimws(format(round(fit %>% purrr::pluck("lower") %>%
                                        dplyr::last() *
-                                       if_else(risk_percent == TRUE,
+                                       dplyr::if_else(risk_percent == TRUE,
                                                true = 100, false = 1),
                                      digits = digits),
                                nsmall = digits)),
                  to,
                  trimws(format(round(fit %>% purrr::pluck("upper") %>%
                                        dplyr::last() *
-                                       if_else(risk_percent == TRUE,
+                                       dplyr::if_else(risk_percent == TRUE,
                                                true = 100, false = 1),
                                      digits = digits),
                                nsmall = digits)), ")")

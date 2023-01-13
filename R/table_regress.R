@@ -203,7 +203,7 @@ table_regress <- function(data, estimand, event, time, time2, outcome,
                 rd = {
                   reference <- 0
                   exponent <- FALSE
-                  multiply <- if_else(risk_percent == TRUE,
+                  multiply <- dplyr::if_else(risk_percent == TRUE,
                                       true = 100, false = 1)
                   to <- dplyr::if_else(is.null(to), true = " to ", false = to)
                   risks::riskdiff(formula = stats::as.formula(
@@ -324,7 +324,7 @@ table_regress <- function(data, estimand, event, time, time2, outcome,
                   reference <- 0
                   exponent <- FALSE
                   to <- dplyr::if_else(is.null(to), true = " to ", false = to)
-                  multiply <- if_else(risk_percent == TRUE,
+                  multiply <- dplyr::if_else(risk_percent == TRUE,
                                       true = 100, false = 1)
                   if(is.na(time2))
                     survdiff_ci(formula = stats::as.formula(
