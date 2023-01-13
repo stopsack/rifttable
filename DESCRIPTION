@@ -3,37 +3,43 @@ Type: Package
 Title: Results Tables to Bridge the Rift Between Epidemiologists and Their Data
 Version: 0.5.0
 Authors@R:
-    person(given = "Konrad",
+    person(given = "Konrad H.",
            family = "Stopsack",
            role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-0722-1311"))
            email = "stopsack@post.harvard.edu",
+           comment = c(ORCID = "0000-0002-0722-1311"))
 Description: The rifttable package creates a presentation-ready stratified 
     results tables for epidemiologists, containing both descriptive and 
     inferential statistics.
-License: GPL-3
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Depends:
+    R (>= 4.1.0)
 Imports:
+    broom (>= 0.7.0),
+    dplyr (>= 1.0.8),
+    labelled (>= 2.2.0),
+    gt (>= 0.8.0),
+    purrr, 
     risks,
     rlang (>= 0.4.0),
     stats,
-    utils,
     survival,
-    tidyverse (>= 1.3.0),
-    purrr, 
     stringr,
-    labelled (>= 2.2.0),
-    broom (>= 0.7.0),
-    gt (>= 0.8.0),
+    tibble,
+    tidyr,
     quantreg
 Suggests: 
+    knitr,
     markdown,
     rmarkdown,
-    sandwich
+    sandwich,
+    testthat (>= 3.0.0)
 Remotes:
     stopsack/risks
 VignetteBuilder: knitr
 URL: https://stopsack.github.io/rifttable, https://github.com/stopsack/rifttable
+Config/testthat/edition: 3

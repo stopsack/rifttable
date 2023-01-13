@@ -1,0 +1,63 @@
+---
+output: 
+  github_document:
+    df_print: kable
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# Automated, Reproducible Generation of Results Tables: Bridging the Rift Between Epidemiologists and Their Data
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Tables are the key format in which epidemiologists present their results. Many results tables in applied studies merely show point estimates and confidence intervals, or even p-values, from regression models: a “growing rift between epidemiologists and their data” ([Rothman 2017](https://doi.org/10.1007/s10654-017-0314-3)). “Actual,” descriptive data, such as counts stratified by exposure and a main confounder or effect modifier, are often lacking. 
+
+**rifttable** creates presentation-ready results tables for epidemiologists in an automated, reproducible fashion. The user provides the final analytical dataset and specifies the design of the table, with rows and/or columns defined by exposure(s), effect modifier(s), and estimands as desired, allowing to show descriptors and inferential estimates in one table -- bridging the rift between epidemiologists and their data, one table at a time.
+
+
+## Installation
+
+You can install the development version of rifttable directly from GitHub:
+
+``` r
+remotes::install_github("stopsack/rifttable")
+```
+
+The installation procedure requires the {remotes} package, obtainable via `install.packages("remotes")`.
+
+
+## Example
+
+```{r example}
+library(rifttable)
+
+tibble::tribble(
+  ~label,                       ~type,                   ~stratum,         
+  "Overall",                    "",                      "",               
+  "– Deaths/N",                 "outcomes/total",        c("Low", "High"), 
+  "– Risk",                     "risk",                  c("Low", "High"), 
+  "– Risk ratio (95% CI)",      "rr",                    c("Low", "High"), 
+  "– Risk difference (95% CI)", "rd",                    c("Low", "High"), 
+  "",                           "",                      "",               
+  "Low hormone receptor",       "",                      "",               
+  "– Deaths/N (Risk)",          "outcomes/total (risk)", "Low",           
+  "– Risk difference (95% CI)", "rd",                    "Low",           
+  "High hormone receptor",      "",                      "",               
+  "– Deaths/N (Risk)",          "outcomes/total (risk)", "High",
+  "– Risk difference (95% CI)", "rd",                    "High") |>
+  dplyr::mutate(
+    exposure = "stage",
+    outcome = "death",
+    effect_modifier = "receptor") |> 
+  rifttable(data = breastcancer)
+```

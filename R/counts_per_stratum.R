@@ -21,7 +21,7 @@ counts_per_stratum <- function(data, event, estimand, is_trend) {
       string = estimand,
       pattern = "irrrob")) {
     data <- data %>%
-      dplyr::select(.data$.exposure,
+      dplyr::select(".exposure",
                     .event = {{ event }}) %>%
       dplyr::filter(as.logical(.data$.event))  # == TRUE
   }
