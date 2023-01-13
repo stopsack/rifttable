@@ -1,4 +1,4 @@
-#' Table 2: Stratified Result Tables
+#' Results Tables for Epidemiology
 #'
 #' @description This function displays descriptive
 #' and inferential results for binary, continuous, and survival data
@@ -39,16 +39,16 @@
 #'   \code{"rows"}.
 #' @param prepare_md Deprecated parameter; ignored. Two/four spaces in the
 #'   \code{label} column of the \code{design} matrix are now being passed on
-#'   silently as an attribute to \code{\link[khsmisc]{mygt}} to ensure
+#'   silently as an attribute to \code{\link[rifttable]{rt_gt}} to ensure
 #'   indentation.
 #' @param custom Optional. Defaults to \code{NULL}. A custom function (or a
 #'   \code{\link{list}} of such functions), that can be called via
 #'   \code{type = "custom"} (or \code{type = "custom2"}, for example).
 #'   Must have at minimum the arguments \code{data} and
 #'   \code{...}, i.e., be defined as \code{function(data, ...)}.
-#'   Custom functions receive \code{table2}'s dataset \code{data}, where
+#'   Custom functions receive \code{rifttable}'s dataset \code{data}, where
 #'   the exposure variable has been renamed to \code{.exposure}. All other
-#'   variables are unchanged. All arguments of \code{table2} and the elements of
+#'   variables are unchanged. All arguments of \code{rifttable} and the elements of
 #'   the  \code{design} dataset are passed along as arguments to the custom
 #'   function. Functions must return a data frame or tibble with as many rows as
 #'   exposure levels and two columns: an exposure column, \code{.exposure}, and
@@ -147,12 +147,12 @@
 #'      * \code{"survdiff"} Difference in survival from Kaplan-Meier estimator.
 #'        Provide time horizon, e.g., \code{"survdiff 2.5"} to evaluate
 #'        differences in survival at 2.5 years. Cannot not handle confounders.
-#'        Uses \code{\link[khsmisc]{survdiff_ci}}.
+#'        Uses \code{\link[rifttable]{survdiff_ci}}.
 #'      * \code{"cumincdiff"} Difference in cumulative incidence from
 #'        Kaplan-Meier estimator. Provide time horizon, e.g.,
 #'        \code{"cumincdiff 2.5"} to evaluate differences in cumulative
 #'        incidence at 2.5 years. Cannot not handle confounders.
-#'        Uses \code{\link[khsmisc]{survdiff_ci}}.
+#'        Uses \code{\link[rifttable]{survdiff_ci}}.
 #'
 #'      Absolute estimates per exposure category:
 #'
@@ -170,7 +170,7 @@
 #'        \code{risk_percent}.
 #'      * \code{"risk (ci)"} Risk with 95% confidence interval
 #'        (Wilson score interval for binomial proportions, see
-#'        \code{\link[khsmisc]{scoreci}}).
+#'        \code{\link[rifttable]{scoreci}}).
 #'      * \code{"cuminc"} Cumulative incidence ("risk") from the Kaplan-Meier
 #'        estimator. Provide time point (e.g., 1.5-year cumulative incidence)
 #'        using \code{"cuminc 1.5"}. If no time point is provided, returns
@@ -194,7 +194,7 @@
 #'      * \code{"rate"} Event rate: event count divided by person-time,
 #'        multiplied by \code{factor}.
 #'      * \code{"rate (ci)"} Event rate with 95% confidence interval
-#'        (Poisson-type interval, see \code{\link[khsmisc]{rates}}).
+#'        (Poisson-type large-sample interval).
 #'      * \code{"outcomes (risk)"} A combination: Outcomes
 #'        followed by risk in parentheses.
 #'      * \code{"outcomes/total (risk)"} A combination: Outcomes slash total
@@ -219,7 +219,7 @@
 #'      * \code{"median"} Median.
 #'      * \code{"median (iqr)"} Median and interquartile range.
 #'      * \code{"range"} Range: Minimum to maximum value.
-#'      * \code{"custom"} A custom function, provided to \code{table2} through
+#'      * \code{"custom"} A custom function, provided to \code{rifttable} through
 #'        the argument \code{custom}. See there for details.
 #'        If a list of multiple functions is provided, use \code{"custom1"}
 #'        through \code{"custom99"} to select one function.
@@ -247,7 +247,7 @@
 #'     stratum, confounders, and outcome.
 #'   * \code{digits} Optional. The number of digits for rounding an individual
 #'     line. Defaults to \code{NA}, where the number of
-#'     digits will be determined based on \code{table2}'s arguments
+#'     digits will be determined based on \code{rifttable}'s arguments
 #'     \code{risk_percent}, \code{risk_digits}, \code{diff_digits},
 #'     \code{ratio_digits}, or \code{rate_digits}, as applicable.
 #'   * \code{digits2} Optional. As \code{digits}, for the second
@@ -265,10 +265,10 @@
 #' If regression models cannot provide estimates in a stratum, e.g.,
 #' because there are no events, then \code{"--"} will be printed. Accompanying
 #' warnings need to be suppressed manually, if appropriate, using
-#' \code{suppressWarnings(table2(...))}.
+#' \code{suppressWarnings(rifttable(...))}.
 #'
-#' @return Tibble. Get formatted output by passing on to
-#'   \code{\link[khsmisc]{mygt}}.
+#' @return Tibble. Get formatted output as a gt table by passing on to
+#'   \code{\link[rifttable]{rt_gt}}.
 #' @export
 #'
 #' @references
@@ -306,11 +306,11 @@
 #'                 exposure = "sex",
 #'                 outcome = "status")
 #'
-#' # Generate table2
-#' table2(design = design1, data = cancer)
+#' # Generate rifttable
+#' rifttable(design = design1, data = cancer)
 #'
 #' # Use 'design' as columns (selecting RR and RD only)
-#' table2(design = design1 %>%
+#' rifttable(design = design1 |>
 #'                   dplyr::filter(label %in% c("RR", "RD")),
 #'        data = cancer,
 #'        layout = "cols")
@@ -347,9 +347,9 @@
 #'                 time = "time",
 #'                 effect_modifier = "ph.ecog")
 #'
-#' # Generate table2
-#' table2(design = design2,
-#'        data = cancer %>% dplyr::filter(ph.ecog %in% 1:2))
+#' # Generate rifttable
+#' rifttable(design = design2,
+#'        data = cancer |> dplyr::filter(ph.ecog %in% 1:2))
 #'
 #'
 #' # Example 3: Get two estimates using 'type' and 'type2'
@@ -363,11 +363,11 @@
 #'                 confounders = "+ age",
 #'                 effect_modifier = "ph.ecog")
 #'
-#' table2(design = design3,
-#'        data = cancer %>% dplyr::filter(ph.ecog %in% 1:2))
+#' rifttable(design = design3,
+#'        data = cancer |> dplyr::filter(ph.ecog %in% 1:2))
 #'
-#' table2(design = design3,
-#'        data = cancer %>% dplyr::filter(ph.ecog %in% 1:2),
+#' rifttable(design = design3,
+#'        data = cancer |> dplyr::filter(ph.ecog %in% 1:2),
 #'        layout = "cols", type2_layout = "cols")
 #'
 #'
@@ -391,16 +391,16 @@
 #'                 trend = "ph.ecog",
 #'                 outcome = "age",
 #'                 effect_modifier = "sex") %>%
-#'   table2(data = cancer %>%
 #'                   dplyr::filter(ph.ecog < 3) %>%
+#'   rifttable(data = cancer |>
 #'                   dplyr::mutate(ph.ecog_factor = factor(ph.ecog)))
 #'
 #'
 #' # Example 5: Get formatted output for Example 2 (see above)
 #' \dontrun{
-#' table2(design = design2,
 #'        data = cancer %>% dplyr::filter(ph.ecog %in% 1:2)) %>%
-#'   mygt(md = 1)  # get markdown formatting in first column ('label')
+#' rifttable(design = design2,
+#'   rt_gt(md = 1)  # get markdown formatting in first column ('label')
 #' }
 #'
 #'
@@ -435,13 +435,13 @@
 #'   "Mean: 2nd custom function",    "custom2") %>%
 #'   mutate(exposure = "sex",
 #'          outcome = "status") %>%
-#'   table2(data = cancer,
+#'   rifttable(data = cancer,
 #'          custom = list(my_custom_fun1, my_custom_fun2),
 #'          overall = TRUE)
 #'
 #' @section Example Output (see Example 5):
-#' \if{html}{\figure{table2.png}{options: width=70\%}}
-table2 <- function(design, data, layout = "rows", factor = 1000,
+#' \if{html}{\figure{rifttable.png}{options: width=70\%}}
+rifttable <- function(design, data, layout = "rows", factor = 1000,
                    risk_percent = FALSE,
                    risk_digits = dplyr::if_else(risk_percent == TRUE,
                                                 true = 0, false = 2),
@@ -488,7 +488,7 @@ table2 <- function(design, data, layout = "rows", factor = 1000,
     if(overall == TRUE) {
       if(layout == "rows") {
         return(dplyr::bind_cols(
-          table2(design = design %>% dplyr::select(-.data$exposure),
+          rifttable(design = design %>% dplyr::select(-.data$exposure),
                  data = data,
                  layout = layout,
                  factor = factor,
@@ -501,7 +501,7 @@ table2 <- function(design, data, layout = "rows", factor = 1000,
                  type2_layout = type2_layout,
                  custom = custom,
                  overall = FALSE),
-          table2(design = design,
+          rifttable(design = design,
                  data = data,
                  layout = layout,
                  factor = factor,
@@ -516,7 +516,7 @@ table2 <- function(design, data, layout = "rows", factor = 1000,
                  overall = FALSE) %>%
             dplyr::select(-1)))
       } else {
-        res_strat <- table2(design = design,
+        res_strat <- rifttable(design = design,
                             data = data,
                             layout = layout,
                             factor = factor,
@@ -530,7 +530,7 @@ table2 <- function(design, data, layout = "rows", factor = 1000,
                             custom = custom,
                             overall = FALSE)
         return(dplyr::bind_rows(
-          table2(design = design %>% dplyr::select(-.data$exposure),
+          rifttable(design = design %>% dplyr::select(-.data$exposure),
                  data = data,
                  layout = layout,
                  factor = factor,
@@ -589,11 +589,11 @@ table2 <- function(design, data, layout = "rows", factor = 1000,
                            values_fill = "") %>%
         dplyr::rename(!!name := .data$label) %>%
         dplyr::select(-.data$index)
-      # capture rows that are indented for mygt()
-      attr(res, which = "mygt.indent2") <- stringr::str_which(
+      # capture rows that are indented for rt_gt()
+      attr(res, which = "rt_gt.indent2") <- stringr::str_which(
         string = res %>% dplyr::pull(1),
         pattern = "^[:blank:]{2,3}")
-      attr(res, which = "mygt.indent4") <- stringr::str_which(
+      attr(res, which = "rt_gt.indent4") <- stringr::str_which(
         string = res %>% dplyr::pull(1),
         pattern = "^[:blank:]{4,}")
       return(res)
@@ -678,17 +678,17 @@ table2 <- function(design, data, layout = "rows", factor = 1000,
           dplyr::select(-.data$index)
       }
       if(type2_layout == "rows") {
-        attr(res, which = "mygt.indent2") <- union(
+        attr(res, which = "rt_gt.indent2") <- union(
           stringr::str_which(
             string = res %>% dplyr::pull(1),
             pattern = "^[:blank:]{2,3}"),
           which(!(1:nrow(res) %% 2)))
       } else {
-        attr(res, which = "mygt.indent2") <- stringr::str_which(
+        attr(res, which = "rt_gt.indent2") <- stringr::str_which(
           string = res %>% dplyr::pull(1),
           pattern = "^[:blank:]{2,3}")
       }
-      attr(res, which = "mygt.indent4") <- stringr::str_which(
+      attr(res, which = "rt_gt.indent4") <- stringr::str_which(
         string = res %>% dplyr::pull(1),
         pattern = "^[:blank:]{4,}")
       return(res)
