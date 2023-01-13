@@ -282,8 +282,8 @@
 #' data(cancer, package = "survival")
 #'
 #' # The exposure (here, 'sex') must be categorical
-#' cancer <- cancer %>%
-#'   tibble::as_tibble() %>%
+#' cancer <- cancer |>
+#'   tibble::as_tibble() |>
 #'   dplyr::mutate(sex = factor(sex, levels = 1:2,
 #'                              labels = c("Men", "Women")),
 #'                 time = time / 365.25,
@@ -301,7 +301,7 @@
 #'             "Outcomes (Risk)",
 #'             "Outcomes/Total (Risk)",
 #'             "RR",
-#'             "RD")) %>%
+#'             "RD")) |>
 #'   dplyr::mutate(type = label,
 #'                 exposure = "sex",
 #'                 outcome = "status")
@@ -340,7 +340,7 @@
 #'   "",                           NULL,     "",           "",
 #'   "**Joint model**, age-adj.",  NULL,     "",           "",
 #'   "  ECOG PS1",                 1,        "+ age",      "hr_joint",
-#'   "  ECOG PS2",                 2,        "+ age",      "hr_joint") %>%
+#'   "  ECOG PS2",                 2,        "+ age",      "hr_joint") |>
 #'   # Elements that are the same for all rows:
 #'   dplyr::mutate(exposure = "sex",
 #'                 event = "status",
@@ -356,7 +356,7 @@
 #' design3 <- tibble::tribble(
 #'   ~label,     ~stratum, ~type,          ~type2,
 #'   "ECOG PS1", 1,        "events/total", "hr",
-#'   "ECOG PS2", 2,        "events/total", "hr") %>%
+#'   "ECOG PS2", 2,        "events/total", "hr") |>
 #'   dplyr::mutate(exposure = "sex",
 #'                 event = "status",
 #'                 time = "time",
@@ -386,20 +386,20 @@
 #'   "",                       NULL,     "",           NA,
 #'   "Joint model",            NULL,     "",           NA,
 #'   "  Men",                  "Men",    "diff_joint", NA,
-#'   "  Women",                "Women",  "diff_joint", NA) %>%
+#'   "  Women",                "Women",  "diff_joint", NA) |>
 #'   dplyr::mutate(exposure = "ph.ecog_factor",
 #'                 trend = "ph.ecog",
 #'                 outcome = "age",
-#'                 effect_modifier = "sex") %>%
-#'                   dplyr::filter(ph.ecog < 3) %>%
+#'                 effect_modifier = "sex") |>
 #'   rifttable(data = cancer |>
+#'                   dplyr::filter(ph.ecog < 3) |>
 #'                   dplyr::mutate(ph.ecog_factor = factor(ph.ecog)))
 #'
 #'
 #' # Example 5: Get formatted output for Example 2 (see above)
 #' \dontrun{
-#'        data = cancer %>% dplyr::filter(ph.ecog %in% 1:2)) %>%
 #' rifttable(design = design2,
+#'        data = cancer |> dplyr::filter(ph.ecog %in% 1:2)) |>
 #'   rt_gt(md = 1)  # get markdown formatting in first column ('label')
 #' }
 #'
@@ -411,8 +411,8 @@
 #'
 #' # Define first, very rudimentary function
 #' my_custom_fun1 <- function(data, ...) {
-#'   data %>%
-#'     group_by(.exposure) %>%
+#'   data |>
+#'     group_by(.exposure) |>
 #'     # Directly referencing the variable 'status'--not portable
 #'     summarize(res = paste("mean =", mean(status)))
 #' }
@@ -421,10 +421,10 @@
 #' my_custom_fun2 <- function(data, outcome, ...) {
 #'   # 'outcome', like all columns of the 'design' matrix, is one argument
 #'   # that is passed along to custom functions
-#'   data %>%
-#'     group_by(.exposure) %>%
+#'   data |>
+#'     group_by(.exposure) |>
 #'     # This improved function will work in other data sets
-#'     select(.exposure, variable = {{ outcome }}) %>%
+#'     select(.exposure, variable = {{ outcome }}) |>
 #'     summarize(res = paste(round(mean(variable), digits = 3)))
 #' }
 #'
@@ -432,9 +432,9 @@
 #'   ~label,                         ~type,
 #'   "Mean (SD), built-in function", "mean (sd)",
 #'   "Mean: 1st custom function",    "custom1",
-#'   "Mean: 2nd custom function",    "custom2") %>%
+#'   "Mean: 2nd custom function",    "custom2") |>
 #'   mutate(exposure = "sex",
-#'          outcome = "status") %>%
+#'          outcome = "status") |>
 #'   rifttable(data = cancer,
 #'          custom = list(my_custom_fun1, my_custom_fun2),
 #'          overall = TRUE)
