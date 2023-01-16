@@ -1,0 +1,272 @@
+---
+title: "Get started with rifttable"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rifttable}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Loading the package
+
+After installation (using `remotes::install_github("stopsack/rifttable")`), load the package with:
+
+```{r setup}
+library(rifttable)
+```
+
+# Loading example data
+
+The `breastcancer` dataset of a binary outcome is included in the package:
+```{r data1}
+data(breastcancer)
+
+breastcancer
+```
+
+The `cancer` dataset from survival package is used in some other examples:
+```{r data2}
+data(cancer, package = "survival")
+
+cancer <- cancer |>
+  tibble::as_tibble() |>
+  dplyr::mutate(
+    # The exposure (here, 'sex') must be categorical
+    sex = factor(
+      sex,
+      levels = 1:2,
+      labels = c("Male", "Female")),
+    time = time / 365.25,
+    status = status - 1)
+
+cancer
+```
+
+
+# Example 1: Basic use with binary outcomes 
+
+Set the table design:
+
+```{r ex1a}
+design1 <- tibble::tibble(
+  label = c(
+    "Outcomes",
+    "Total",
+    "Outcomes/Total",
+    "Risk",
+    "Risk (CI)",
+    "Outcomes (Risk)",
+    "Outcomes/Total (Risk)",
+    "RR",
+    "RD")) |>
+  dplyr::mutate(
+    type = label,
+    exposure = "sex",
+    outcome = "status")
+```
+
+Generate rifttable:
+
+```{r ex1b}
+rifttable(
+  design = design1, 
+  data = cancer)
+```
+
+# Example 2: Formatted output
+
+This example uses the `design` of Example 1 above. So far, the tables produced when just running the code shown had an appearance like output in the R console. To obtain formatted tables in HTML and other output documents, pipe the output of `rifttable()` to a table formatting function such as
+
+* `knitr::kable()`: works well with all output formats, but supports only limited formatting. Add to the YAML header a statement `df_print: kable` to print all tables using kable.
+* `gt::gt()`: supports more advanced formatting. If using `rifttable::rt_gt()` as a wrapper for `gt::gt()`, indentations from the `label` of the table `design` are properly passed along, and tables are shown properly if the markdown is knitted to `github_document` (just a `.md`, not an `.html` or other formats).
+
+```{r ex2a}
+rifttable(
+  design = design1, 
+  data = cancer) |> 
+  rt_gt()
+```
+
+
+# Example 3: Swap rows and columns
+
+To use the `design` as columns instead of rows, showing only three `type`s:
+
+```{r ex3}
+rifttable(
+  design = design1 |>
+    dplyr::filter(label %in% c(
+      "Outcomes/Total (Risk)",
+      "RR", 
+      "RD")),
+  data = cancer,
+  layout = "cols") |> 
+  rt_gt()
+```
+
+
+# Example 4: Survival outcomes, effect modifier, and confounder
+
+Survival outcomes use the `time` and `event` variables in the `design` (and `type2`, with late entry, as in `survival::Surv()`), rather than the `outcome` variable used for binary, categorical, or continuous outcomes.
+
+Set table design:
+```{r ex4a}
+design2 <- tibble::tribble(
+  # Elements that vary by row:
+  ~label,                       ~stratum, ~confounders, ~type,
+  "**Overall**",                NULL,     "",           "blank",
+  "  Events",                   NULL,     "",           "events",
+  "  Person-years",             NULL,     "",           "time",
+  "  Rate/1000 py (95% CI)",    NULL,     "",           "rate (ci)",
+  "  Unadjusted HR (95% CI)",   NULL,     "",           "hr",
+  "  Age-adjusted HR (95% CI)", NULL,     "+ age",      "hr",
+  "",                           NULL,     "",           "blank",
+  "**Stratified models**",      NULL,     "",           "",
+  "*ECOG PS1* (events/N)",      1,        "",           "events/total",
+  "  Unadjusted",               1,        "",           "hr",
+  "  Age-adjusted",             1,        "+ age",      "hr",
+  "*ECOG PS2* (events/N)",      2,        "",           "events/total",
+  "  Unadjusted",               2,        "",           "hr",
+  "  Age-adjusted",             2,        "+ age",      "hr",
+  "",                           NULL,     "",           "",
+  "**Joint model**, age-adj.",  NULL,     "",           "",
+  "  ECOG PS1",                 1,        "+ age",      "hr_joint",
+  "  ECOG PS2",                 2,        "+ age",      "hr_joint") |>
+  # Elements that are the same for all rows:
+  dplyr::mutate(
+    exposure = "sex",
+    event = "status",
+    time = "time",
+    effect_modifier = "ph.ecog")
+```
+
+Generate rifttable:
+
+```{r ex4b}
+rifttable(
+  design = design2,
+  data = cancer |> 
+    dplyr::filter(ph.ecog %in% 1:2)) |> 
+  rt_gt(md = 1)
+```
+
+
+# Example 5: Two estimates using `type` and `type2`
+
+```{r ex5a}
+design3 <- tibble::tribble(
+  ~label,     ~stratum, ~type,          ~type2,
+  "ECOG PS1", 1,        "events/total", "hr",
+  "ECOG PS2", 2,        "events/total", "hr") |>
+  dplyr::mutate(
+    exposure = "sex",
+    event = "status",
+    time = "time",
+    confounders = "+ age",
+    effect_modifier = "ph.ecog")
+
+rifttable(
+  design = design3,
+  data = cancer |> 
+    dplyr::filter(ph.ecog %in% 1:2)) |> 
+  rt_gt()
+```
+
+With estimate `type` as columns:
+
+```{r ex5b}
+rifttable(
+  design = design3,
+  data = cancer |> 
+    dplyr::filter(ph.ecog %in% 1:2),
+  layout = "cols", 
+  type2_layout = "cols") |> 
+  rt_gt()
+```
+
+
+# Example 6: Continuous outcomes, rounding, and trend (slope)
+
+Request rounding to 1 decimal digit in some cases; add a continuous trend, *i.e.*, the slope per one unit of the `trend` variable:
+
+```{r ex6}
+tibble::tribble(
+  ~label,                   ~stratum, ~type,        ~digits,
+  "Marginal mean (95% CI)", NULL,     "mean (ci)",  1,
+  "  Male",                 "Male",   "mean",       NA,
+  "  Female",               "Female", "mean",       NA,
+  "",                       NULL,     "",           NA,
+  "Stratified model",       NULL,     "",           NA,
+  "  Male",                 "Male",   "diff",       1,
+  "  Female",               "Female", "diff",       1,
+  "",                       NULL,     "",           NA,
+  "Joint model",            NULL,     "",           NA,
+  "  Male",                 "Male",   "diff_joint", NA,
+  "  Female",               "Female", "diff_joint", NA) |>
+  dplyr::mutate(
+    exposure = "ph.ecog_factor",
+    trend = "ph.ecog",
+    outcome = "age",
+    effect_modifier = "sex") |>
+  rifttable(
+    data = cancer |>
+      dplyr::filter(ph.ecog < 3) |>
+      dplyr::mutate(ph.ecog_factor = factor(ph.ecog))) |> 
+  rt_gt()
+```
+
+
+# Example 7: Custom functions 
+
+This example also adds an overall, unstratified estimate.
+
+```{r ex7}
+library(dplyr)  # for easier data handling
+
+# Define first, very rudimentary function
+my_custom_fun1 <- function(data, ...) {
+  data |>
+    group_by(.exposure) |>
+    # Directly referencing the outcome variable 'status'--not portable
+    summarize(res = paste("mean =", mean(status)))
+}
+
+# Define second, improved function
+my_custom_fun2 <- function(data, outcome, ...) {
+  # 'outcome', like all columns of the 'design', is one argument
+  # that is passed along to custom functions
+  data |>
+    # The exposure variable is always renamed in '.exposure':
+    group_by(.exposure) |>
+    # This improved function will work in data sets regardless of how
+    # what the name of the 'outcome' variable is
+    select(
+      .exposure, 
+      variable = {{ outcome }}) |>
+    summarize(
+      res = paste(round(
+        mean(variable), 
+        digits = 3)))
+}
+
+tibble::tribble(
+  ~label,                         ~type,
+  "Mean (SD), built-in function", "mean (sd)",
+  "Mean: 1st custom function",    "custom1",
+  "Mean: 2nd custom function",    "custom2") |>
+  mutate(
+    exposure = "sex",
+    outcome = "status") |>
+  rifttable(
+    data = cancer,
+    custom = list(my_custom_fun1, my_custom_fun2),
+    overall = TRUE)
+```

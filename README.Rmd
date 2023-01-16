@@ -61,4 +61,7 @@ tibble::tribble(
     outcome = "death",
     effect_modifier = "receptor") |> 
   rifttable(data = breastcancer)
+
 ```
+
+For more examples, see the [Get Started vignette](https://stopsack.github.io/rifttable/articles/rifttable.html).

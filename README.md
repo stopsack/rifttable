@@ -80,3 +80,6 @@ tibble::tribble(
 | – Risk difference (95% CI) | 0 (reference) | 0.14 (0.02 to 0.26)  | 0.51 (0.25 to 0.77) |
 
 </div>
+
+For more examples, see the [Get Started
+vignette](https://stopsack.github.io/rifttable/articles/rifttable.html).
