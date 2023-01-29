@@ -16,7 +16,6 @@ rifttable(
   rate_digits = 1,
   to = NULL,
   type2_layout = "rows",
-  prepare_md = "deprecated",
   custom = NULL,
   overall = FALSE
 )
@@ -61,11 +60,6 @@ quantiles; defaults to \code{"-"} otherwise.}
 \code{type2} in the \code{design} matrix, display it as in rows below
 (\code{"rows"}) or columns (\code{"columns"}) to the right. Defaults to
 \code{"rows"}.}
-
-\item{prepare_md}{Deprecated parameter; ignored. Two/four spaces in the
-\code{label} column of the \code{design} matrix are now being passed on
-silently as an attribute to \code{\link[rifttable]{rt_gt}} to ensure
-indentation.}
 
 \item{custom}{Optional. Defaults to \code{NULL}. A custom function (or a
 \code{\link{list}} of such functions), that can be called via
