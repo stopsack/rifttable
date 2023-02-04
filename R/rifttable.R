@@ -18,7 +18,7 @@
 #' @param factor Optional. Used for \code{type = "rates"}: Factor to multiply
 #'   events per person-time by. Defaults to \code{1000}.
 #' @param risk_percent Optional. Show risk and risk difference estimates in
-#'   percentage points instead of proportions. Defaults to \code{FALSE}.
+#'   percentage points instead of proportions. Defaults to \code{TRUE}.
 #' @param risk_digits Optional. Number of decimal digits to show for risks/
 #'   cumulative incidence. Defaults to \code{2} for \code{risk_percent = FALSE}
 #'   and to \code{0} for \code{risk_percent = TRUE}. Can override for each line
@@ -427,7 +427,7 @@ rifttable <- function(
     data,
     layout = "rows",
     factor = 1000,
-    risk_percent = FALSE,
+    risk_percent = TRUE,
     risk_digits = dplyr::if_else(
       risk_percent == TRUE,
       true = 0,
