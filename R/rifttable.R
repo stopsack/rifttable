@@ -238,6 +238,8 @@
 #'     defined by exposure, and possibly the effect modifier, contains fewer
 #'     observations or, for survival analyses, fewer events than \code{nmin}.
 #'     Defaults to \code{NA}, i.e., to print all estimates.
+#'   * \code{na_rm}. Optional. Exclude observations with missing outcome.
+#'     Defaults to \code{FALSE}. Use with caution.
 #'
 #' Use \code{\link[tibble]{tibble}}, \code{\link[tibble]{tribble}}, and
 #' \code{\link[dplyr]{mutate}} to construct the \code{design} dataset,
@@ -458,6 +460,7 @@ rifttable <- function(
   if(!("digits"      %in% names(design))) design$digits      <- NA
   if(!("digits2"     %in% names(design))) design$digits2     <- NA
   if(!("nmin"        %in% names(design))) design$nmin        <- NA
+  if(!("na_rm"       %in% names(design))) design$na_rm       <- NA
   if(!("effect_modifier" %in% names(design) & "stratum" %in% names(design))) {
     design <- design %>%
       dplyr::mutate(effect_modifier = NA, stratum = NA)
@@ -565,7 +568,8 @@ rifttable <- function(
           .data$type,
           .data$trend,
           .data$digits,
-          .data$nmin),
+          .data$nmin,
+          .data$na_rm),
         .f = fill_cells,
         data = data,
         factor = factor,
@@ -636,7 +640,8 @@ rifttable <- function(
             .data$type2,  # !
             .data$trend,
             .data$digits2,  # !
-            .data$nmin),
+            .data$nmin,
+            .data$na_rm),
           .f = fill_cells,
           data = data,
           factor = factor,

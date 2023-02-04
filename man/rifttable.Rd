@@ -278,6 +278,8 @@ estimate (\code{type2}).
 defined by exposure, and possibly the effect modifier, contains fewer
 observations or, for survival analyses, fewer events than \code{nmin}.
 Defaults to \code{NA}, i.e., to print all estimates.
+\item \code{na_rm}. Optional. Exclude observations with missing outcome.
+Defaults to \code{FALSE}. Use with caution.
 }
 
 Use \code{\link[tibble]{tibble}}, \code{\link[tibble]{tribble}}, and

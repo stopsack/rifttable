@@ -12,6 +12,7 @@
 #' @param trend Continuous (trend) exposure variable
 #' @param digits Number of digits to round an individual estimate to
 #' @param nmin Minimum number of observations/events to display an estimate
+#' @param na_rm Suppress observations with missing outcome
 #' @param factor Factor for rates. Defaults to 1000.
 #' @param risk_percent Show risks and risk differences as percentages?
 #' @param diff_digits Number of digits to round difference estimates to
@@ -24,7 +25,7 @@
 #' @noRd
 fill_cells <- function(data, event, time, time2, outcome,
                        exposure, effect_modifier, stratum, confounders,
-                       type, trend, digits, nmin, factor, risk_percent,
+                       type, trend, digits, nmin, na_rm, factor, risk_percent,
                        diff_digits, risk_digits, ratio_digits, rate_digits,
                        to, custom_fn) {
   if(is.na(exposure)) {
@@ -42,6 +43,26 @@ fill_cells <- function(data, event, time, time2, outcome,
                      continuous and thus has many levels."))
     data$.exposure <- factor(data$.exposure)
   }
+
+  if(!is.na(na_rm))
+    if(na_rm == TRUE & !(type %in% c("", "blank"))) {
+      if(
+        stringr::str_detect(
+          string = type,
+          pattern = "events|hr|rate|time|medsurv|medfu|maxfu|cuminc|^surv")) {
+        data <- data %>%
+          dplyr::filter(!is.na({{ event }}) & !is.na({{ time }}))
+        if(!is.na(time2)) {
+          data <- data %>%
+            dplyr::filter(!is.na({{ time2 }}))
+        }
+      } else {
+        data <- data %>%
+          dplyr::rename(.outcome = dplyr::one_of(outcome)) %>%
+          dplyr::filter(!is.na(.data$.outcome)) %>%
+          dplyr::rename(!!outcome := .data$.outcome)
+      }
+    }
 
   # Check that trend variable, if given, is continuous
   if(!is.na(trend)) {
