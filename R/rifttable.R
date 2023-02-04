@@ -472,7 +472,7 @@ rifttable <- function(
         true = "",
         false = .data$type2))
 
-  if(sum(!is.na(design$exposure)) > 0) {
+  if(any(!is.na(design$exposure))) {
     name <- labelled::var_label(dplyr::pull(data, design$exposure[1]))
     if(is.null(name))
       name <- design$exposure[1]
@@ -483,7 +483,7 @@ rifttable <- function(
           dplyr::bind_cols(
             rifttable(
               design = design %>%
-                dplyr::select(-.data$exposure),
+                dplyr::select(-"exposure"),
               data = data,
               layout = layout,
               factor = factor,
@@ -530,7 +530,7 @@ rifttable <- function(
           dplyr::bind_rows(
             rifttable(
               design = design %>%
-                dplyr::select(-.data$exposure),
+                dplyr::select(-"exposure"),
               data = data,
               layout = layout,
               factor = factor,
@@ -614,10 +614,10 @@ rifttable <- function(
   if(all(design$type2 == "")) {
     res <- res %>%
       dplyr::select(
-        .data$index,
-        .data$label,
-        .data$result) %>%
-      tidyr::unnest(cols = .data$result)
+        "index",
+        "label",
+        "result") %>%
+      tidyr::unnest(cols = "result")
     if(layout == "rows") {
       res <- res %>%
         tidyr::pivot_wider(
@@ -625,7 +625,7 @@ rifttable <- function(
           values_from = .data$res,
           values_fill = "") %>%
         dplyr::rename(!!name := .data$label) %>%
-        dplyr::select(-.data$index)
+        dplyr::select(-"index")
       # capture rows that are indented for rt_gt()
       attr(res, which = "rt_gt.indent2") <- stringr::str_which(
         string = res %>% dplyr::pull(1),
@@ -644,12 +644,12 @@ rifttable <- function(
             values_fill = "")
       } else {
         res %>%
-          dplyr::select(-.data$index) %>%
+          dplyr::select(-"index") %>%
           tidyr::pivot_wider(
             names_from = .data$label,
             values_from = .data$res,
             values_fill = "") %>%
-          dplyr::rename(!!name := .data$.exposure)
+          dplyr::rename(!!name := ".exposure")
       }
     }
 
@@ -690,10 +690,10 @@ rifttable <- function(
           by = ".exposure",
           suffix = c(".1", ".2")))) %>%
       dplyr::select(
-        .data$index,
-        .data$label,
-        .data$result) %>%
-      tidyr::unnest(cols = .data$result) %>%
+        "index",
+        "label",
+        "result") %>%
+      tidyr::unnest(cols = "result") %>%
       tidyr::pivot_longer(
         cols = c(.data$res.1, .data$res.2),
         names_to = "whichres",
@@ -706,7 +706,7 @@ rifttable <- function(
       if(type2_layout == "rows") {
         res <- res %>%
           tidyr::pivot_wider(
-            names_from = .data$.exposure,
+            names_from = ".exposure",
             values_from = .data$value,
             values_fill = "") %>%
           dplyr::group_by(.data$index) %>%
@@ -717,7 +717,7 @@ rifttable <- function(
               false = "")) %>%
           dplyr::ungroup() %>%
           dplyr::rename(!!name := .data$label) %>%
-          dplyr::select(-.data$index, -.data$whichres)
+          dplyr::select(-"index", -"whichres")
       } else {
         res <- res %>%
           dplyr::mutate(
@@ -726,13 +726,13 @@ rifttable <- function(
               true = paste0(.data$.exposure),
               false = paste0(.data$.exposure,
                              " "))) %>%
-          dplyr::select(-.data$whichres) %>%
+          dplyr::select(-"whichres") %>%
           tidyr::pivot_wider(
             names_from = .data$.exposure,
             values_from = .data$value,
             values_fill = "") %>%
           dplyr::rename(!!name := .data$label) %>%
-          dplyr::select(-.data$index)
+          dplyr::select(-"index")
       }
       if(type2_layout == "rows") {
         attr(res, which = "rt_gt.indent2") <- union(
@@ -760,7 +760,7 @@ rifttable <- function(
               values_fill = "")
         } else {
           res <- res %>%
-            dplyr::select(-.data$index) %>%
+            dplyr::select(-"index") %>%
             tidyr::pivot_wider(
               names_from = .data$label,
               values_from = .data$value,
@@ -774,8 +774,8 @@ rifttable <- function(
               true = paste0(.data$.exposure),
               false = "")) %>%
           dplyr::ungroup() %>%
-          dplyr::select(-.data$whichres) %>%
-          dplyr::rename(!!name := .data$.exposure)
+          dplyr::select(-"whichres") %>%
+          dplyr::rename(!!name := ".exposure")
       } else {
         if(sum(duplicated(design$label)) > 0 | "" %in% design$label) {
           res %>%
@@ -785,12 +785,12 @@ rifttable <- function(
                 true = .data$label,
                 false = paste0(.data$label,
                                " "))) %>%
-            dplyr::select(-.data$whichres) %>%
+            dplyr::select(-"whichres") %>%
             tidyr::pivot_wider(
               names_from = c(.data$index, .data$label),
               values_from = .data$value,
               values_fill = "") %>%
-            dplyr::rename(!!name := .data$.exposure)
+            dplyr::rename(!!name := ".exposure")
         } else {
           res %>%
             dplyr::mutate(
@@ -799,12 +799,12 @@ rifttable <- function(
                 true = .data$label,
                 false = paste0(.data$label,
                                " "))) %>%
-            dplyr::select(-.data$whichres, -.data$index) %>%
+            dplyr::select(-"whichres", -"index") %>%
             tidyr::pivot_wider(
               names_from = .data$label,
               values_from = .data$value,
               values_fill = "") %>%
-            dplyr::rename(!!name := .data$.exposure)
+            dplyr::rename(!!name := ".exposure")
         }
       }
     }
