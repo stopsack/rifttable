@@ -551,6 +551,35 @@ rifttable <- function(
     name <- "Summary"
   }
 
+  # For Table 1s from table1_design()
+  if(any(stringr::str_detect(string = design$outcome, "@"))) {
+    to_code <- tibble::tibble(
+      combo = stringr::str_subset(design$outcome, "@")) %>%
+      tidyr::separate(
+        col = .data$combo,
+        into = c("outcome", "var_level"),
+        sep = "@")
+    data <- purrr::map2(
+      .x = to_code$outcome,
+      .y = to_code$var_level,
+      .f = ~{
+        varname <- paste0(.x, "@", .y)
+        if(.y == "_NA_") {
+          data %>%
+            dplyr::rename(variable = {{ .x }}) %>%
+            dplyr::mutate(result = is.na(variable)) %>%
+            dplyr::select(!!varname := result)
+        } else {
+          data %>%
+            dplyr::rename(variable = {{ .x }}) %>%
+            dplyr::mutate(result = variable == .y) %>%
+            dplyr::select(!!varname := result)
+        }
+      }) %>%
+      purrr::list_cbind() %>%
+      dplyr::bind_cols(data)
+  }
+
   res <- design %>%
     dplyr::mutate(
       type   = stringr::str_to_lower(string = .data$type),
