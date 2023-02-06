@@ -9,7 +9,7 @@ rifttable(
   data,
   layout = "rows",
   factor = 1000,
-  risk_percent = TRUE,
+  risk_percent = FALSE,
   risk_digits = dplyr::if_else(risk_percent == TRUE, true = 0, false = 2),
   diff_digits = 2,
   ratio_digits = 2,
@@ -35,7 +35,7 @@ Defaults to \code{"rows"}.}
 events per person-time by. Defaults to \code{1000}.}
 
 \item{risk_percent}{Optional. Show risk and risk difference estimates in
-percentage points instead of proportions. Defaults to \code{TRUE}.}
+percentage points instead of proportions. Defaults to \code{FALSE}.}
 
 \item{risk_digits}{Optional. Number of decimal digits to show for risks/
 cumulative incidence. Defaults to \code{2} for \code{risk_percent = FALSE}
