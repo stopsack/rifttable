@@ -45,14 +45,18 @@
 #' data(cancer, package = "survival")
 #'
 #' cancer <- cancer |>
-#'   dplyr::mutate(sex = factor(sex, levels = 1:2,
-#'                              labels = c("Men", "Women")),
-#'                 status = status - 1)
+#'   dplyr::mutate(
+#'     sex = factor(
+#'       sex,
+#'       levels = 1:2,
+#'       labels = c("Male", "Female")),
+#'       status = status - 1)
 #'
-#' survdiff_ci(formula = survival::Surv(time = time, event = status) ~ sex,
-#'             data = cancer,
-#'             time = 365.25)
-#' # Women have 19 percentage points higher one-year survival than men
+#' survdiff_ci(
+#'   formula = survival::Surv(time = time, event = status) ~ sex,
+#'   data = cancer,
+#'   time = 365.25)
+#' # Females have 19 percentage points higher one-year survival than males
 #' # (95% CI, 5 to 34 percentage points).
 survdiff_ci <- function(formula, data, time,
                         estimand = c("survival", "cuminc"),

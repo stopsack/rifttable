@@ -305,7 +305,7 @@ data(cancer, package = "survival")
 cancer <- cancer |>
   tibble::as_tibble() |>
   dplyr::mutate(sex = factor(sex, levels = 1:2,
-                             labels = c("Men", "Women")),
+                             labels = c("Male", "Female")),
                 time = time / 365.25,
                 status = status - 1)
 
@@ -396,16 +396,14 @@ rifttable(design = design3,
 tibble::tribble(
   ~label,                   ~stratum, ~type,        ~digits,
   "Marginal mean (95\% CI)", NULL,     "mean (ci)",  1,
-  "  Men",                  "Men",    "mean",       NA,
-  "  Women",                "Women",  "mean",       NA,
+  "  Male",                 "Male",   "mean",       NA,
+  "  Female",               "Female", "mean",       NA,
   "",                       NULL,     "",           NA,
   "Stratified model",       NULL,     "",           NA,
-  "  Men",                  "Men",    "diff",       1,
-  "  Women",                "Women",  "diff",       1,
+  "  Male",                 "Male",   "diff",       1,
+  "  Female",               "Female", "diff",       1,
   "",                       NULL,     "",           NA,
   "Joint model",            NULL,     "",           NA,
-  "  Men",                  "Men",    "diff_joint", NA,
-  "  Women",                "Women",  "diff_joint", NA) |>
   dplyr::mutate(exposure = "ph.ecog_factor",
                 trend = "ph.ecog",
                 outcome = "age",
@@ -413,6 +411,8 @@ tibble::tribble(
   rifttable(data = cancer |>
                   dplyr::filter(ph.ecog < 3) |>
                   dplyr::mutate(ph.ecog_factor = factor(ph.ecog)))
+  "  Male",                 "Male",   "diff_joint", NA,
+  "  Female",               "Female", "diff_joint", NA) |>
 
 
 # Example 5: Get formatted output for Example 2 (see above)
