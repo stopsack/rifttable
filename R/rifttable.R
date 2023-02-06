@@ -588,7 +588,8 @@ rifttable <- function(
       result = purrr::pmap(
         .l = list(
           .data$event,
-          .data$time, .data$time2,
+          .data$time,
+          .data$time2,
           .data$outcome,
           .data$exposure,
           .data$effect_modifier,
@@ -598,7 +599,10 @@ rifttable <- function(
           .data$trend,
           .data$digits,
           .data$nmin,
-          .data$na_rm),
+          .data$na_rm,
+          .data$ci,
+          .data$to,
+          .data$arguments),
         .f = fill_cells,
         data = data,
         factor = factor,
@@ -607,8 +611,7 @@ rifttable <- function(
         diff_digits = diff_digits,
         ratio_digits = ratio_digits,
         rate_digits = rate_digits,
-        to = to,
-        custom_fn = custom))
+        reference = reference))
 
   # simple reshaping if only "type" alone
   if(all(design$type2 == "")) {
@@ -660,7 +663,8 @@ rifttable <- function(
         result2 = purrr::pmap(
           .l = list(
             .data$event,
-            .data$time, .data$time2,
+            .data$time,
+            .data$time2,
             .data$outcome,
             .data$exposure,
             .data$effect_modifier,
@@ -670,7 +674,10 @@ rifttable <- function(
             .data$trend,
             .data$digits2,  # !
             .data$nmin,
-            .data$na_rm),
+            .data$na_rm,
+            .data$ci,
+            .data$to,
+            .data$arguments),
           .f = fill_cells,
           data = data,
           factor = factor,
@@ -679,8 +686,6 @@ rifttable <- function(
           diff_digits = diff_digits,
           ratio_digits = ratio_digits,
           rate_digits = rate_digits,
-          to = to,
-          custom_fn = custom)) %>%
       dplyr::mutate(result = purrr::map2(
         .x = .data$result,
         .y = .data$result2,
@@ -689,6 +694,7 @@ rifttable <- function(
           .y,
           by = ".exposure",
           suffix = c(".1", ".2")))) %>%
+          reference = reference),
       dplyr::select(
         "index",
         "label",
