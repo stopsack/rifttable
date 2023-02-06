@@ -540,7 +540,9 @@ rifttable <- function(
   }
 
   # For Table 1s from table1_design()
-  if(any(stringr::str_detect(string = design$outcome, "@"))) {
+  if(any(
+    stringr::str_detect(string = design$outcome, "@"),
+    na.rm = TRUE)) {
     to_code <- tibble::tibble(
       combo = stringr::str_subset(design$outcome, "@")) %>%
       tidyr::separate(
