@@ -451,7 +451,7 @@ rifttable <- function(
       type2 = dplyr::if_else(
         is.na(.data$type2),
         true = "",
-        false = .data$type2))
+        false = .data$type2),
       to = dplyr::if_else(
         is.na(.data$to),
         true = to_use,
