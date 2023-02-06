@@ -50,7 +50,11 @@ rt_tabstyle <- function(mytab) {
 #'
 #' @section Example Output:
 #' \if{html}{\figure{rt_gt.png}{options: width=50\%}}
-rt_gt <- function(df, md = NULL, indent = c(10, 20), remove_border = TRUE) {
+rt_gt <- function(
+    df,
+    md = NULL,
+    indent = c(10, 20),
+    remove_border = TRUE) {
   if (!requireNamespace("gt", quietly = TRUE)) {
     stop(
       paste(

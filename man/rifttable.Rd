@@ -343,10 +343,11 @@ design2 <- tibble::tribble(
   "  ECOG PS1",                 1,        "+ age",      "hr_joint",
   "  ECOG PS2",                 2,        "+ age",      "hr_joint") |>
   # Elements that are the same for all rows:
-  dplyr::mutate(exposure = "sex",
-                event = "status",
-                time = "time",
-                effect_modifier = "ph.ecog")
+  dplyr::mutate(
+    exposure = "sex",
+    event = "status",
+    time = "time",
+    effect_modifier = "ph.ecog")
 
 # Generate rifttable
 rifttable(design = design2,
@@ -358,11 +359,12 @@ design3 <- tibble::tribble(
   ~label,     ~stratum, ~type,          ~type2,
   "ECOG PS1", 1,        "events/total", "hr",
   "ECOG PS2", 2,        "events/total", "hr") |>
-  dplyr::mutate(exposure = "sex",
-                event = "status",
-                time = "time",
-                confounders = "+ age",
-                effect_modifier = "ph.ecog")
+  dplyr::mutate(
+    exposure = "sex",
+    event = "status",
+    time = "time",
+    confounders = "+ age",
+    effect_modifier = "ph.ecog")
 
 rifttable(design = design3,
        data = cancer |> dplyr::filter(ph.ecog \%in\% 1:2))
@@ -386,15 +388,17 @@ tibble::tribble(
   "  Female",               "Female", "diff",       1,
   "",                       NULL,     "",           NA,
   "Joint model",            NULL,     "",           NA,
-  dplyr::mutate(exposure = "ph.ecog_factor",
-                trend = "ph.ecog",
-                outcome = "age",
-                effect_modifier = "sex") |>
-  rifttable(data = cancer |>
-                  dplyr::filter(ph.ecog < 3) |>
-                  dplyr::mutate(ph.ecog_factor = factor(ph.ecog)))
   "  Male",                 "Male",   "diff_joint", NA,
   "  Female",               "Female", "diff_joint", NA) |>
+  dplyr::mutate(
+    exposure = "ph.ecog_factor",
+    trend = "ph.ecog",
+    outcome = "age",
+    effect_modifier = "sex") |>
+  rifttable(
+    data = cancer |>
+      dplyr::filter(ph.ecog < 3) |>
+      dplyr::mutate(ph.ecog_factor = factor(ph.ecog)))
 
 
 # Example 5: Get formatted output for Example 2 (see above)
