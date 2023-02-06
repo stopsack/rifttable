@@ -51,6 +51,15 @@ rt_tabstyle <- function(mytab) {
 #' @section Example Output:
 #' \if{html}{\figure{rt_gt.png}{options: width=50\%}}
 rt_gt <- function(df, md = NULL, indent = c(10, 20), remove_border = TRUE) {
+  if (!requireNamespace("gt", quietly = TRUE)) {
+    stop(
+      paste(
+        "The package \"gt\" must be installed to create formatted tables",
+        "via rifttable::rt_gt(). Use alternative packages for table",
+        "formatting or install \"gt\":\n   install.packages(\"gt\")"),
+      call. = FALSE)
+  }
+
   # RMarkdown "output: github_document" cannot handle HTML styles
   if(any(stringr::str_detect(
     string = c("", knitr::opts_knit$get("rmarkdown.pandoc.to")),
