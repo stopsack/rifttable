@@ -2,29 +2,33 @@
 #' observations or events below "nmin"
 #'
 #' @param data  Dataset
-#' @param event Event variable
-#' @param estimand  Estimand
 #' @param is_trend Whether trend is estimated
+#' @param suppress Suppress if below total count, no outcomes, or no events
 #'
 #' @return Tibble
 #' @noRd
-counts_per_stratum <- function(data, event, estimand, is_trend) {
+counts_per_stratum <- function(
+    data,
+    suppress = c("total", "binary", "event"),
+    is_trend) {
+
+  # Counts per stratum for nmin
+  suppress <- match.arg(suppress)
   if(is_trend == TRUE) {
     data <- data %>%
       dplyr::mutate(.exposure = "")
   }
 
-  if(stringr::str_detect(
-    string = estimand,
-    pattern = "rmtdiff|rmtl|^surv|cuminc|^hr|^irr|events|^rate|medsurv|medfu|maxfu") &
-    !stringr::str_detect(
-      string = estimand,
-      pattern = "irrrob")) {
+  if(suppress == "binary") {
     data <- data %>%
-      dplyr::select(".exposure",
-                    .event = {{ event }}) %>%
-      dplyr::filter(as.logical(.data$.event))  # == TRUE
+      dplyr::filter(as.logical(.data$.outcome))
   }
+
+  if(suppress == "event") {
+    data <- data %>%
+      dplyr::filter(as.logical(.data$.event))
+  }
+
   data %>%
     dplyr::count(
       .data$.exposure,
