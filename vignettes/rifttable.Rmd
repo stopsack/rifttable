@@ -25,7 +25,7 @@ library(rifttable)
 
 # Loading example data
 
-The `breastcancer` dataset of a binary outcome is included in the package:
+The `breastcancer` dataset of a binary outcome is included in the rifttable package:
 ```{r data1}
 data(breastcancer)
 
@@ -226,47 +226,33 @@ tibble::tribble(
 
 # Example 7: Custom functions 
 
-This example also adds an overall, unstratified estimate.
+This example also adds an overall estimate not stratified by exposure.
 
 ```{r ex7}
 library(dplyr)  # for easier data handling
 
-# Define first, very rudimentary function
-my_custom_fun1 <- function(data, ...) {
+# Define custom function, must start with "estimate_"
+estimate_my_example <- function(data, ...) {
+  # Variables have been renamed in '.exposure' and '.outcome'
   data |>
     group_by(.exposure) |>
-    # Directly referencing the outcome variable 'status'--not portable
-    summarize(res = paste("mean =", mean(status)))
-}
-
-# Define second, improved function
-my_custom_fun2 <- function(data, outcome, ...) {
-  # 'outcome', like all columns of the 'design', is one argument
-  # that is passed along to custom functions
-  data |>
-    # The exposure variable is always renamed in '.exposure':
-    group_by(.exposure) |>
-    # This improved function will work in data sets regardless of how
-    # what the name of the 'outcome' variable is
-    select(
-      .exposure, 
-      variable = {{ outcome }}) |>
     summarize(
-      res = paste(round(
-        mean(variable), 
-        digits = 3)))
+      res = paste(
+        round(
+          mean(.outcome),
+          digits = 3)))
 }
 
+# Call custom function, omit "estimate_"
 tibble::tribble(
-  ~label,                         ~type,
-  "Mean (SD), built-in function", "mean (sd)",
-  "Mean: 1st custom function",    "custom1",
-  "Mean: 2nd custom function",    "custom2") |>
+  ~label,                    ~type,        ~stratum,
+  "Mean: Built-in function", "mean",       1,
+  "Mean: Custom function",   "my_example", 1) |>
   mutate(
     exposure = "sex",
-    outcome = "status") |>
+    outcome = "status",
+    effect_modifier = "ph.ecog") |>
   rifttable(
     data = cancer,
-    custom = list(my_custom_fun1, my_custom_fun2),
     overall = TRUE)
 ```
