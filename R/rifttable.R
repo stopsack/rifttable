@@ -473,7 +473,10 @@ rifttable <- function(
         false = .data$type2))
 
   if(any(!is.na(design$exposure))) {
-    name <- labelled::var_label(dplyr::pull(data, design$exposure[1]))
+    name <- attr(
+      x = data %>%
+        dplyr::pull(design$exposure[1]),
+      which = "label")
     if(is.null(name))
       name <- design$exposure[1]
 

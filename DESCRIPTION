@@ -21,7 +21,6 @@ Depends:
 Imports:
     broom (>= 0.7.0),
     dplyr (>= 1.0.8),
-    labelled (>= 2.2.0),
     gt (>= 0.8.0),
     purrr, 
     risks,

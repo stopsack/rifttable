@@ -36,12 +36,11 @@ dplyr::mutate(
     hp > 200,
     true = ">200 hp",
     false = "<=200 hp")) |>
-  labelled::set_variable_labels(
-    mpg = "Miles per gallon",
-    hp = "Horsepower",
-    hp_categorical = "Horsepower",
-    am = "Automatic transmission",
-    gear = "Gears")
+# Label some variables. Better alternative: labelled::set_variable_labels()
+attr(cars$hp, "label") <- "Horsepower"
+attr(cars$hp_categorical, "label") <- "Horsepower"
+attr(cars$am, "label") <- "Automatic transmission"
+attr(cars$gear, "label") <- "Gears"
 
 # Generate table "design"
 design <- cars |>
