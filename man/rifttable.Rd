@@ -17,7 +17,6 @@ rifttable(
   to = ", ",
   reference = "(reference)",
   type2_layout = "rows",
-  custom = NULL,
   overall = FALSE
 )
 }
@@ -61,22 +60,6 @@ quantiles; defaults to \code{"-"} otherwise.}
 \code{type2} in the \code{design} matrix, display it as in rows below
 (\code{"rows"}) or columns (\code{"columns"}) to the right. Defaults to
 \code{"rows"}.}
-
-\item{custom}{Optional. Defaults to \code{NULL}. A custom function (or a
-\code{\link{list}} of such functions), that can be called via
-\code{type = "custom"} (or \code{type = "custom2"}, for example).
-Must have at minimum the arguments \code{data} and
-\code{...}, i.e., be defined as \code{function(data, ...)}.
-Custom functions receive \code{rifttable}'s dataset \code{data}, where
-the exposure variable has been renamed to \code{.exposure}. All other
-variables are unchanged. All arguments of \code{rifttable} and the elements of
-the  \code{design} dataset are passed along as arguments to the custom
-function. Functions must return a data frame or tibble with as many rows as
-exposure levels and two columns: an exposure column, \code{.exposure}, and
-a result column per exposure level, \code{res}, of type \code{character}.
-All estimation steps need to be done by the custom function, such as
-subsetting to the \code{stratum} of the \code{effect_modifier} or rounding of
-numeric estimates, as applicable. See examples.}
 
 \item{overall}{Optional. Defaults to \code{FALSE}. Add a first column with
 unstratified estimates to an exposure-stratified table? Elements will be
@@ -242,10 +225,6 @@ survival for censoring.
 \item \code{"median"} Median.
 \item \code{"median (iqr)"} Median and interquartile range.
 \item \code{"range"} Range: Minimum to maximum value.
-\item \code{"custom"} A custom function, provided to \code{rifttable} through
-the argument \code{custom}. See there for details.
-If a list of multiple functions is provided, use \code{"custom1"}
-through \code{"custom99"} to select one function.
 \item \code{"blank"} or \code{""} An empty line.
 }
 
@@ -423,41 +402,32 @@ rifttable(design = design2,
   rt_gt(md = 1)  # get markdown formatting in first column ('label')
 }
 
+# Example 6: Use custom function; add exposure-unstratified overall estimates
 
-# Example 6: Using custom functions and adding an
-# overall unstratified estimate
-
-library(dplyr)  # for easier data handling
-
-# Define first, very rudimentary function
-my_custom_fun1 <- function(data, ...) {
+# Define custom function, must start with "estimate_"
+estimate_my_example <- function(data, ...) {
+  # Variables have been renamed in '.exposure' and '.outcome'
   data |>
-    group_by(.exposure) |>
-    # Directly referencing the variable 'status'--not portable
-    summarize(res = paste("mean =", mean(status)))
+    dplyr::group_by(.exposure) |>
+    dplyr::summarize(
+      res = paste(
+        round(
+          mean(.outcome),
+          digits = 3)))
 }
 
-# Define second, improved function
-my_custom_fun2 <- function(data, outcome, ...) {
-  # 'outcome', like all columns of the 'design' matrix, is one argument
-  # that is passed along to custom functions
-  data |>
-    group_by(.exposure) |>
-    # This improved function will work in other data sets
-    select(.exposure, variable = {{ outcome }}) |>
-    summarize(res = paste(round(mean(variable), digits = 3)))
-}
-
+# Call custom function, omit "estimate_"
 tibble::tribble(
-  ~label,                         ~type,
-  "Mean (SD), built-in function", "mean (sd)",
-  "Mean: 1st custom function",    "custom1",
-  "Mean: 2nd custom function",    "custom2") |>
-  mutate(exposure = "sex",
-         outcome = "status") |>
-  rifttable(data = cancer,
-         custom = list(my_custom_fun1, my_custom_fun2),
-         overall = TRUE)
+  ~label,                    ~type,        ~stratum,
+  "Mean: Built-in function", "mean",       1,
+  "Mean: Custom function",   "my_example", 1) |>
+  dplyr::mutate(
+    exposure = "sex",
+    outcome = "status",
+    effect_modifier = "ph.ecog") |>
+  rifttable(
+    data = cancer,
+    overall = TRUE)
 
 }
 \references{

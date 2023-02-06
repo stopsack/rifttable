@@ -477,7 +477,6 @@ rifttable <- function(
               ratio_digits = ratio_digits,
               rate_digits = rate_digits,
               type2_layout = type2_layout,
-              custom = custom,
               to = to,
               reference = reference,
               overall = FALSE),
@@ -492,7 +491,6 @@ rifttable <- function(
               ratio_digits = ratio_digits,
               rate_digits = rate_digits,
               type2_layout = type2_layout,
-              custom = custom,
               to = to,
               reference = reference,
               overall = FALSE) %>%
@@ -509,7 +507,6 @@ rifttable <- function(
           ratio_digits = ratio_digits,
           rate_digits = rate_digits,
           type2_layout = type2_layout,
-          custom = custom,
           to = to,
           reference = reference,
           overall = FALSE)
@@ -527,7 +524,6 @@ rifttable <- function(
               ratio_digits = ratio_digits,
               rate_digits = rate_digits,
               type2_layout = type2_layout,
-              custom = custom,
               to = to,
               reference = reference,
               overall = FALSE) %>%
