@@ -5,7 +5,6 @@
 #' @param time Time variable
 #' @param time2 Second time variable
 #' @param exposure Exposure variable
-#' @param effectmodifier Effect modifier variable
 #' @param stratum Effect modifier level
 #' @param confounders String of covariates
 #' @param type Type of statistic quested from table_count
@@ -13,6 +12,7 @@
 #' @param digits Number of digits to round an individual estimate to
 #' @param nmin Minimum number of observations/events to display an estimate
 #' @param na_rm Suppress observations with missing outcome
+#' @param ci Confidence interval limits
 #' @param factor Factor for rates. Defaults to 1000.
 #' @param risk_percent Show risks and risk differences as percentages?
 #' @param diff_digits Number of digits to round difference estimates to
@@ -20,7 +20,10 @@
 #' @param ratio_digits Number of digits to round ratio estimates to
 #' @param rate_digits Number of digits to round rate estimates to
 #' @param to Separator for mean/difference confidence intervals.
-#' @param custom_fn Custom function
+#' @param outcome Outcome variable
+#' @param effect_modifier Effect modifier variable
+#' @param arguments Optional list of arguments passed on to estimators
+#' @param reference
 #'
 #' @return Tibble
 #' @noRd
@@ -39,14 +42,16 @@ fill_cells <- function(
     digits,
     nmin,
     na_rm,
+    ci,
+    to,
+    reference,
+    arguments,
     factor,
     risk_percent,
     diff_digits,
     risk_digits,
     ratio_digits,
-    rate_digits,
-    to,
-    custom_fn) {
+    rate_digits) {
   if(is.na(exposure)) {
     data <- data %>%
       dplyr::mutate(.exposure = "Overall")

@@ -435,6 +435,8 @@ rifttable <- function(
   if(!("to"          %in% names(design))) design$to          <- NA
   if(!("nmin"        %in% names(design))) design$nmin        <- NA
   if(!("na_rm"       %in% names(design))) design$na_rm       <- NA
+  if(!("ci"          %in% names(design))) design$ci          <- NA
+  if(!("arguments"   %in% names(design))) design$arguments   <- NA
   if(!("effect_modifier" %in% names(design) & "stratum" %in% names(design))) {
     design <- design %>%
       dplyr::mutate(effect_modifier = NA, stratum = NA)

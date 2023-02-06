@@ -16,31 +16,33 @@ knitr::opts_chunk$set(
 
 # Comparative estimates with 95% confidence intervals
 
-`type` | Description
--------+---------------------------
-`"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator. Provide time horizon, e.g., `"cumincdiff 2.5"` to evaluate differences in cumulative incidence at 2.5 years. Cannot not handle confounders. Uses `rifttable::survdiff_ci()`.
-`"diff"` | Mean difference from linear model.
+`type` | Description | Options (`arguments = `)
+-------+-------------+--------------
+`"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator. Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in cumulative incidence at 2.5 years.
+`"diff"` | Mean difference from linear model. |
 `"fold"` | Fold change from generalized linear model with log link (i.e., ratio of arithmetic means).
 `"foldlog"` | Fold change from linear model after log transformation of the outcome (*i.e.*, ratio of geometric means).
 `"hr"`    | Hazard ratio from Cox proportional hazards regression.
 `"irr"`   | Incidence rate ratio for count outcomes from Poisson regression model.
 `"irrrob"` | Ratio for other outcomes from Poisson regression model with robust (sandwich) standard errors.
 `"or"` | Odds ratio from logistic regression.
-`"quantreg"` | Quantile difference from quantile regression using `quantreg::rq()` with `method = "fn"`. By default, this is the difference in medians. For a different quantile, e.g., the 75th percentile, use `"quantreg 0.75"`.
-`"rd"` | Risk difference (or prevalence difference) from risks::riskdiff(). Can request model fitting approach and bootstrap repeats as for `"rr"`.
-`"rr"` | Risk ratio (or prevalence ratio) from `risks::riskratio()`. Can request specific model fitting  approach and, for marginal standardization only, the number of bootstrap repeats. | Examples: `"rrglm_start"` or `"rrmargstd 2000"`
-`"survdiff"` | Difference in survival from Kaplan-Meier estimator. Provide time horizon, e.g., `"survdiff 2.5"` to evaluate differences in survival at 2.5 years. Cannot not handle confounders. `rifttable::survdiff_ci()`.
+`"quantreg"` | Quantile difference from quantile regression using `quantreg::rq()` with `method = "fn"`. By default, this is the difference in medians. | `list(tau = 0.75)` to change the quantile to, e.g., the 75th percentile.
+`"rd"` | Risk difference (or prevalence difference) from risks::riskdiff(). | `list(approach = "margstd_boot", bootrepeats = 2000)` to request model fitting via marginal standardization with 2000 bootstrap.
+`"rr"` | Risk ratio (or prevalence ratio) from `risks::riskratio()`. | See `"rd"`.
+`"survdiff"` | Difference in survival from Kaplan-Meier estimator.  Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in survival at 2.5 years.
+
+By default, regression models will be fit separately for each stratum of the `effect_modifier`. Append `"_joint"` to `"hr"`, `"rr"`, `"rd"`, `"irr"`, `"irrrob"`, `"diff"`, `"fold"`, `"foldlog"`, `"quantreg"`, or `"or"` to obtain "joint" models for exposure and effect modifier that have a single reference category.
+ 
+Example: `type = "hr_joint"`. 
 
    
 # Absolute estimates per exposure category
 
-`type` | Description
--------+---------------------------
-`"blank"` or `""` | An empty line
-`"cuminc"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator. Provide time point (e.g., 1.5-year cumulative incidence) using `"cuminc 1.5"`. If no time point is provided, returns cumulative incidence at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent`.
-`"cuminc (ci)"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator with 95% confidence intervals (Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). Provide time point as in `"cuminc"`.
+`type` | Description | Options (`arguments = `)
+-------+-------------+--------------
+`"cuminc"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator. If no time point is provided, returns cumulative incidence at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show cumulative incidence at 2.5 years.
+`"cuminc (ci)"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator with 95% confidence intervals (Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"cuminc"`.
 `"cases/controls"` | Cases and non-cases (events and non-events); useful for case-control studies.
-`"custom"` | A custom function, provided to `rifttable()` through the parameter `custom`. See there for details. If a list of multiple functions is provided, use `"custom1"` through `"custom99"` to select one function.
 `"events"` | Event count.
 `"events/time"` | Events slash person-time.
 `"events/time (rate)"` | A combination: Events slash time followed by rate in parentheses.
@@ -51,10 +53,10 @@ knitr::opts_chunk$set(
 `"range"` | Range: Minimum to maximum value.
 `"rate"` | Event rate: event count divided by person-time, multiplied by the `rifttable()` parameter `factor`.
 `"rate (ci)"` | Event rate with 95% confidence interval (Poisson-type large-sample interval).
-`"risk"` | Risk (or prevalence), calculated as a proportion, *i.e.*, outcomes divided by number of observations. Change between display as proportion or percent using the parameter `risk_percent`.
+`"risk"` | Risk (or prevalence), calculated as a proportion, *i.e.*, outcomes divided by number of observations. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`.
 `"risk (ci)"` | Risk with 95% confidence interval (Wilson score interval for binomial proportions, see `rifttable::scoreci()`).
-`"surv"` | Survival from the Kaplan-Meier estimator. Provide time point (e.g., 1.5-year survival) using `"surv 1.5"`. If no time point is provided, returns survival at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent`.
-`"surv (ci)"` | Survival from the Kaplan-Meier estimator with 95% confidence interval (Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). Provide time point as in `"surv"`.
+`"surv"` | Survival from the Kaplan-Meier estimator. If no time point is provided, returns survival at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show survival at 2.5 years.
+`"surv (ci)"` | Survival from the Kaplan-Meier estimator with 95% confidence interval (Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"surv"`.
 `"time"` | Person-time.
 `"total"` | Number of observations.
 `"maxfu"` | Maximum follow-up time.
@@ -68,8 +70,12 @@ knitr::opts_chunk$set(
 `"medsurv"` | Median survival.
 `"medsurv (ci)"` | Median survival with 95% confidence interval.
 
-By default, regression models will be fit separately for each stratum of the `effect_modifier`. Append `"_joint"` to `"hr"`, `"rr"`, `"rd"`, `"irr"`, `"irrrob"`, `"diff"`, `"fold"`, `"foldlog"`, `"quantreg"`, or `"or"` to obtain "joint" models for exposure and effect modifier that have a single reference category.
- 
-Example: `type = "hr_joint"`. 
- 
+
+# Special types
+
+`type` | Description | Options (`arguments = `)
+-------+-------------+--------------
+`"blank"` or `""` | An empty line
+`"custom_function"` | A user-defined function. In this example, the corresponding function must be called `estimate_custom_function()` | Any
+
 The reference categories for exposure and effect modifier are their first factor levels, which can be changed using `forcats::fct_relevel()`. Note that the joint model will be fit across all non-missing (`NA`) strata of the effect modifier, even if the `design` table does not request all strata be shown.
