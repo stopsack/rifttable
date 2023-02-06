@@ -14,7 +14,7 @@ rifttable(
   diff_digits = 2,
   ratio_digits = 2,
   rate_digits = 1,
-  to = NULL,
+  to = ", ",
   type2_layout = "rows",
   custom = NULL,
   overall = FALSE

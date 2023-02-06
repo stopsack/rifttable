@@ -31,8 +31,7 @@
 #'   Defaults to \code{1}. Can override for each line in \code{type}.
 #' @param to Optional. Separator between the lower and the upper bound
 #'   of the 95% confidence interval (and interquartile range for medians).
-#'   Defaults to \code{" to "} for means, medians, and differences in means or
-#'   quantiles; defaults to \code{"-"} otherwise.
+#'   Defaults to \code{", "}.
 #' @param type2_layout Optional. If a second estimate is requested via
 #'   \code{type2} in the \code{design} matrix, display it as in rows below
 #'   (\code{"rows"}) or columns (\code{"columns"}) to the right. Defaults to
@@ -409,7 +408,7 @@ rifttable <- function(
     diff_digits = 2,
     ratio_digits = 2,
     rate_digits = 1,
-    to = NULL,
+    to = ", ",
     type2_layout = "rows",
     overall = FALSE) {
   if(!is.data.frame(design))
@@ -430,18 +429,24 @@ rifttable <- function(
   if(!("type2"       %in% names(design))) design$type2       <- ""
   if(!("digits"      %in% names(design))) design$digits      <- NA
   if(!("digits2"     %in% names(design))) design$digits2     <- NA
+  if(!("to"          %in% names(design))) design$to          <- NA
   if(!("nmin"        %in% names(design))) design$nmin        <- NA
   if(!("na_rm"       %in% names(design))) design$na_rm       <- NA
   if(!("effect_modifier" %in% names(design) & "stratum" %in% names(design))) {
     design <- design %>%
       dplyr::mutate(effect_modifier = NA, stratum = NA)
   }
+  to_use <- to
   design <- design %>%
     dplyr::mutate(
       type2 = dplyr::if_else(
         is.na(.data$type2),
         true = "",
         false = .data$type2))
+      to = dplyr::if_else(
+        is.na(.data$to),
+        true = to_use,
+        false = .data$to))
 
   if(any(!is.na(design$exposure))) {
     name <- attr(
@@ -466,9 +471,9 @@ rifttable <- function(
               diff_digits = diff_digits,
               ratio_digits = ratio_digits,
               rate_digits = rate_digits,
-              to = to,
               type2_layout = type2_layout,
               custom = custom,
+              to = to,
               overall = FALSE),
             rifttable(
               design = design,
@@ -480,9 +485,9 @@ rifttable <- function(
               diff_digits = diff_digits,
               ratio_digits = ratio_digits,
               rate_digits = rate_digits,
-              to = to,
               type2_layout = type2_layout,
               custom = custom,
+              to = to,
               overall = FALSE) %>%
               dplyr::select(-1)))
       } else {
@@ -496,9 +501,9 @@ rifttable <- function(
           diff_digits = diff_digits,
           ratio_digits = ratio_digits,
           rate_digits = rate_digits,
-          to = to,
           type2_layout = type2_layout,
           custom = custom,
+          to = to,
           overall = FALSE)
         return(
           dplyr::bind_rows(
@@ -513,9 +518,9 @@ rifttable <- function(
               diff_digits = diff_digits,
               ratio_digits = ratio_digits,
               rate_digits = rate_digits,
-              to = to,
               type2_layout = type2_layout,
               custom = custom,
+              to = to,
               overall = FALSE) %>%
               dplyr::rename(!!names(res_strat)[1] := 1),
             res_strat))
