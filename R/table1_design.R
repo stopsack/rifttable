@@ -8,6 +8,13 @@
 #' @param by Optional: Stratification variable. Typically the exposure.
 #' @param total Optional: Whether to add the total count at the beginning.
 #'   Defaults to \code{TRUE}.
+#' @param continuous_type Estimator (\code{type} in
+#'   \code{\link[rifttable]{rifttable}} \code{design}) for continuous variables.
+#'   Defaults to \code{"median (iqr)"}.
+#' @param binary_type Estimator (\code{type} in
+#'   \code{\link[rifttable]{rifttable}} \code{design}) for binary variables and
+#'   strata of categorical variables. Defaults to \code{"outcomes (risk)"}
+#'   (count and column proportion).
 #'
 #' @return \code{design} tibble that can be passed on to
 #'   \code{\link[rifttable]{rifttable}}.
@@ -16,66 +23,69 @@
 #' @examples
 #' # Data preparation
 #' cars <- tibble::as_tibble(mtcars) |>
-#' dplyr::mutate(
-#'   gear = factor(
-#'     gear,
-#'     levels = 3:5,
-#'     labels = c("Three", "Four", "Five")),
-#'   hp_categorical = dplyr::if_else(
-#'     hp > 200,
-#'     true = ">200 hp",
-#'     false = "<=200 hp")) |>
-#'   labelled::set_variable_labels(
-#'     mpg = "Miles per gallon",
-#'     hp = "Horsepower",
-#'     hp_categorical = "Horsepower",
-#'     am = "Automatic transmission",
-#'     gear = "Gears")
+#'   dplyr::mutate(
+#'     gear = factor(
+#'       gear,
+#'       levels = 3:5,
+#'       labels = c("Three", "Four", "Five")),
+#'     hp_categorical = dplyr::if_else(
+#'       hp > 200,
+#'       true = ">200 hp",
+#'       false = "<=200 hp"))
+#' # Label some variables. Better alternative: labelled::set_variable_labels()
+#' attr(cars$hp, "label") <- "Horsepower"
+#' attr(cars$hp_categorical, "label") <- "Horsepower"
+#' attr(cars$am, "label") <- "Automatic transmission"
+#' attr(cars$gear, "label") <- "Gears"
 #'
 #' # Generate table "design"
 #' design <- cars |>
-#'   table1_design(mpg, hp, hp_categorical, am, by = gear)
+#'   table1_design(
+#'     hp, hp_categorical, mpg, am,
+#'     by = gear)
 #'
-#' # Use "design" to create a descriptive table
+#' # Use "design" to create a descriptive table.
+#' # Recommend setting 'risk_percent = TRUE' to show proportions as percentages.
 #' design |>
-#'   rifttable(data = cars, diff_digits = 0)
+#'   rifttable(
+#'     data = cars,
+#'     diff_digits = 0,
+#'     risk_percent = TRUE)
 table1_design <- function(
     data,
     ...,
     by = NULL,
-    total = TRUE) {
+    total = TRUE,
+    continuous_type = "median (iqr)",
+    binary_type = "outcomes (risk)") {
   olddata <- data
   data <- data |>
     dplyr::select(!!!rlang::enquos(...))
   if(ncol(data) == 0)
     data <- olddata
-  variables <- colnames(data)
-  if(!missing(by))
-    variables <- variables[variables != deparse(substitute(by))]
+  data <- data %>%
+    dplyr::select(-dplyr::any_of(deparse(substitute(by))))
 
-  design <- tibble::tibble(variable = variables) |>
+  label_list <- purrr::map(
+    .x = data,
+    .f = attr,
+    which = "label")
+  design <- tibble::tibble(
+    variable = names(label_list),
+    var_label = as.character(label_list),
+    type = purrr::map_chr(
+      .x = data,
+      .f = class)) %>%
     dplyr::mutate(
-      type = purrr::map_chr(
-        .x = .data$variable,
-        .f = ~data |>
-          dplyr::select(var = dplyr::one_of(.x)) |>
-          dplyr::pull(var) |>
-          class()),
       levels = purrr::map(
         .x = .data$variable,
-        .f = ~data |>
-          dplyr::select(var = dplyr::one_of(.x)) |>
-          dplyr::pull(var) |>
-          na.exclude() |>
-          unique())) |>
-    dplyr::left_join(
-      data |>
-        labelled::var_label(unlist = TRUE) |>
-        tibble::as_tibble(rownames = "variable") |>
-        dplyr::rename(var_label = .data$value),
-      by = "variable") |>
-    dplyr::mutate(
-      nlevels = purrr::map_int(.x = levels, .f = length),
+        ~unique(na.exclude(data[[.x]]))),
+      has_na = purrr::map_lgl(
+        .x = .data$variable,
+        ~anyNA(data[, .x])),
+      nlevels = purrr::map_int(
+        .x = .data$levels,
+        .f = length),
       variable_type = dplyr::case_when(
         .data$type %in% c(
           "character", "factor", "ordered") ~
@@ -88,92 +98,72 @@ table1_design <- function(
           "numeric",
         TRUE ~
           "ERROR-undefined"),
-      has_na = purrr::map_lgl(
-        .x = .data$variable,
-        .f = ~data |>
-          dplyr::select(var = dplyr::one_of(.x)) |>
-          dplyr::pull(var) |>
-          is.na() |>
-          any()),
-      nlevels = dplyr::if_else(
-        .data$variable_type == "categorical",
-        true = .data$nlevels + 1 + .data$has_na,
-        false = 1 + .data$has_na),
-      levels = purrr::pmap(
-        .l = list(.data$variable_type, .data$variable, .data$levels),
+      outcome = purrr::pmap(
+        .l = list(
+          .data$variable_type,
+          .data$variable,
+          .data$levels),
         .f = ~{
           if(..1 == "categorical")
-            c(..2, as.character(..3))
+            c(
+              "",
+              paste(..2, ..3, sep = "@"),
+              paste0(..2, "@_NA_"))
           else
-            as.character(..3)
-          })) |>
-    tidyr::uncount(
-      weights = nlevels,
-      .remove = FALSE) |>
+            c(..2, paste0(..2, "@_NA_"))
+        })) %>%
+    tidyr::unnest_longer(col = "outcome") %>%
+    dplyr::filter(!(.data$has_na == FALSE &
+                      stringr::str_detect(
+                        string = .data$outcome,
+                        pattern = "@_NA_$"))) %>%
     dplyr::group_by(.data$variable) |>
     dplyr::mutate(
-      var_level = dplyr::case_when(
-        .data$variable_type == "categorical" &
-          .data$has_na == TRUE &
-          dplyr::row_number() == .data$nlevels ~
-          "_NA_",
-        .data$variable_type != "categorical" &
-          .data$has_na == TRUE &
-          dplyr::row_number() == 2 ~
-          "_NA_",
-        .data$variable_type == "categorical" ~
-          purrr::map2_chr(
-            .x = .data$levels,
-            .y = dplyr::row_number(),
-            .f = ~.x[.y]),
-        TRUE ~
-          ""),
-      outcome = dplyr::case_when(
-        .data$var_level == "_NA_" ~
-          paste0(.data$variable, "@_NA_"),
-        .data$variable_type == "categorical" &
-          dplyr::row_number() == 1 ~
-          "",
-        .data$variable_type == "categorical" &
-          dplyr::row_number() > 1 ~
-          paste0(.data$variable, "@", .data$var_level),
-        TRUE ~
-          .data$variable),
       type = dplyr::case_when(
-        .data$var_level == "_NA_" ~
+        stringr::str_detect(
+          string = .data$outcome,
+          pattern = "@_NA_$") ~
           "outcomes",
         .data$variable_type == "categorical" &
           dplyr::row_number() == 1 ~
           "",
         .data$variable_type == "categorical" &
           dplyr::row_number() > 1 ~
-          "outcomes (risk)",
+          binary_type,
         .data$variable_type == "binary" ~
-          "outcomes (risk)",
+          binary_type,
         .data$variable_type == "numeric" ~
-          "median (iqr)",
+          continuous_type,
         TRUE ~
           "ERROR"),
       label = dplyr::case_when(
-        .data$var_level == "_NA_" ~
+        stringr::str_detect(
+          string = .data$outcome,
+          pattern = "@_NA_$") ~
           "  Unknown",
         .data$variable_type == "categorical" &
           dplyr::row_number() == 1 &
-          .data$var_label != "" ~
+          !(.data$var_label %in% c("", "NULL")) ~
           .data$var_label,
         .data$variable_type == "categorical" &
           dplyr::row_number() == 1 &
-          .data$var_label == "" ~
+          !(.data$var_label %in% c("", "NULL")) ~
           .data$variable,
         .data$variable_type == "categorical" &
           dplyr::row_number() > 1 ~
-          paste0("  ", .data$var_level),
-        .data$var_label != "" ~
+          paste0(
+            "  ",
+            stringr::str_remove(
+              string = .data$outcome,
+              pattern = paste0("^", .data$variable, "@"))),
+        !(.data$var_label %in% c("", "NULL")) ~
           .data$var_label,
-        .data$var_label == "" ~
+        .data$var_label %in% c("", "NULL") ~
           .data$variable),
       na_rm = .data$has_na &
-        .data$var_level != "_NA_" &
+        !stringr::str_detect(
+          string = .data$outcome,
+          pattern = "@_NA_$") &
         !(.data$variable_type == "categorical" &
             dplyr::row_number() == 1)) |>
     dplyr::ungroup() |>
@@ -184,7 +174,7 @@ table1_design <- function(
   }
   if(total == TRUE) {
     design <- dplyr::bind_rows(
-      tibble::tibble(label = "N", outcome = "any", type = "total"),
+      tibble::tibble(label = "N", outcome = "", type = "total"),
       design)
   }
   if(!missing(by)) {

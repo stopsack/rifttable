@@ -4,7 +4,14 @@
 \alias{table1_design}
 \title{Design A Descriptive Table}
 \usage{
-table1_design(data, ..., by = NULL, total = TRUE)
+table1_design(
+  data,
+  ...,
+  by = NULL,
+  total = TRUE,
+  continuous_type = "median (iqr)",
+  binary_type = "outcomes (risk)"
+)
 }
 \arguments{
 \item{data}{Data set}
@@ -15,6 +22,15 @@ table1_design(data, ..., by = NULL, total = TRUE)
 
 \item{total}{Optional: Whether to add the total count at the beginning.
 Defaults to \code{TRUE}.}
+
+\item{continuous_type}{Estimator (\code{type} in
+\code{\link[rifttable]{rifttable}} \code{design}) for continuous variables.
+Defaults to \code{"median (iqr)"}.}
+
+\item{binary_type}{Estimator (\code{type} in
+\code{\link[rifttable]{rifttable}} \code{design}) for binary variables and
+strata of categorical variables. Defaults to \code{"outcomes (risk)"}
+(count and column proportion).}
 }
 \value{
 \code{design} tibble that can be passed on to
@@ -27,15 +43,15 @@ This function generates a \code{design} table from which
 \examples{
 # Data preparation
 cars <- tibble::as_tibble(mtcars) |>
-dplyr::mutate(
-  gear = factor(
-    gear,
-    levels = 3:5,
-    labels = c("Three", "Four", "Five")),
-  hp_categorical = dplyr::if_else(
-    hp > 200,
-    true = ">200 hp",
-    false = "<=200 hp")) |>
+  dplyr::mutate(
+    gear = factor(
+      gear,
+      levels = 3:5,
+      labels = c("Three", "Four", "Five")),
+    hp_categorical = dplyr::if_else(
+      hp > 200,
+      true = ">200 hp",
+      false = "<=200 hp"))
 # Label some variables. Better alternative: labelled::set_variable_labels()
 attr(cars$hp, "label") <- "Horsepower"
 attr(cars$hp_categorical, "label") <- "Horsepower"
@@ -44,9 +60,15 @@ attr(cars$gear, "label") <- "Gears"
 
 # Generate table "design"
 design <- cars |>
-  table1_design(mpg, hp, hp_categorical, am, by = gear)
+  table1_design(
+    hp, hp_categorical, mpg, am,
+    by = gear)
 
-# Use "design" to create a descriptive table
+# Use "design" to create a descriptive table.
+# Recommend setting 'risk_percent = TRUE' to show proportions as percentages.
 design |>
-  rifttable(data = cars, diff_digits = 0)
+  rifttable(
+    data = cars,
+    diff_digits = 0,
+    risk_percent = TRUE)
 }
