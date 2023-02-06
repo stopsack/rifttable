@@ -41,6 +41,8 @@
 #'   shown only for absolute estimates (e.g., \code{type = "mean"}) and blank
 #'   for comparatible estimates (e.g., mean difference via
 #'   \code{type = "diff"}).
+#' @param reference Optional. Defaults to \code{"(reference)"}. Alternative
+#'   label for the reference category.
 #'
 #' @details The main input parameter is the dataset \code{design}.
 #'   Always required are the column \code{type} (the type of requested
@@ -409,6 +411,7 @@ rifttable <- function(
     ratio_digits = 2,
     rate_digits = 1,
     to = ", ",
+    reference = "(reference)",
     type2_layout = "rows",
     overall = FALSE) {
   if(!is.data.frame(design))
@@ -474,6 +477,7 @@ rifttable <- function(
               type2_layout = type2_layout,
               custom = custom,
               to = to,
+              reference = reference,
               overall = FALSE),
             rifttable(
               design = design,
@@ -488,6 +492,7 @@ rifttable <- function(
               type2_layout = type2_layout,
               custom = custom,
               to = to,
+              reference = reference,
               overall = FALSE) %>%
               dplyr::select(-1)))
       } else {
@@ -504,6 +509,7 @@ rifttable <- function(
           type2_layout = type2_layout,
           custom = custom,
           to = to,
+          reference = reference,
           overall = FALSE)
         return(
           dplyr::bind_rows(
@@ -521,6 +527,7 @@ rifttable <- function(
               type2_layout = type2_layout,
               custom = custom,
               to = to,
+              reference = reference,
               overall = FALSE) %>%
               dplyr::rename(!!names(res_strat)[1] := 1),
             res_strat))
