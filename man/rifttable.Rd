@@ -53,8 +53,10 @@ Defaults to \code{1}. Can override for each line in \code{type}.}
 
 \item{to}{Optional. Separator between the lower and the upper bound
 of the 95\% confidence interval (and interquartile range for medians).
-Defaults to \code{" to "} for means, medians, and differences in means or
-quantiles; defaults to \code{"-"} otherwise.}
+Defaults to \code{", "}.}
+
+\item{reference}{Optional. Defaults to \code{"(reference)"}. Alternative
+label for the reference category.}
 
 \item{type2_layout}{Optional. If a second estimate is requested via
 \code{type2} in the \code{design} matrix, display it as in rows below
