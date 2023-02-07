@@ -92,7 +92,7 @@ table1_design <- function(
           "categorical",
         purrr::map_lgl(
           .x = .data$levels,  # this is TRUE also for "logical" variable
-          .f = ~all(c(0, 1) %in% .x)) ~
+          .f = ~all(stats::na.omit(.x) %in% c(0, 1))) ~
           "binary",
         .data$type == "numeric" ~
           "numeric",
