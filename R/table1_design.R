@@ -79,7 +79,7 @@ table1_design <- function(
     dplyr::mutate(
       levels = purrr::map(
         .x = .data$variable,
-        ~unique(na.exclude(data[[.x]]))),
+        ~sort(unique(na.exclude(data[[.x]])))),
       has_na = purrr::map_lgl(
         .x = .data$variable,
         ~anyNA(data[, .x])),
