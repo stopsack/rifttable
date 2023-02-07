@@ -549,7 +549,7 @@ rifttable <- function(
         col = .data$combo,
         into = c("outcome", "var_level"),
         sep = "@")
-    data <- purrr::map2(
+    data <- purrr::map2_dfc(
       .x = to_code$outcome,
       .y = to_code$var_level,
       .f = ~{
@@ -566,7 +566,6 @@ rifttable <- function(
             dplyr::select(!!varname := result)
         }
       }) %>%
-      purrr::list_cbind() %>%
       dplyr::bind_cols(data)
   }
 
