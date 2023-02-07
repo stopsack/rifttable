@@ -420,8 +420,10 @@ rifttable <- function(
     overall = FALSE) {
   if(!is.data.frame(design))
     stop("No 'design' data frame/tibble was provided.")
+  if(!is.data.frame(data))
+    stop("No 'data' data frame/tibble was provided.")
 
-  if(!("type"       %in% names(design))) {
+  if(!("type" %in% names(design))) {
     stop(paste("The 'design' data frame must contain a 'type' column",
                "specifying the requested statistics."))
   }
