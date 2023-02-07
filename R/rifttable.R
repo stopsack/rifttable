@@ -456,8 +456,8 @@ rifttable <- function(
         false = .data$type2),
       to = dplyr::if_else(
         is.na(.data$to),
-        true = to_use,
-        false = .data$to))
+        true = as.character(to_use),
+        false = as.character(.data$to)))
 
   if(any(!is.na(design$exposure))) {
     name <- attr(
