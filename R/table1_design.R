@@ -47,11 +47,8 @@
 #'     by = gear)
 #'
 #' # Use "design" to create a descriptive table.
-#' # Recommend setting 'risk_percent = TRUE' to show proportions as percentages.
 #' design |>
 #'   rifttable(
-#'     diff_digits = 0,
-#'     risk_percent = TRUE)
 table1_design <- function(
     data,
     ...,

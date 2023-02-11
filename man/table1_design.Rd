@@ -71,5 +71,4 @@ design <- cars |>
 design |>
   rifttable(
     diff_digits = 0,
-    risk_percent = TRUE)
 }
