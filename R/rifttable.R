@@ -252,8 +252,8 @@
 #' data(cancer, package = "survival")
 #'
 #' # The exposure (here, 'sex') must be categorical
-#' cancer <- cancer |>
-#'   tibble::as_tibble() |>
+#' cancer <- cancer %>%
+#'   tibble::as_tibble() %>%
 #'   dplyr::mutate(sex = factor(sex, levels = 1:2,
 #'                              labels = c("Male", "Female")),
 #'                 time = time / 365.25,
@@ -271,7 +271,7 @@
 #'             "Outcomes (Risk)",
 #'             "Outcomes/Total (Risk)",
 #'             "RR",
-#'             "RD")) |>
+#'             "RD")) %>%
 #'   dplyr::mutate(type = label,
 #'                 exposure = "sex",
 #'                 outcome = "status")
@@ -280,7 +280,7 @@
 #' rifttable(design = design1, data = cancer)
 #'
 #' # Use 'design' as columns (selecting RR and RD only)
-#' rifttable(design = design1 |>
+#' rifttable(design = design1 %>%
 #'                   dplyr::filter(label %in% c("RR", "RD")),
 #'        data = cancer,
 #'        layout = "cols")
@@ -309,7 +309,7 @@
 #'   "",                           NULL,     "",           "",
 #'   "**Joint model**, age-adj.",  NULL,     "",           "",
 #'   "  ECOG PS1",                 1,        "+ age",      "hr_joint",
-#'   "  ECOG PS2",                 2,        "+ age",      "hr_joint") |>
+#'   "  ECOG PS2",                 2,        "+ age",      "hr_joint") %>%
 #'   # Elements that are the same for all rows:
 #'   dplyr::mutate(
 #'     exposure = "sex",
@@ -319,14 +319,14 @@
 #'
 #' # Generate rifttable
 #' rifttable(design = design2,
-#'        data = cancer |> dplyr::filter(ph.ecog %in% 1:2))
+#'        data = cancer %>% dplyr::filter(ph.ecog %in% 1:2))
 #'
 #'
 #' # Example 3: Get two estimates using 'type' and 'type2'
 #' design3 <- tibble::tribble(
 #'   ~label,     ~stratum, ~type,          ~type2,
 #'   "ECOG PS1", 1,        "events/total", "hr",
-#'   "ECOG PS2", 2,        "events/total", "hr") |>
+#'   "ECOG PS2", 2,        "events/total", "hr") %>%
 #'   dplyr::mutate(
 #'     exposure = "sex",
 #'     event = "status",
@@ -335,10 +335,10 @@
 #'     effect_modifier = "ph.ecog")
 #'
 #' rifttable(design = design3,
-#'        data = cancer |> dplyr::filter(ph.ecog %in% 1:2))
+#'        data = cancer %>% dplyr::filter(ph.ecog %in% 1:2))
 #'
 #' rifttable(design = design3,
-#'        data = cancer |> dplyr::filter(ph.ecog %in% 1:2),
+#'        data = cancer %>% dplyr::filter(ph.ecog %in% 1:2),
 #'        layout = "cols", type2_layout = "cols")
 #'
 #'
@@ -357,22 +357,22 @@
 #'   "",                       NULL,     "",           NA,
 #'   "Joint model",            NULL,     "",           NA,
 #'   "  Male",                 "Male",   "diff_joint", NA,
-#'   "  Female",               "Female", "diff_joint", NA) |>
+#'   "  Female",               "Female", "diff_joint", NA) %>%
 #'   dplyr::mutate(
 #'     exposure = "ph.ecog_factor",
 #'     trend = "ph.ecog",
 #'     outcome = "age",
-#'     effect_modifier = "sex") |>
+#'     effect_modifier = "sex") %>%
 #'   rifttable(
-#'     data = cancer |>
-#'       dplyr::filter(ph.ecog < 3) |>
+#'     data = cancer %>%
+#'       dplyr::filter(ph.ecog < 3) %>%
 #'       dplyr::mutate(ph.ecog_factor = factor(ph.ecog)))
 #'
 #'
 #' # Example 5: Get formatted output for Example 2 (see above)
 #' \dontrun{
 #' rifttable(design = design2,
-#'        data = cancer |> dplyr::filter(ph.ecog %in% 1:2)) |>
+#'        data = cancer %>% dplyr::filter(ph.ecog %in% 1:2)) %>%
 #'   rt_gt(md = 1)  # get markdown formatting in first column ('label')
 #' }
 #'
@@ -381,8 +381,8 @@
 #' # Define custom function, must start with "estimate_"
 #' estimate_my_example <- function(data, ...) {
 #'   # Variables have been renamed in '.exposure' and '.outcome'
-#'   data |>
-#'     dplyr::group_by(.exposure) |>
+#'   data %>%
+#'     dplyr::group_by(.exposure) %>%
 #'     dplyr::summarize(
 #'       res = paste(
 #'         round(
@@ -394,11 +394,11 @@
 #' tibble::tribble(
 #'   ~label,                    ~type,        ~stratum,
 #'   "Mean: Built-in function", "mean",       1,
-#'   "Mean: Custom function",   "my_example", 1) |>
+#'   "Mean: Custom function",   "my_example", 1) %>%
 #'   dplyr::mutate(
 #'     exposure = "sex",
 #'     outcome = "status",
-#'     effect_modifier = "ph.ecog") |>
+#'     effect_modifier = "ph.ecog") %>%
 #'   rifttable(
 #'     data = cancer,
 #'     overall = TRUE)

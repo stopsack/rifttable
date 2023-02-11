@@ -43,8 +43,8 @@ Formatting includes:
 
 \examples{
 data(mtcars)
-mtcars |>
-  dplyr::slice(1:5) |>
+mtcars \%>\%
+  dplyr::slice(1:5) \%>\%
   rt_gt()
 
 }

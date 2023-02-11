@@ -44,7 +44,7 @@
 #' # Load 'cancer' dataset from survival package (Used in all examples)
 #' data(cancer, package = "survival")
 #'
-#' cancer <- cancer |>
+#' cancer <- cancer %>%
 #'   dplyr::mutate(
 #'     sex = factor(
 #'       sex,

@@ -44,8 +44,8 @@ rt_tabstyle <- function(mytab) {
 #'
 #' @examples
 #' data(mtcars)
-#' mtcars |>
-#'   dplyr::slice(1:5) |>
+#' mtcars %>%
+#'   dplyr::slice(1:5) %>%
 #'   rt_gt()
 #'
 #' @section Example Output:

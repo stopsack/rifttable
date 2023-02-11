@@ -44,7 +44,7 @@ This function generates a \code{design} table from which
 }
 \examples{
 # Data preparation
-cars <- tibble::as_tibble(mtcars) |>
+cars <- tibble::as_tibble(mtcars) \%>\%
   dplyr::mutate(
     gear = factor(
       gear,
@@ -61,14 +61,13 @@ attr(cars$am, "label") <- "Automatic transmission"
 attr(cars$gear, "label") <- "Gears"
 
 # Generate table "design"
-design <- cars |>
+design <- cars \%>\%
   table1_design(
     hp, hp_categorical, mpg, am,
     by = gear)
 
 # Use "design" to create a descriptive table.
-# Recommend setting 'risk_percent = TRUE' to show proportions as percentages.
-design |>
+design \%>\%
   rifttable(
-    diff_digits = 0,
+    diff_digits = 0)
 }

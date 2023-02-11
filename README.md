@@ -54,11 +54,11 @@ tibble::tribble(
   "– Risk difference (95% CI)", "rd",                    "Low",           
   "High hormone receptor",      "",                      "",               
   "– Deaths/N (Risk)",          "outcomes/total (risk)", "High",
-  "– Risk difference (95% CI)", "rd",                    "High") |>
+  "– Risk difference (95% CI)", "rd",                    "High") %>%
   dplyr::mutate(
     exposure = "stage",
     outcome = "death",
-    effect_modifier = "receptor") |> 
+    effect_modifier = "receptor") %>% 
   rifttable(data = breastcancer)
 ```
 

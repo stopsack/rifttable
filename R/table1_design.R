@@ -24,7 +24,7 @@
 #'
 #' @examples
 #' # Data preparation
-#' cars <- tibble::as_tibble(mtcars) |>
+#' cars <- tibble::as_tibble(mtcars) %>%
 #'   dplyr::mutate(
 #'     gear = factor(
 #'       gear,
@@ -41,14 +41,15 @@
 #' attr(cars$gear, "label") <- "Gears"
 #'
 #' # Generate table "design"
-#' design <- cars |>
+#' design <- cars %>%
 #'   table1_design(
 #'     hp, hp_categorical, mpg, am,
 #'     by = gear)
 #'
 #' # Use "design" to create a descriptive table.
-#' design |>
+#' design %>%
 #'   rifttable(
+#'     diff_digits = 0)
 table1_design <- function(
     data,
     ...,
@@ -57,7 +58,7 @@ table1_design <- function(
     continuous_type = "median (iqr)",
     binary_type = "outcomes (risk)") {
   olddata <- data
-  data <- data |>
+  data <- data %>%
     dplyr::select(!!!rlang::enquos(...))
   if(ncol(data) == 0)
     data <- olddata
@@ -118,7 +119,7 @@ table1_design <- function(
                       stringr::str_detect(
                         string = .data$outcome,
                         pattern = "@_NA_$"))) %>%
-    dplyr::group_by(.data$variable) |>
+    dplyr::group_by(.data$variable) %>%
     dplyr::mutate(
       type = dplyr::case_when(
         stringr::str_detect(
@@ -166,12 +167,13 @@ table1_design <- function(
           string = .data$outcome,
           pattern = "@_NA_$") &
         !(.data$variable_type == "categorical" &
-            dplyr::row_number() == 1)) |>
-    dplyr::ungroup() |>
+            dplyr::row_number() == 1)) %>%
+    dplyr::ungroup() %>%
     dplyr::select("label", "outcome", "type", "na_rm")
   # Have "na_rm" column only in "design" if >= 1 variable has missing data
   if(!any(design$na_rm)) {
-    design <- design |> dplyr::select(-"na_rm")
+    design <- design %>%
+      dplyr::select(-"na_rm")
   }
   if(total == TRUE) {
     design <- dplyr::bind_rows(
