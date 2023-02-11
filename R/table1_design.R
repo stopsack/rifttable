@@ -61,8 +61,11 @@ table1_design <- function(
     dplyr::select(!!!rlang::enquos(...))
   if(ncol(data) == 0)
     data <- olddata
-  data <- data %>%
-    dplyr::select(-dplyr::any_of(deparse(substitute(by))))
+  if(!missing(by)) {
+    if(deparse(substitute(by)) %in% names(data))
+      data <- data %>%
+        dplyr::select(!{{ by }})
+  }
 
   label_list <- purrr::map(
     .x = data,
@@ -176,7 +179,10 @@ table1_design <- function(
       design)
   }
   if(!missing(by)) {
-    design$exposure <- deparse(substitute(by))
+    design$exposure <- stringr::str_remove_all(
+      string = deparse(substitute(by)),
+      pattern = "[\"\']")
+  }
   if(length(rlang::enquos(...)) > 0) {
     data_for_attr <- olddata %>%
       dplyr::select(!!!rlang::enquos(...), {{ by }})
