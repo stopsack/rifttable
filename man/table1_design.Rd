@@ -34,7 +34,9 @@ strata of categorical variables. Defaults to \code{"outcomes (risk)"}
 }
 \value{
 \code{design} tibble that can be passed on to
-\code{\link[rifttable]{rifttable}}.
+\code{\link[rifttable]{rifttable}}. Contains an attribute \code{rt_data}
+so that the dataset does not have to be provided to
+\code{\link[rifttable]{rifttable}} another time.
 }
 \description{
 This function generates a \code{design} table from which
@@ -68,7 +70,6 @@ design <- cars |>
 # Recommend setting 'risk_percent = TRUE' to show proportions as percentages.
 design |>
   rifttable(
-    data = cars,
     diff_digits = 0,
     risk_percent = TRUE)
 }

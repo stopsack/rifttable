@@ -17,7 +17,9 @@
 #'   (count and column proportion).
 #'
 #' @return \code{design} tibble that can be passed on to
-#'   \code{\link[rifttable]{rifttable}}.
+#'   \code{\link[rifttable]{rifttable}}. Contains an attribute \code{rt_data}
+#'   so that the dataset does not have to be provided to
+#'   \code{\link[rifttable]{rifttable}} another time.
 #' @export
 #'
 #' @examples
@@ -48,7 +50,6 @@
 #' # Recommend setting 'risk_percent = TRUE' to show proportions as percentages.
 #' design |>
 #'   rifttable(
-#'     data = cars,
 #'     diff_digits = 0,
 #'     risk_percent = TRUE)
 table1_design <- function(
@@ -179,7 +180,13 @@ table1_design <- function(
   }
   if(!missing(by)) {
     design$exposure <- deparse(substitute(by))
+  if(length(rlang::enquos(...)) > 0) {
+    data_for_attr <- olddata %>%
+      dplyr::select(!!!rlang::enquos(...), {{ by }})
+  } else {
+    data_for_attr <- olddata
   }
+  attr(x = design, which = "rt_data") <- data_for_attr
   return(design)
 }
 
