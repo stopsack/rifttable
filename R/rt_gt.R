@@ -4,17 +4,22 @@
 #' @noRd
 rt_tabstyle <- function(mytab) {
   mytab %>%
-    gt::tab_options(data_row.padding = gt::px(0),
-                    column_labels.border.top.style = "none",
-                    table.border.top.style = "none",
-                    table_body.border.top.style = "none",
-                    column_labels.font.weight = "bold") %>%
-    gt::tab_style(style = gt::cell_text(align = "left",
-                                        v_align = "top"),
-                  locations = gt::cells_body()) %>%
-    gt::tab_style(style = gt::cell_text(align = "left",
-                                    v_align = "bottom"),
-                  locations = gt::cells_column_labels())
+    gt::tab_options(
+      data_row.padding = gt::px(0),
+      column_labels.border.top.style = "none",
+      table.border.top.style = "none",
+      table_body.border.top.style = "none",
+      column_labels.font.weight = "bold") %>%
+    gt::tab_style(
+      style = gt::cell_text(
+        align = "left",
+        v_align = "top"),
+      locations = gt::cells_body()) %>%
+    gt::tab_style(
+      style = gt::cell_text(
+        align = "left",
+        v_align = "bottom"),
+      locations = gt::cells_column_labels())
 }
 
 #' Turn tibble into gt Table with Custom Formatting

@@ -290,36 +290,44 @@ data(cancer, package = "survival")
 # The exposure (here, 'sex') must be categorical
 cancer <- cancer \%>\%
   tibble::as_tibble() \%>\%
-  dplyr::mutate(sex = factor(sex, levels = 1:2,
-                             labels = c("Male", "Female")),
-                time = time / 365.25,
-                status = status - 1)
+  dplyr::mutate(
+    sex = factor(
+      sex,
+      levels = 1:2,
+      labels = c("Male", "Female")),
+    time = time / 365.25,
+    status = status - 1)
 
 
 # Example 1: Binary outcomes (use 'outcome' variable)
 # Set table design
 design1 <- tibble::tibble(
-  label = c("Outcomes",
-            "Total",
-            "Outcomes/Total",
-            "Risk",
-            "Risk (CI)",
-            "Outcomes (Risk)",
-            "Outcomes/Total (Risk)",
-            "RR",
-            "RD")) \%>\%
-  dplyr::mutate(type = label,
-                exposure = "sex",
-                outcome = "status")
+  label = c(
+    "Outcomes",
+    "Total",
+    "Outcomes/Total",
+    "Risk",
+    "Risk (CI)",
+    "Outcomes (Risk)",
+    "Outcomes/Total (Risk)",
+    "RR",
+    "RD")) \%>\%
+  dplyr::mutate(
+    type = label,
+    exposure = "sex",
+    outcome = "status")
 
 # Generate rifttable
-rifttable(design = design1, data = cancer)
+rifttable(
+  design = design1,
+  data = cancer)
 
 # Use 'design' as columns (selecting RR and RD only)
-rifttable(design = design1 \%>\%
-                  dplyr::filter(label \%in\% c("RR", "RD")),
-       data = cancer,
-       layout = "cols")
+rifttable(
+  design = design1 \%>\%
+    dplyr::filter(label \%in\% c("RR", "RD")),
+  data = cancer,
+  layout = "cols")
 
 
 # Example 2: Survival outcomes (use 'time' and 'event'),
@@ -354,8 +362,10 @@ design2 <- tibble::tribble(
     effect_modifier = "ph.ecog")
 
 # Generate rifttable
-rifttable(design = design2,
-       data = cancer \%>\% dplyr::filter(ph.ecog \%in\% 1:2))
+rifttable(
+  design = design2,
+  data = cancer \%>\%
+    dplyr::filter(ph.ecog \%in\% 1:2))
 
 
 # Example 3: Get two estimates using 'type' and 'type2'
@@ -370,12 +380,17 @@ design3 <- tibble::tribble(
     confounders = "+ age",
     effect_modifier = "ph.ecog")
 
-rifttable(design = design3,
-       data = cancer \%>\% dplyr::filter(ph.ecog \%in\% 1:2))
+rifttable(
+  design = design3,
+  data = cancer \%>\%
+    dplyr::filter(ph.ecog \%in\% 1:2))
 
-rifttable(design = design3,
-       data = cancer \%>\% dplyr::filter(ph.ecog \%in\% 1:2),
-       layout = "cols", type2_layout = "cols")
+rifttable(
+  design = design3,
+  data = cancer \%>\%
+    dplyr::filter(ph.ecog \%in\% 1:2),
+  layout = "cols",
+  type2_layout = "cols")
 
 
 # Example 4: Continuous outcomes (use 'outcome' variable);

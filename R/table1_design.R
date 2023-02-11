@@ -48,8 +48,7 @@
 #'
 #' # Use "design" to create a descriptive table.
 #' design %>%
-#'   rifttable(
-#'     diff_digits = 0)
+#'   rifttable(diff_digits = 0)
 table1_design <- function(
     data,
     ...,
