@@ -96,11 +96,12 @@ fill_cells <- function(
 
   if(type == "" |
      type == "blank") {
-    if(is.na(exposure)) {
+    if(is.na(exposure) & is.na(trend)) {
       return(tibble::tibble(
         .exposure = "Overall",
         res = ""))
-    } else {
+    }
+    if(is.na(trend)) {
       return(
         tibble::tibble(
           .exposure = data %>%
@@ -108,6 +109,14 @@ fill_cells <- function(
             levels(),
           res = ""))
     }
+    return(
+      tibble::tibble(
+        .exposure = c(
+          data %>%
+            dplyr::pull(.data$.exposure) %>%
+            levels(),
+          "Trend"),
+        res = ""))
   }
 
   if(is.na(nmin))
@@ -263,7 +272,7 @@ fill_cells <- function(
           time = time,
           time2 = time2,
           outcome = outcome,
-          exposure = exposure,
+          exposure = trend,
           effectmodifier = effect_modifier,
           effectmodifier_level = stratum,
           confounders = confounders,
