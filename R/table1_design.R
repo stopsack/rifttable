@@ -13,6 +13,8 @@
 #' @param na_always Optional: Whether to add the count of missing values for
 #'   each variable, even if there are none. Defaults to \code{FALSE}, i.e.,
 #'   the count of missing values will only be shown if there are any.
+#' @param na_label Label for count of missing values. Defaults to
+#'   \code{"Unknown"}.
 #' @param continuous_type Estimator (\code{type} in
 #'   \code{\link[rifttable]{rifttable}} \code{design}) for continuous variables.
 #'   Defaults to \code{"median (iqr)"}.
@@ -61,6 +63,7 @@ table1_design <- function(
     total = TRUE,
     empty_levels = FALSE,
     na_always = FALSE,
+    na_label = "Unknown",
     continuous_type = "median (iqr)",
     binary_type = "outcomes (risk)") {
   olddata <- data
@@ -158,7 +161,7 @@ table1_design <- function(
         stringr::str_detect(
           string = .data$outcome,
           pattern = "@_NA_$") ~
-          "  Unknown",
+          paste0("  ", na_label),
         .data$variable_type == "categorical" &
           dplyr::row_number() == 1 &
           !(.data$var_label %in% c("", "NULL")) ~

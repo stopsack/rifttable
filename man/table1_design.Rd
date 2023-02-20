@@ -11,6 +11,7 @@ table1_design(
   total = TRUE,
   empty_levels = FALSE,
   na_always = FALSE,
+  na_label = "Unknown",
   continuous_type = "median (iqr)",
   binary_type = "outcomes (risk)"
 )
@@ -31,6 +32,9 @@ variables. Defaults to \code{FALSE}.}
 \item{na_always}{Optional: Whether to add the count of missing values for
 each variable, even if there are none. Defaults to \code{FALSE}, i.e.,
 the count of missing values will only be shown if there are any.}
+
+\item{na_label}{Label for count of missing values. Defaults to
+\code{"Unknown"}.}
 
 \item{continuous_type}{Estimator (\code{type} in
 \code{\link[rifttable]{rifttable}} \code{design}) for continuous variables.
