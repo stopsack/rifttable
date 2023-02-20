@@ -169,7 +169,7 @@ prepare_data <- function(
        !(type %in% c("", "blank"))) {
       if(is.na(outcome) | outcome == "")
         data <- data %>%
-          tidyr::drop_na(dplyr::any_of(".event", ".time", ".time2"))
+          tidyr::drop_na(dplyr::any_of(c(".event", ".time", ".time2")))
       else
           data <- data %>%
             tidyr::drop_na(".outcome")
