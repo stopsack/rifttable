@@ -8,6 +8,11 @@
 #' @param by Optional: Stratification variable. Typically the exposure.
 #' @param total Optional: Whether to add the total count at the beginning.
 #'   Defaults to \code{TRUE}.
+#' @param empty_levels Optional: Whether to include empty levels of factor
+#'   variables. Defaults to \code{FALSE}.
+#' @param na_always Optional: Whether to add the count of missing values for
+#'   each variable, even if there are none. Defaults to \code{FALSE}, i.e.,
+#'   the count of missing values will only be shown if there are any.
 #' @param continuous_type Estimator (\code{type} in
 #'   \code{\link[rifttable]{rifttable}} \code{design}) for continuous variables.
 #'   Defaults to \code{"median (iqr)"}.
@@ -54,6 +59,8 @@ table1_design <- function(
     ...,
     by = NULL,
     total = TRUE,
+    empty_levels = FALSE,
+    na_always = FALSE,
     continuous_type = "median (iqr)",
     binary_type = "outcomes (risk)") {
   olddata <- data
@@ -80,13 +87,22 @@ table1_design <- function(
     dplyr::mutate(
       levels = purrr::map(
         .x = .data$variable,
-        ~sort(unique(na.exclude(data[[.x]])))),
+        .f = ~sort(unique(na.exclude(data[[.x]])))))
+  if(empty_levels == TRUE) {
+    design <- design %>%
+      dplyr::mutate(
+        levels_f = purrr::map(.x = .data$variable,
+                              .f = ~levels(data[[.x]])),
+        levels = dplyr::if_else(
+          .data$type == "factor",
+          true = .data$levels_f,
+          false = .data$levels))
+  }
+  design <- design %>%
+    dplyr::mutate(
       has_na = purrr::map_lgl(
         .x = .data$variable,
         ~anyNA(data[, .x])),
-      nlevels = purrr::map_int(
-        .x = .data$levels,
-        .f = length),
       variable_type = dplyr::case_when(
         .data$type %in% c(
           "character", "factor", "ordered") ~
@@ -115,6 +131,7 @@ table1_design <- function(
         })) %>%
     tidyr::unnest_longer(col = "outcome") %>%
     dplyr::filter(!(.data$has_na == FALSE &
+                      na_always == FALSE &
                       stringr::str_detect(
                         string = .data$outcome,
                         pattern = "@_NA_$"))) %>%

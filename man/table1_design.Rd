@@ -9,6 +9,8 @@ table1_design(
   ...,
   by = NULL,
   total = TRUE,
+  empty_levels = FALSE,
+  na_always = FALSE,
   continuous_type = "median (iqr)",
   binary_type = "outcomes (risk)"
 )
@@ -22,6 +24,13 @@ table1_design(
 
 \item{total}{Optional: Whether to add the total count at the beginning.
 Defaults to \code{TRUE}.}
+
+\item{empty_levels}{Optional: Whether to include empty levels of factor
+variables. Defaults to \code{FALSE}.}
+
+\item{na_always}{Optional: Whether to add the count of missing values for
+each variable, even if there are none. Defaults to \code{FALSE}, i.e.,
+the count of missing values will only be shown if there are any.}
 
 \item{continuous_type}{Estimator (\code{type} in
 \code{\link[rifttable]{rifttable}} \code{design}) for continuous variables.
