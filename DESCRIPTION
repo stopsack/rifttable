@@ -22,7 +22,7 @@ Imports:
     broom (>= 0.7.0),
     dplyr (>= 1.0.8),
     purrr, 
-    risks,
+    risks (>= 0.4.0),
     rlang (>= 0.4.0),
     stats,
     survival,
