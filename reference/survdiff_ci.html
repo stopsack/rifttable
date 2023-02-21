@@ -12,7 +12,7 @@ point based on the difference between per-group Kaplan-Meier estimates."><!-- ma
     
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +25,13 @@ point based on the difference between per-group Kaplan-Meier estimates."><!-- ma
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
+    <a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a>
+  </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -123,19 +130,23 @@ where the outcome is time to an event. BMJ 1999;319:1492–5.
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Load 'cancer' dataset from survival package (Used in all examples)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cancer</span>, package <span class="op">=</span> <span class="st">"survival"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">cancer</span> <span class="op">&lt;-</span> <span class="va">cancer</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">sex</span>, levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span></span>
-<span class="r-in"><span>                             labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Men"</span>, <span class="st">"Women"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                status <span class="op">=</span> <span class="va">status</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cancer</span> <span class="op">&lt;-</span> <span class="va">cancer</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="va">sex</span>,</span></span>
+<span class="r-in"><span>      levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span></span>
+<span class="r-in"><span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      status <span class="op">=</span> <span class="va">status</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">survdiff_ci</span><span class="op">(</span>formula <span class="op">=</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>, event <span class="op">=</span> <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span>,</span></span>
-<span class="r-in"><span>            data <span class="op">=</span> <span class="va">cancer</span>,</span></span>
-<span class="r-in"><span>            time <span class="op">=</span> <span class="fl">365.25</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">survdiff_ci</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  formula <span class="op">=</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">time</span>, event <span class="op">=</span> <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">cancer</span>,</span></span>
+<span class="r-in"><span>  time <span class="op">=</span> <span class="fl">365.25</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   term  estimate std.error statistic p.value conf.low conf.high</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Women    0.190    0.073<span style="text-decoration: underline;">9</span>      2.58 0.004<span style="text-decoration: underline;">97</span>   0.045<span style="text-decoration: underline;">6</span>     0.335</span>
-<span class="r-in"><span><span class="co"># Women have 19 percentage points higher one-year survival than men</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   term   estimate std.error statistic p.value conf.low conf.high</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Female    0.190    0.073<span style="text-decoration: underline;">9</span>      2.58 0.004<span style="text-decoration: underline;">97</span>   0.045<span style="text-decoration: underline;">6</span>     0.335</span>
+<span class="r-in"><span><span class="co"># Females have 19 percentage points higher one-year survival than males</span></span></span>
 <span class="r-in"><span><span class="co"># (95% CI, 5 to 34 percentage points).</span></span></span>
 </code></pre></div>
     </div>

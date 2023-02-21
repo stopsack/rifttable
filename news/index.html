@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,6 +23,13 @@
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
+    <a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a>
+  </div>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -48,6 +55,38 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.0" id="rifttable-060">rifttable 0.6.0<a class="anchor" aria-label="anchor" href="#rifttable-060"></a></h2>
+<ul><li>Breaking changes:
+<ul><li>
+<code>to</code> is set to <code>", "</code> by default, instead of <code>"-"</code> for ratio variables and <code>" to "</code> for difference variables</li>
+<li>Custom functions are now directly called via the <code>type</code> variable, following a restructuring of all estimation functions with greater flexibility.</li>
+<li>
+<code>design$type</code> no longer accepts additional arguments, such as time points. Supply list instead via <code>design$arguments</code>.</li>
+<li>Suppression of strata with sparse or re-identifiable data with <code>design$nmin</code> now differentiates between counts of total observations or outcomes, depending on estimator.</li>
+</ul></li>
+<li>New function <code><a href="../reference/table1_design.html">table1_design()</a></code>: Generate design of a descriptive “Table 1.”</li>
+<li>New <code>outcome</code> option <code>"variable@level"</code> for categorical variables that displays <code>level</code> as a binary outcome. Used by <code><a href="../reference/table1_design.html">table1_design()</a></code>.</li>
+<li>Unstratified tables displaying the trend/linear slope (<code>trend</code> variable in the <code>design</code>) without an <code>exposure</code>.</li>
+<li>More customization:
+<ul><li>
+<code>rifttable(reference = ...)</code>: Label for the reference category.</li>
+<li>
+<code>design$ci</code>: Width of confidence intervals.</li>
+<li>
+<code>design$na_rm</code>: Omitting observations with missing outcome data.</li>
+<li>
+<code>design$arguments</code>: Flexibly passing along any argument to estimation functions.</li>
+</ul></li>
+<li>New vignette describing all estimators.</li>
+<li>Internal:
+<ul><li>Drop dependency on R &gt;= 4.1 and native pipe.</li>
+<li>Require <a href="https://stopsack.github.io/risks" class="external-link">{risks}</a> &gt;= 0.4.0.</li>
+<li>Remove dependency on {labelled} package.</li>
+<li>The {gt} and {quantreg} packages are now optional as soft dependencies.</li>
+<li>Compatible with {dplyr} 1.1.0, {tidyselect} 1.2.0</li>
+</ul></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="rifttable-050">rifttable 0.5.0<a class="anchor" aria-label="anchor" href="#rifttable-050"></a></h2>
 <ul><li>khsmisc::table2() “graduated” into its own package. See <a href="https://stopsack.github.io/khsmisc/news/" class="external-link">{khsmisc} Changelog</a> for earlier versions.</li>
 <li>Add <code><a href="../reference/breastcancer.html">breastcancer()</a></code> dataset</li>
@@ -55,7 +94,8 @@
 </li>
 <li>Remove RMTL estimators</li>
 </ul></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
