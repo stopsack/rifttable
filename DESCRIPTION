@@ -1,7 +1,7 @@
 Package: rifttable
 Type: Package
 Title: Results Tables to Bridge the Rift Between Epidemiologists and Their Data
-Version: 0.5.0
+Version: 0.6.0
 Authors@R:
     person(given = "Konrad H.",
            family = "Stopsack",
@@ -28,7 +28,7 @@ Imports:
     survival,
     stringr,
     tibble,
-    tidyr,
+    tidyr
 Suggests: 
     gt (>= 0.8.0),
     knitr,
