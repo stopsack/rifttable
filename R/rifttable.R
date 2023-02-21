@@ -392,7 +392,7 @@
 #' }
 #'
 #' # Example 6: Use custom function; add exposure-unstratified overall estimates
-#'
+#' \dontrun{
 #' # Define custom function, must start with "estimate_"
 #' estimate_my_example <- function(data, ...) {
 #'   # Variables have been renamed in '.exposure' and '.outcome'
@@ -417,7 +417,7 @@
 #'   rifttable(
 #'     data = cancer,
 #'     overall = TRUE)
-#'
+#' }
 #' @section Example Output (see Example 5):
 #' \if{html}{\figure{rifttable.png}{options: width=70\%}}
 rifttable <- function(

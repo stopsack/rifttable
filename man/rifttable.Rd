@@ -428,7 +428,7 @@ rifttable(design = design2,
 }
 
 # Example 6: Use custom function; add exposure-unstratified overall estimates
-
+\dontrun{
 # Define custom function, must start with "estimate_"
 estimate_my_example <- function(data, ...) {
   # Variables have been renamed in '.exposure' and '.outcome'
@@ -453,7 +453,7 @@ tibble::tribble(
   rifttable(
     data = cancer,
     overall = TRUE)
-
+}
 }
 \references{
 Greenland S, Rothman KJ (2008). Introduction to Categorical Statistics. In:
