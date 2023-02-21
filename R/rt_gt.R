@@ -4,17 +4,22 @@
 #' @noRd
 rt_tabstyle <- function(mytab) {
   mytab %>%
-    gt::tab_options(data_row.padding = gt::px(0),
-                    column_labels.border.top.style = "none",
-                    table.border.top.style = "none",
-                    table_body.border.top.style = "none",
-                    column_labels.font.weight = "bold") %>%
-    gt::tab_style(style = gt::cell_text(align = "left",
-                                        v_align = "top"),
-                  locations = gt::cells_body()) %>%
-    gt::tab_style(style = gt::cell_text(align = "left",
-                                    v_align = "bottom"),
-                  locations = gt::cells_column_labels())
+    gt::tab_options(
+      data_row.padding = gt::px(0),
+      column_labels.border.top.style = "none",
+      table.border.top.style = "none",
+      table_body.border.top.style = "none",
+      column_labels.font.weight = "bold") %>%
+    gt::tab_style(
+      style = gt::cell_text(
+        align = "left",
+        v_align = "top"),
+      locations = gt::cells_body()) %>%
+    gt::tab_style(
+      style = gt::cell_text(
+        align = "left",
+        v_align = "bottom"),
+      locations = gt::cells_column_labels())
 }
 
 #' Turn tibble into gt Table with Custom Formatting
@@ -44,13 +49,26 @@ rt_tabstyle <- function(mytab) {
 #'
 #' @examples
 #' data(mtcars)
-#' mtcars |>
-#'   dplyr::slice(1:5) |>
+#' mtcars %>%
+#'   dplyr::slice(1:5) %>%
 #'   rt_gt()
 #'
 #' @section Example Output:
 #' \if{html}{\figure{rt_gt.png}{options: width=50\%}}
-rt_gt <- function(df, md = NULL, indent = c(10, 20), remove_border = TRUE) {
+rt_gt <- function(
+    df,
+    md = NULL,
+    indent = c(10, 20),
+    remove_border = TRUE) {
+  if (!requireNamespace("gt", quietly = TRUE)) {
+    stop(
+      paste(
+        "The package \"gt\" must be installed to create formatted tables",
+        "via rifttable::rt_gt(). Use alternative packages for table",
+        "formatting or install \"gt\":\n   install.packages(\"gt\")"),
+      call. = FALSE)
+  }
+
   # RMarkdown "output: github_document" cannot handle HTML styles
   if(any(stringr::str_detect(
     string = c("", knitr::opts_knit$get("rmarkdown.pandoc.to")),

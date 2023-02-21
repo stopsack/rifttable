@@ -7,7 +7,7 @@
 #' @format ## `breastcancer`
 #' A tibble with 192 rows and 3 columns:
 #' \describe{
-#'   \item{death}{Ddeath, binary: 0, 1}
+#'   \item{death}{Death, binary: 0, 1}
 #'   \item{stage}{Cancer stage, 3 categories}
 #'   \item{receptor}{Hormone receptor status, binary: "High", "Low"}
 #'   ...
