@@ -1,0 +1,100 @@
+---
+title: "A Descriptive Table 1"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{A Descriptive Table 1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Loading the package
+
+After installation (using `remotes::install_github("stopsack/rifttable")`), load the package with:
+
+```{r setup}
+library(rifttable)
+```
+
+
+# Data handling
+
+This example uses the `cancer` dataset from the survival package.
+
+```{r data, message = FALSE}
+library(dplyr)  # for data handling
+data(cancer, package = "survival")
+cancer <- cancer %>%
+  tibble::as_tibble() %>%
+  dplyr::mutate(
+    sex = factor(
+      sex,
+      levels = 1:2,
+      labels = c("Male", "Female")),
+    ph.ecog = factor(ph.ecog))
+```
+
+
+# Generate a table design
+
+rifttable's `table1_design()` generates the `design` table that can then be passed on to `rifttable()`.
+
+```{r design}
+design <- cancer %>%
+  table1_design(
+    age, ph.ecog, ph.karno, pat.karno,  # leave empty to include all variables
+    by = sex)
+
+# Print the design for illustration purposes
+design
+```
+
+
+# Obtain Table 1
+
+```{r rifttable}
+design %>%
+  rifttable() %>%
+  rt_gt()  # obtain formatted output
+```
+
+Of note, the dataset is passed along silently together with the `design`. However, the same design can be applied to different data, if it contains the same variable names, *e.g.*, `rifttable(design = design, data = otherdata)`.
+
+
+# Customize the table
+
+Label variables, set custom rounding, change estimands, and all "Overall" column.
+
+```{r custom}
+# Alternative: set_variable_labels() from the {labelled} package
+attr(cancer$age, "label") <- "Age, years"  # At diagnosis? Unclear (Loprinzi 94)
+attr(cancer$ph.ecog, "label") <- "Physician-rated ECOG score"
+attr(cancer$ph.karno, "label") <- "Physician-rated Karnofsky score"
+attr(cancer$pat.karno, "label") <- "Patient-rated Karnofsky score"
+attr(cancer$sex, "label") <- "Sex"
+
+design <- cancer %>%
+  table1_design(
+    age, ph.ecog, ph.karno, pat.karno, 
+    by = sex, 
+    continuous_type = "mean (sd)") %>%  # default: "median (iqr)"
+  mutate(  # rounding specifically for the "age" variable
+    digits = if_else(
+      outcome == "age",
+      true = 1,
+      false = NA))
+
+design %>%
+  rifttable(
+    diff_digits = 0,  # rounding for continuous variables other than age
+    overall = TRUE) %>%  # add unstratified "overall" column
+  rt_gt() %>%  # obtain formatted output
+  gt::tab_footnote(
+    footnote = "Data shown are count (percent) or mean (standard deviation)")
+```
