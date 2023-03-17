@@ -52,9 +52,9 @@ format_stratified_results <- function(
               pattern = stringr::fixed("(NaN%)")),
             "(--)"),
         TRUE ~ .data$res),
-      res = dplyr::if_else(
-        .data$.per_stratum < nmin,
-        true = paste0("-- (<", nmin, ")"),
-        false = .data$res)) %>%
+      res = dplyr::case_when(
+        .data$.per_stratum < nmin ~
+          paste0("-- (<", nmin, ")"),
+        TRUE ~ .data$res)) %>%
     dplyr::select(-.data$.per_stratum)
 }
