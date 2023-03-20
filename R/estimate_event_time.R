@@ -217,7 +217,7 @@ estimate_event_time <- function(
         dplyr::summarize(
           res = paste(format_round(
             max(.data$.time),
-            digits = 0)))
+            digits = digits)))
     },
     "surv" =,
     "surv (ci)" =,
