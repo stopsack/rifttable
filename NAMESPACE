@@ -2,6 +2,7 @@
 
 export("%>%")
 export(rifttable)
+export(rt_bind_rows)
 export(rt_gt)
 export(scoreci)
 export(survdiff_ci)
