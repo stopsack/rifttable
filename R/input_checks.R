@@ -67,7 +67,7 @@ find_argument <- function(
     acceptable = NULL,
     default = NA) {
   argum <- default
-  if(!is.na(arguments)) {
+  if(any(!is.na(arguments))) {
     if(is.list(arguments)) {
       if(which_argument %in% names(arguments)) {
         if(is_numeric) {
