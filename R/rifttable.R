@@ -487,13 +487,15 @@ rifttable <- function(
         true = as.character(to_use),
         false = as.character(.data$to)))
 
-  if(any(!is.na(design$exposure))) {
+  exposure_nona <- stats::na.omit(design$exposure)
+  exposure_nona <- exposure_nona[exposure_nona != ""]
+  if(length(exposure_nona > 0)) {
     name <- attr(
       x = data %>%
-        dplyr::pull(design$exposure[1]),
+        dplyr::pull(exposure_nona[1]),
       which = "label")
     if(is.null(name))
-      name <- design$exposure[1]
+      name <- exposure_nona[1]
 
     if(overall == TRUE) {
       if(layout == "rows") {
