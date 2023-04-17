@@ -52,7 +52,7 @@ fill_cells <- function(
     risk_digits,
     ratio_digits,
     rate_digits) {
-  if(is.na(exposure)) {
+  if(is.na(exposure) | exposure == "") {
     data <- data %>%
       dplyr::mutate(.exposure = "Overall")
   } else {
