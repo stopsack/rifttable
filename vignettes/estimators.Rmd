@@ -68,7 +68,7 @@ knitr::opts_chunk$set(
 `type` | Description | Options (`arguments = `)
 -------+-------------+--------------
 `"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator. Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in cumulative incidence at 2.5 years.
-`"hr"`    | Hazard ratio from Cox proportional hazards regression.
+`"hr"`    | Hazard ratio from Cox proportional hazards regression. | `list(robust = TRUE)` for robust (sandwich standard) errors; `list(weights = "weight_variable", robust = TRUE)` for sample (e.g., inverse-probability) weights and robust errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
 `"survdiff"` | Difference in survival from Kaplan-Meier estimator.  Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in survival at 2.5 years.
 
    

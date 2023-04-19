@@ -50,6 +50,20 @@ estimate_regress_cox <- function(
   digits <- find_rounding_digits(
     digits = digits,
     default = ratio_digits)
+  coxph_weights <- find_argument(
+    arguments = arguments,
+    which_argument = "weights",
+    is_numeric = FALSE,
+    default = NULL)
+  if(!is.null(coxph_weights)) {
+    coxph_weights <- data %>%
+      dplyr::pull(dplyr::one_of(coxph_weights))
+  }
+  coxph_robust <- find_argument(
+    arguments = arguments,
+    which_argument = "robust",
+    is_numeric = FALSE,
+    default = NULL)
 
   survival::coxph(
     formula = stats::as.formula(
@@ -60,7 +74,9 @@ estimate_regress_cox <- function(
           false = "survival::Surv(time = .time_orig, time2 = .time2, "),
         "event = .event) ~ .exposure ",
         confounders)),
-    data = data) %>%
+    data = data,
+    weights = coxph_weights,
+    robust = coxph_robust) %>%
     broom::tidy(
       conf.int = TRUE,
       conf.level = ci,
