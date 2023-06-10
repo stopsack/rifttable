@@ -78,7 +78,7 @@ rt_gt <- function(
     return(res)
   } else {
     df_gt <- df %>%
-      gt::gt() %>%
+      gt::gt(id = "rifttable") %>%
       rt_tabstyle()
     if(!is.null(indent[1])) {
       if(is.null(attr(df, "rt_gt.indent4")) |
