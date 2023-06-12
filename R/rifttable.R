@@ -662,13 +662,6 @@ rifttable <- function(
           values_fill = "") %>%
         dplyr::rename(!!name := .data$label) %>%
         dplyr::select(-"index")
-      # capture rows that are indented for rt_gt()
-      attr(res, which = "rt_gt.indent2") <- stringr::str_which(
-        string = res %>% dplyr::pull(1),
-        pattern = "^[:blank:]{2,3}")
-      attr(res, which = "rt_gt.indent4") <- stringr::str_which(
-        string = res %>% dplyr::pull(1),
-        pattern = "^[:blank:]{4,}")
       return(res)
     } else {
       if(sum(duplicated(design$label)) > 0 |
@@ -774,20 +767,6 @@ rifttable <- function(
           dplyr::rename(!!name := .data$label) %>%
           dplyr::select(-"index")
       }
-      if(type2_layout == "rows") {
-        attr(res, which = "rt_gt.indent2") <- union(
-          stringr::str_which(
-            string = res %>% dplyr::pull(1),
-            pattern = "^[:blank:]{2,3}"),
-          which(!(1:nrow(res) %% 2)))
-      } else {
-        attr(res, which = "rt_gt.indent2") <- stringr::str_which(
-          string = res %>% dplyr::pull(1),
-          pattern = "^[:blank:]{2,3}")
-      }
-      attr(res, which = "rt_gt.indent4") <- stringr::str_which(
-        string = res %>% dplyr::pull(1),
-        pattern = "^[:blank:]{4,}")
       return(res)
 
     } else {

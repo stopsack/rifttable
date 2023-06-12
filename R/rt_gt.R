@@ -33,16 +33,15 @@ rt_tabstyle <- function(mytab) {
 #' @param df Data frame/tibble
 #' @param md Optional. If not \code{NULL}, then the given
 #'   columns will be printed with markdown formatting, e.g., \code{md = c(1, 3)}
-#'   for columns 1 and 3.
-#' @param indent Optional. Detects labels (first
-#'  columns in a \code{\link[rifttable]{rifttable}}) that start with two or four
-#'   spaces and ensures indenting via \code{\link[gt]{tab_style}}. Defaults
-#'   to 10 and 20 pixels for two or four spaces (\code{c(10, 20)}). Set to
-#'   \code{NULL} to turn off. (Note that gt currently does not seem to support
-#'   four-space indents in columns with markdown formatting, e.g.,
-#'   \code{md = 1}.)
-#' @param remove_border Optional. For indented lines, remove the upper
-#'   horizontal border line? Defaults to \code{TRUE}.
+#'   for columns 1 and 3. Defaults to \code{1}, i.e., the first column.
+#' @param indent Optional. Detects cells in the first column of table, e.g.,
+#'   from \code{\link[rifttable]{rifttable}} where the first column contains the
+#'   labels, that start with at least two spaces. This text is then indented via
+#'   \code{\link[gt]{tab_style}}. Defaults \code{10} for 10 pixels. Set to
+#'   \code{NULL} to turn off.
+#' @param remove_border Optional. For rows that are indented in the first
+#'   column or have an empty first column, remove the upper horizontal border
+#'   line? Defaults to \code{TRUE}.
 #'
 #' @return Formatted gt table
 #' @export
@@ -57,8 +56,8 @@ rt_tabstyle <- function(mytab) {
 #' \if{html}{\figure{rt_gt.png}{options: width=50\%}}
 rt_gt <- function(
     df,
-    indent = c(10, 20),
     md = 1,
+    indent = 10,
     remove_border = TRUE) {
   if (!requireNamespace("gt", quietly = TRUE)) {
     stop(
@@ -81,40 +80,28 @@ rt_gt <- function(
       gt::gt(id = "rifttable") %>%
       rt_tabstyle()
     if(!is.null(indent[1])) {
-      if(is.null(attr(df, "rt_gt.indent4")) |
-         length(attr(df, "rt_gt.indent4")) == 0)
-        indent4 <- FALSE
-      else
-        indent4 <- attr(df, "rt_gt.indent4")
-      if(is.null(attr(df, "rt_gt.indent2")) |
-         length(attr(df, "rt_gt.indent2")) == 0)
-        indent2 <-FALSE
-      else {
-        indent2 <- attr(df, "rt_gt.indent2")
-        indent2 <- indent2[!(indent2 %in% indent4)]
-      }
-      all_indents <- union(indent2, indent4)[union(indent2, indent4) != 0]
+      indent2 <- union(
+        stringr::str_which(
+          string = df[[1]],
+          pattern = "^[:blank:]{2,}"),
+        which(df[[1]] == ""))
       df_gt <- df_gt %>%
         gt::tab_style(
           style = gt::cell_text(indent = gt::px(indent[1])),
           locations = gt::cells_body(columns = 1,
-                                     rows = indent2)) %>%
-        gt::tab_style(
-          style = gt::cell_text(indent = gt::px(indent[2])),
-          locations = gt::cells_body(columns = 1,
-                                     rows = indent4))
-      if(remove_border == TRUE & length(all_indents) > 0) {
+                                     rows = indent2))
+      if(remove_border == TRUE & length(indent2) > 0) {
         df_gt <- df_gt %>%
           gt::tab_style(
             style = gt::cell_borders(sides = "top", weight = NULL),
             locations = gt::cells_body(columns = gt::everything(),
-                                       rows = all_indents))
+                                       rows = indent2))
       }
     }
     if(!is.null(md)) {
       df_gt <- df_gt %>%
         gt::fmt_markdown(columns = md)
     }
-    df_gt
+    return(df_gt)
   }
 }

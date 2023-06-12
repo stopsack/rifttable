@@ -4,25 +4,24 @@
 \alias{rt_gt}
 \title{Turn tibble into gt Table with Custom Formatting}
 \usage{
-rt_gt(df, md = NULL, indent = c(10, 20), remove_border = TRUE)
+rt_gt(df, md = 1, indent = 10, remove_border = TRUE)
 }
 \arguments{
 \item{df}{Data frame/tibble}
 
 \item{md}{Optional. If not \code{NULL}, then the given
 columns will be printed with markdown formatting, e.g., \code{md = c(1, 3)}
-for columns 1 and 3.}
+for columns 1 and 3. Defaults to \code{1}, i.e., the first column.}
 
-\item{indent}{Optional. Detects labels (first
-columns in a \code{\link[rifttable]{rifttable}}) that start with two or four
-spaces and ensures indenting via \code{\link[gt]{tab_style}}. Defaults
-to 10 and 20 pixels for two or four spaces (\code{c(10, 20)}). Set to
-\code{NULL} to turn off. (Note that gt currently does not seem to support
-four-space indents in columns with markdown formatting, e.g.,
-\code{md = 1}.)}
+\item{indent}{Optional. Detects cells in the first column of table, e.g.,
+from \code{\link[rifttable]{rifttable}} where the first column contains the
+labels, that start with at least two spaces. This text is then indented via
+\code{\link[gt]{tab_style}}. Defaults \code{10} for 10 pixels. Set to
+\code{NULL} to turn off.}
 
-\item{remove_border}{Optional. For indented lines, remove the upper
-horizontal border line? Defaults to \code{TRUE}.}
+\item{remove_border}{Optional. For rows that are indented in the first
+column or have an empty first column, remove the upper horizontal border
+line? Defaults to \code{TRUE}.}
 }
 \value{
 Formatted gt table
