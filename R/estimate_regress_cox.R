@@ -7,6 +7,7 @@
 #' @param is_trend If called on a continous (trend) variable
 #' @param type Estimand
 #' @param ratio_digits Digits for ratios
+#' @param ratio_digits_decrease Fewer digits for elevated ratios
 #' @param nmin Suppress counts below
 #' @param exposure Name of exposure variable
 #' @param na_rm Remove observations with missing outcome data
@@ -28,6 +29,7 @@ estimate_regress_cox <- function(
     confounders,
     digits,
     ratio_digits,
+    ratio_digits_decrease,
     is_trend,
     nmin,
     na_rm,
@@ -87,6 +89,7 @@ estimate_regress_cox <- function(
       is_trend = is_trend,
       multiply = 1,
       digits = digits,
+      ratio_digits_decrease = ratio_digits_decrease,
       pattern = pattern,
       xlevels = xlevels,
       reference = 1,

@@ -18,6 +18,7 @@
 #' @param diff_digits Number of digits to round difference estimates to
 #' @param risk_digits Number of digits to round risk/cumulative incidences to
 #' @param ratio_digits Number of digits to round ratio estimates to
+#' @param ratio_digits_decrease Fewer digits for elevated ratios
 #' @param rate_digits Number of digits to round rate estimates to
 #' @param to Separator for mean/difference confidence intervals.
 #' @param outcome Outcome variable
@@ -51,6 +52,7 @@ fill_cells <- function(
     diff_digits,
     risk_digits,
     ratio_digits,
+    ratio_digits_decrease,
     rate_digits) {
   if(is.na(exposure) | exposure == "") {
     data <- data %>%
@@ -238,6 +240,7 @@ fill_cells <- function(
       diff_digits = diff_digits,
       risk_digits = risk_digits,
       ratio_digits = ratio_digits,
+      ratio_digits_decrease = ratio_digits_decrease,
       rate_digits = rate_digits,
       risk_percent = risk_percent,
       to = to,
@@ -285,6 +288,7 @@ fill_cells <- function(
           diff_digits = diff_digits,
           risk_digits = risk_digits,
           ratio_digits = ratio_digits,
+          ratio_digits_decrease = ratio_digits_decrease,
           rate_digits = rate_digits,
           risk_percent = risk_percent,
           to = to,

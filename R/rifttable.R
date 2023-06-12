@@ -31,6 +31,11 @@
 #'   rounding of means and mean difference estimates. Defaults to \code{2}.
 #' @param ratio_digits Optional. Number of decimal digits to show for ratio
 #'   estimates. Defaults to \code{2}. Can override for each line in \code{type}.
+#' @param ratio_digits_decrease Optional. Lower limits of ratios above which
+#'   fewer digits should be shown. Provide a named vector of the format,
+#'   \code{c(`3` = -2, `10` = -2)} to reduce the number of rounding digits by
+#'   1 digit for ratios greater than 3 and by 2 digits for ratios greater than
+#'   10 (the default). To disable, set to \code{NULL}.
 #' @param rate_digits Optional. Number of decimal digits to show for rates.
 #'   Defaults to \code{1}. Can override for each line in \code{type}.
 #' @param to Optional. Separator between the lower and the upper bound
@@ -433,6 +438,7 @@ rifttable <- function(
       false = 2),
     diff_digits = 2,
     ratio_digits = 2,
+    ratio_digits_decrease = c(`2.995` = -1, `9.95` = -2),
     rate_digits = 1,
     to = ", ",
     reference = "(reference)",
@@ -511,6 +517,7 @@ rifttable <- function(
               risk_digits = risk_digits,
               diff_digits = diff_digits,
               ratio_digits = ratio_digits,
+              ratio_digits_decrease = ratio_digits_decrease,
               rate_digits = rate_digits,
               type2_layout = type2_layout,
               to = to,
@@ -525,6 +532,7 @@ rifttable <- function(
               risk_digits = risk_digits,
               diff_digits = diff_digits,
               ratio_digits = ratio_digits,
+              ratio_digits_decrease = ratio_digits_decrease,
               rate_digits = rate_digits,
               type2_layout = type2_layout,
               to = to,
@@ -541,6 +549,7 @@ rifttable <- function(
           risk_digits = risk_digits,
           diff_digits = diff_digits,
           ratio_digits = ratio_digits,
+          ratio_digits_decrease = ratio_digits_decrease,
           rate_digits = rate_digits,
           type2_layout = type2_layout,
           to = to,
@@ -558,6 +567,7 @@ rifttable <- function(
               risk_digits = risk_digits,
               diff_digits = diff_digits,
               ratio_digits = ratio_digits,
+              ratio_digits_decrease = ratio_digits_decrease,
               rate_digits = rate_digits,
               type2_layout = type2_layout,
               to = to,
@@ -632,6 +642,7 @@ rifttable <- function(
         risk_digits = risk_digits,
         diff_digits = diff_digits,
         ratio_digits = ratio_digits,
+        ratio_digits_decrease = ratio_digits_decrease,
         rate_digits = rate_digits,
         reference = reference))
 
@@ -707,6 +718,7 @@ rifttable <- function(
           risk_digits = risk_digits,
           diff_digits = diff_digits,
           ratio_digits = ratio_digits,
+          ratio_digits_decrease = ratio_digits_decrease,
           rate_digits = rate_digits,
           reference = reference),
         result = purrr::map2(
