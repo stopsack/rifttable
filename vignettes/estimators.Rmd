@@ -46,7 +46,7 @@ knitr::opts_chunk$set(
 `"irr"`   | Incidence rate ratio for count outcomes from Poisson regression model.
 `"irrrob"` | Ratio for other outcomes from Poisson regression model with robust (sandwich) standard errors.
 `"or"` | Odds ratio from logistic regression.
-`"rd"` | Risk difference (or prevalence difference) from risks::riskdiff(). | `list(approach = "margstd_boot", bootrepeats = 2000)` to request model fitting via marginal standardization with 2000 bootstrap.
+`"rd"` | Risk difference (or prevalence difference) from risks::riskdiff(). | `list(approach = "margstd_boot", bootrepeats = 2000)` to request model fitting via marginal standardization with 2000 bootstraps.
 `"rr"` | Risk ratio (or prevalence ratio) from `risks::riskratio()`. | See `"rd"`.
 
 ## Absolute estimates per exposure category
@@ -68,7 +68,7 @@ knitr::opts_chunk$set(
 `type` | Description | Options (`arguments = `)
 -------+-------------+--------------
 `"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator. Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in cumulative incidence at 2.5 years.
-`"hr"`    | Hazard ratio from Cox proportional hazards regression. | `list(robust = TRUE)` for robust (sandwich standard) errors; `list(weights = "weight_variable", robust = TRUE)` for sample (e.g., inverse-probability) weights and robust errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
+`"hr"`    | Hazard ratio from Cox proportional hazards regression. | `list(robust = TRUE)` for robust (sandwich) standard errors; `list(weights = "weight_variable", robust = TRUE)` for sampling (e.g., inverse-probability) weights and robust errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
 `"survdiff"` | Difference in survival from Kaplan-Meier estimator.  Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in survival at 2.5 years.
 
    
@@ -96,9 +96,13 @@ knitr::opts_chunk$set(
 
 # Joint models for comparative estimates
 
-By default, regression models will be fit separately for each stratum of the `effect_modifier`. Append `"_joint"` to `"hr"`, `"rr"`, `"rd"`, `"irr"`, `"irrrob"`, `"diff"`, `"fold"`, `"foldlog"`, `"quantreg"`, or `"or"` to obtain "joint" models for exposure and effect modifier that have a single reference category.
+By default, regression models will be fit separately for each stratum of the `effect_modifier`. 
+
+Append `"_joint"` to `"hr"`, `"rr"`, `"rd"`, `"irr"`, `"irrrob"`, `"diff"`, `"fold"`, `"foldlog"`, `"quantreg"`, or `"or"` to obtain "joint" models for exposure and effect modifier that have a single reference category.
  
 Example: `type = "hr_joint"`.
+
+Note that the joint model will be fit across all non-missing (`NA`) strata of the effect modifier, even if the `design` table does not request all strata be shown.
 
 
 # Special types
@@ -109,4 +113,4 @@ Example: `type = "hr_joint"`.
 `"custom_function"` | A user-defined function. In this example, the corresponding function must be called `estimate_custom_function()` | Any
 `"total"` | Number of observations.
 
-The reference categories for exposure and effect modifier are their first factor levels, which can be changed using `forcats::fct_relevel()`. Note that the joint model will be fit across all non-missing (`NA`) strata of the effect modifier, even if the `design` table does not request all strata be shown.
+The reference categories for exposure and effect modifier are their first factor levels, which can be changed using `forcats::fct_relevel()`. 

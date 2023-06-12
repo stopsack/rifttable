@@ -1,0 +1,179 @@
+---
+title: "Frequently Asked Questions"
+output: 
+  rmarkdown::html_vignette:
+    df_print: kable
+vignette: >
+  %\VignetteIndexEntry{Frequently Asked Questions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Basic example
+
+Most subsequent examples build on this simple rifttable:
+
+```{r basic, message = FALSE}
+library(rifttable)
+library(dplyr)  # for data management, e.g., mutate()
+data(breastcancer, package = "risks")
+
+design <- tibble::tribble(
+  ~label,                       ~type,                   ~stratum,         
+  "Overall",                    "",                      "",               
+  "– Deaths/N",                 "outcomes/total",        c("Low", "High"), 
+  "– Risk",                     "risk",                  c("Low", "High"), 
+  "– Risk ratio (95% CI)",      "rr",                    c("Low", "High"), 
+  "– Risk difference (95% CI)", "rd",                    c("Low", "High"), 
+  "",                           "",                      "",               
+  "Low hormone receptor",       "",                      "",               
+  "– Deaths/N (Risk)",          "outcomes/total (risk)", "Low",           
+  "– Risk difference (95% CI)", "rd",                    "Low",           
+  "High hormone receptor",      "",                      "",               
+  "– Deaths/N (Risk)",          "outcomes/total (risk)", "High",
+  "– Risk difference (95% CI)", "rd",                    "High") %>%
+  mutate(
+    exposure = "stage",
+    outcome = "death",
+    effect_modifier = "receptor")
+
+rifttable(
+  design = design,
+  data = breastcancer)
+```
+
+# How do I add overall statistics?
+
+Use the `overall` argument to show descriptive data for the entire `data` set.
+Inferential estimators showing comparisons between exposure categories will be blank there.
+
+```{r overall}
+rifttable(
+  design = design,
+  data = breastcancer, 
+  overall = TRUE)
+```
+
+
+# How do I test for trend?
+
+Instead of *testing* a null hypothesis about a trend, **rifttable** proposes 
+*estimating* the difference in the outcome for a one-unit higher exposure. 
+This is also called a linear slope. Here, we estimate the risk associated for 
+stage that is one category higher.
+
+```{r trend}
+rifttable(
+  design = design %>%
+    mutate(trend = "stage_numeric"),
+  data = breastcancer %>%
+    mutate(stage_numeric = as.numeric(stage)))
+```
+
+
+# How do I show multiple exposures in the same table?
+
+Our simple toy dataset just has one exposure variable. For demonstration,
+we just create a second variable, with two categories, "Level 1" and "Level 2,"
+which is a simplified combination of the `stage` and `receptor` variables.
+
+We will flip the table `layout` from `"rows"` (the default) to `"cols"` and 
+concatenate two rifttables. We also need to give our new `exposure2` variable 
+the same label as `stage` to make sure results appear in 
+the same column.
+
+
+```{r multiple}
+breastcancer_2exposures <- breastcancer %>%
+  mutate(
+    exposure2 = case_when(
+      stage == "Stage I" | 
+        (stage == "Stage II" & receptor == "High") ~ 
+        "Level 1",
+      stage == "Stage III" | 
+        (stage == "Stage II" & receptor == "Low") ~ 
+        "Level 2"))
+
+attr(breastcancer_2exposures$exposure2, which = "label") <- "Exposure"
+attr(breastcancer_2exposures$stage, which = "label") <- "Exposure"
+
+bind_rows(
+  design %>%
+    mutate(exposure = "exposure2") %>%
+    slice(2:5) %>%
+    rifttable(
+      data = breastcancer_2exposures, 
+      layout = "cols"),
+  design %>%
+    slice(2:5) %>%
+    rifttable(
+      data = breastcancer_2exposures, 
+      layout = "cols")
+)
+```
+
+
+# How do I change how results are rounded?
+
+By default, differences measures are being rounded to 2 decimal digits (`0.01`), such as `type = "diff"`, the mean difference, or `type = "quantreg"`, the median difference. The same goes for risk measures, such as `type = "risk"`, unless shown as percentage points. Ratio measures are also shown with 2 decimal digits, such as `type = "hr"`, the hazard ratio, or `type = "fold"`, a ratio of arithmetric means. 
+
+Rounding can be changed by setting the `rifttable()` arguments `diff_digits`, `risk_digits`, and `ratio_digits` globally for the entire table. 
+
+
+```{r rounding}
+design <- tibble::tribble(
+  ~label,                     ~type,
+  "Deaths/N",                 "outcomes/total", 
+  "Risk",                     "risk",          
+  "Risk ratio (95% CI)",      "rr", 
+  "Odds ratio (95% CI)",      "or", 
+  "Risk difference (95% CI)", "rd") %>%
+  mutate(
+    exposure = "stage",
+    outcome = "death",
+    effect_modifier = "receptor")
+
+rifttable(
+  design = design,
+  data = breastcancer,
+  ratio_digits = 3,  # Many digits for ratios
+  risk_digits = 1)   # Fewer digits for risks
+```
+
+As can be seen, ratios > 3 are still shown with 1 fewer decimal, and ratios > 10 are shown with 2 fewer decimals ([Wilcox, *Epidemiology* 2004](https://doi.org/10.1097/01.ede.0000101026.08873.14) motivates why). To disable such additional rounding of extremely high ratios:
+
+```{r rounding_decrease}
+rifttable(
+  design = design,
+  data = breastcancer,
+  ratio_digits = 3,
+  ratio_digits_decrease = NULL,  # Do not round high ratios more
+  risk_digits = 1)
+```
+
+Additionally, rounding can be changed for each row, adding a column `digits` to the rifttable `design`:
+
+```{r rounding_digits}
+tibble::tribble(
+  ~label,                     ~type,            ~digits,
+  "Deaths/N",                 "outcomes/total", NA,  # Uses rifttable default
+  "Risk",                     "risk",           NA,  # Uses rifttable default
+  "Risk ratio (95% CI)",      "",               NA,  # Uses risk_digits below
+  "– Rounded to 1 digit",     "rr",             1,
+  "– Rounded to 2 digits",    "rr",             2,
+  "Risk difference (95% CI)", "rd",             3) %>%  # Overrides risk_digits
+  mutate(
+    exposure = "stage",
+    outcome = "death",
+    effect_modifier = "receptor") %>%
+rifttable(
+  data = breastcancer,
+  risk_digits = 1)   # Fewer digits for risks, unless specified by "digits"
+```
