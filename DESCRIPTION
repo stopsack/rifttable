@@ -1,16 +1,15 @@
 Package: rifttable
 Type: Package
 Title: Results Tables to Bridge the Rift Between Epidemiologists and Their Data
-Version: 0.6.0
+Version: 0.6.1
 Authors@R:
     person(given = "Konrad H.",
            family = "Stopsack",
            role = c("aut", "cre"),
            email = "stopsack@post.harvard.edu",
            comment = c(ORCID = "0000-0002-0722-1311"))
-Description: The rifttable package creates a presentation-ready stratified 
-    results tables for epidemiologists, containing both descriptive and 
-    inferential statistics.
+Description: Presentation-ready stratified results tables for epidemiologists, 
+    containing both descriptive and inferential statistics.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -22,7 +21,7 @@ Imports:
     broom (>= 0.7.0),
     dplyr (>= 1.0.8),
     purrr, 
-    risks (>= 0.4.1),
+    risks (>= 0.4.2),
     rlang (>= 0.4.0),
     stats,
     survival,
