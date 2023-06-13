@@ -42,7 +42,7 @@ The installation procedure requires the {remotes} package, obtainable via `insta
 ```{r example}
 library(rifttable)
 
-tibble::tribble(
+example_design <- tibble::tribble(
   ~label,                       ~type,                   ~stratum,         
   "Overall",                    "",                      "",               
   "– Deaths/N",                 "outcomes/total",        c("Low", "High"), 
@@ -59,8 +59,11 @@ tibble::tribble(
   dplyr::mutate(
     exposure = "stage",
     outcome = "death",
-    effect_modifier = "receptor") %>% 
-  rifttable(data = breastcancer)
+    effect_modifier = "receptor")
+
+rifttable(
+  design = example_design,
+  data = risks::breastcancer)
 ```
 
 For more examples, see the [Get Started vignette](https://stopsack.github.io/rifttable/articles/rifttable.html).

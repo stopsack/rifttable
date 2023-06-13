@@ -2,6 +2,7 @@
 #'
 #' @param data Data set
 #' @param digits Number of digits to round estimates to
+#' @param ratio_digits_decrease Ratios to round less
 #' @param to Separator character(s) for confidence interval bounds
 #' @param is_trend If called on a continous (trend) variable
 #' @param nmin Suppress counts below
@@ -25,6 +26,7 @@ format_regression_results <- function(
     is_trend,
     multiply,
     digits,
+    ratio_digits_decrease,
     pattern,
     xlevels,
     reference,
@@ -49,7 +51,8 @@ format_regression_results <- function(
         .data$conf.high),
       .funs = ~format_round(
         . * multiply,
-        digits = digits)) %>%
+        digits = digits,
+        ratio_digits_decrease = ratio_digits_decrease)) %>%
     dplyr::full_join(
       counts_per_stratum(
         data = data,

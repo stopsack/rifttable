@@ -53,13 +53,10 @@ prepare_data <- function(
       ".exposure[:digit:]{1,2}__",
       effectmodifier_level,
       "__[:digit:]{1,2}__")
+    data$.effectmod <- data[[effectmodifier]]
     data <- data %>%
-      dplyr::rename(.effectmod = dplyr::one_of(effectmodifier)) %>%
       dplyr::filter(!is.na(.data$.effectmod)) %>%
-      dplyr::mutate(
-        .effectmod = factor(.data$.effectmod),
-        # keep copy under initial name to have it available as confounder
-        !!effectmodifier := .data$.effectmod)
+      dplyr::mutate(.effectmod = factor(.data$.effectmod))
     xlevels_indices <- 1:length(xlevels)
     names(xlevels_indices) <- xlevels
     emlevels <- data %>%
@@ -84,15 +81,14 @@ prepare_data <- function(
       if(!is.null(effectmodifier_level) &
          !(is.null(effectmodifier) |
            is.na(effectmodifier))) {
+        data$.effectmod <- data[[effectmodifier]]
         data <- data %>%
-          dplyr::rename(.effectmod = dplyr::one_of(effectmodifier)) %>%
-          dplyr::mutate(!!effectmodifier := .data$.effectmod) %>%
           dplyr::filter(.data$.effectmod %in% effectmodifier_level)
       }
     }
   }
 
-  # Rename outcome/event variables
+  # Create copies of outcome/event variables under standardized names
   if(!is.na(outcome)) {
     if(outcome != "") {
       if(!(outcome %in% names(data)))
@@ -103,9 +99,7 @@ prepare_data <- function(
             "': Outcome variable '",
             outcome,
             "' is not valid for the dataset."))
-      data <- data %>%
-        dplyr::rename(
-          .outcome = dplyr::one_of(outcome))
+      data$.outcome <- data[[outcome]]
     }
   }
   if(!is.na(time) & !is.na(event)) {
@@ -119,8 +113,7 @@ prepare_data <- function(
               "': Event variable '",
               event,
               "' is not valid for the dataset."))
-        data <- data %>%
-          dplyr::rename(.event = dplyr::one_of(event))
+        data$.event <- data[[event]]
       } else {
         # event and outcome can be the same variable
         data <- data %>%
@@ -146,19 +139,16 @@ prepare_data <- function(
                 "': time2 variable '",
                 time2,
                 "' is not valid for the dataset."))
+          data$.time_orig <- data[[time]]
+          data$.time2 <- data[[time2]]
           data <- data %>%
-            dplyr::rename(
-              .time_orig = dplyr::one_of(time),
-              .time2 = dplyr::one_of(time2)) %>%
             # for estimators that just sum the follow-up times:
-            dplyr::mutate(
-              .time = .data$.time2 - .data$.time_orig)
+            dplyr::mutate(.time = .data$.time2 - .data$.time_orig)
           has_time2 <- TRUE
         }
       }
       if(!has_time2) {
-        data <- data %>% dplyr::rename(
-          .time = dplyr::one_of(time))
+        data$.time <- data[[time]]
       }
     }
   }

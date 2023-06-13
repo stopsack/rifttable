@@ -7,8 +7,9 @@
 #' @param to Separator character(s) for confidence interval bounds
 #' @param is_trend If called on a continous (trend) variable
 #' @param type Estimand
-#' @param ratio_digits Digits for ratios
 #' @param risk_digits Digits for risks
+#' @param ratio_digits Digits for ratios
+#' @param ratio_digits_decrease Fewer digits for elevated ratios
 #' @param nmin Suppress counts below
 #' @param exposure Name of exposure variable
 #' @param outcome Name of outcome variable
@@ -32,6 +33,7 @@ estimate_regress_binary <- function(
     risk_percent,
     risk_digits,
     ratio_digits,
+    ratio_digits_decrease,
     is_trend,
     nmin,
     na_rm,
@@ -61,6 +63,9 @@ estimate_regress_binary <- function(
       type %in% c("rd", "rd_joint"),
       true = risk_digits,
       false = ratio_digits))
+  if(type %in% c("rd", "rd_joint")) {
+    ratio_digits_decrease <- NULL
+  }
   bootrepeats <- find_argument(
     arguments = arguments,
     which_argument = "bootrepeats",
@@ -132,6 +137,7 @@ estimate_regress_binary <- function(
         true = 100,
         false = 1),
       digits = digits,
+      ratio_digits_decrease = ratio_digits_decrease,
       pattern = pattern,
       xlevels = xlevels,
       reference = dplyr::if_else(

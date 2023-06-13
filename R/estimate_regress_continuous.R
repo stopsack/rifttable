@@ -8,6 +8,7 @@
 #' @param is_trend If called on a continous (trend) variable
 #' @param type Estimand
 #' @param ratio_digits Digits for ratios
+#' @param ratio_digits_decrease Fewer digits for elevated ratios
 #' @param diff_digits Digits for differences
 #' @param nmin Suppress counts below
 #' @param exposure Name of exposure variable
@@ -29,6 +30,7 @@ estimate_regress_continuous <- function(
     digits,
     risk_percent,
     ratio_digits,
+    ratio_digits_decrease,
     diff_digits,
     is_trend,
     nmin,
@@ -55,6 +57,9 @@ estimate_regress_continuous <- function(
       type %in% c("diff", "diff_joint", "quantreg", "quantreg_joint"),
       true = diff_digits,
       false = ratio_digits))
+  if(type %in% c("diff", "diff_joint", "quantreg", "quantreg_joint")) {
+    ratio_digits_decrease <- NULL
+  }
   tau <- find_argument(
     arguments = arguments,
     which_argument = "tau",
@@ -189,6 +194,7 @@ estimate_regress_continuous <- function(
       is_trend = is_trend,
       multiply = 1,
       digits = digits,
+      ratio_digits_decrease = ratio_digits_decrease,
       pattern = pattern,
       xlevels = xlevels,
       reference = dplyr::if_else(

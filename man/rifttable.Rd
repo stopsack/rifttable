@@ -13,6 +13,7 @@ rifttable(
   risk_digits = dplyr::if_else(risk_percent == TRUE, true = 0, false = 2),
   diff_digits = 2,
   ratio_digits = 2,
+  ratio_digits_decrease = c(`2.995` = -1, `9.95` = -2),
   rate_digits = 1,
   to = ", ",
   reference = "(reference)",
@@ -51,6 +52,12 @@ rounding of means and mean difference estimates. Defaults to \code{2}.}
 
 \item{ratio_digits}{Optional. Number of decimal digits to show for ratio
 estimates. Defaults to \code{2}. Can override for each line in \code{type}.}
+
+\item{ratio_digits_decrease}{Optional. Lower limits of ratios above which
+fewer digits should be shown. Provide a named vector of the format,
+\code{c(`3` = -2, `10` = -2)} to reduce the number of rounding digits by
+1 digit for ratios greater than 3 and by 2 digits for ratios greater than
+10 (the default). To disable, set to \code{NULL}.}
 
 \item{rate_digits}{Optional. Number of decimal digits to show for rates.
 Defaults to \code{1}. Can override for each line in \code{type}.}
@@ -243,7 +250,8 @@ obtain "joint" models for exposure and effect modifier that have a
 single reference category.
 Example: \code{type = "hr_joint"}. The reference categories
 for exposure and effect modifier are their first factor levels, which
-can be changed using \code{\link[forcats]{fct_relevel}}. Note that
+can be changed using \code{fct_relevel} from the {forcats} package.
+Note that
 the joint model will be fit across all non-missing (\code{NA}) strata
 of the effect modifier, even if the \code{design} table does not
 request all strata be shown.

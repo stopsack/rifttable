@@ -1,3 +1,29 @@
+# rifttable 0.6.1
+
+* New functionality:
+  + Cox models (`type = "hr"`) allow for `weights`, clustering, and `robust` 
+    standard errors.
+  + Argument `ratio_digits_decrease`: By default, decrease number of decimal
+    digits shown for ratios by 1 digit for ratios > 3 and by 2 digits for ratios
+    > 10. Leads to rounded ratios and confidence intervals of `1.23`, `3.4`, and 
+    `11`.
+  + `rt_gt()` now indents the first column and applies markdown formatting to it 
+    by default.
+* New FAQ vignette.
+* Bug fixes:
+  + Binary outcomes returned `NA` instead of `0` in unstratified tables
+    with all-null outcome.
+  + `type = "maxfu"` ignored `digits` and `diff_digits`.
+  + Allow for different `exposure` (strata labels) and `arguments` in one table.
+  + Show unstratified estimate if `exposure` is `""`, not just for `NA`.
+* Internal:
+  + `rt_gt()`: suppress random `id` of gt tables to keep git diff slim.
+  + Keep variables `.event`, `.outcome`, etc. available under their original 
+    names.
+  + Require {risks} >= 0.4.2.
+  + Examples load the `breastcancer` dataset from the risks package.
+
+
 # rifttable 0.6.0
 
 * Breaking changes: 
@@ -14,8 +40,8 @@
 * New function `table1_design()`: Generate design of a descriptive "Table 1."
 * New `outcome` option `"variable@level"` for categorical variables that
   displays `level` as a binary outcome. Used by `table1_design()`.
-* Unstratified tables displaying the trend/linear slope (`trend` variable in the
-  `design`) without an `exposure`.
+* Support unstratified tables displaying the trend/linear slope (`trend` 
+  variable in the `design`) without an `exposure`.
 * More customization:
   + `rifttable(reference = ...)`: Label for the reference category.
   + `design$ci`: Width of confidence intervals.

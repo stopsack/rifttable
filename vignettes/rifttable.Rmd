@@ -25,14 +25,8 @@ library(rifttable)
 
 # Loading example data
 
-The `breastcancer` dataset of a binary outcome is included in the rifttable package:
-```{r data1}
-data(breastcancer)
+The `cancer` dataset from survival package is used here:
 
-breastcancer
-```
-
-The `cancer` dataset from survival package is used in some other examples:
 ```{r data2}
 data(cancer, package = "survival")
 

@@ -69,7 +69,7 @@ Of note, the dataset is passed along silently together with the `design`. Howeve
 
 # Customize the table
 
-Label variables, set custom rounding, change estimands, and all "Overall" column.
+Label variables, set custom rounding, change estimands, and add "Overall" column.
 
 ```{r custom}
 # Alternative: set_variable_labels() from the {labelled} package
