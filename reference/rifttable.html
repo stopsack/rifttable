@@ -20,7 +20,7 @@ Model diagnostics for regression models need to be conducted separately."><!-- m
     
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,7 @@ Model diagnostics for regression models need to be conducted separately."><!-- m
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
+    <a class="dropdown-item" href="../articles/faq.html">Frequently Asked Questions</a>
     <a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a>
   </div>
 </li>
@@ -85,6 +86,7 @@ Model diagnostics for regression models need to be conducted separately.</p>
 <span>  risk_digits <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">risk_percent</span> <span class="op">==</span> <span class="cn">TRUE</span>, true <span class="op">=</span> <span class="fl">0</span>, false <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  diff_digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  ratio_digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  ratio_digits_decrease <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`2.995` <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, `9.95` <span class="op">=</span> <span class="op">-</span><span class="fl">2</span><span class="op">)</span>,</span>
 <span>  rate_digits <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  to <span class="op">=</span> <span class="st">", "</span>,</span>
 <span>  reference <span class="op">=</span> <span class="st">"(reference)"</span>,</span>
@@ -140,6 +142,14 @@ rounding of means and mean difference estimates. Defaults to <code>2</code>.</p>
 <dt>ratio_digits</dt>
 <dd><p>Optional. Number of decimal digits to show for ratio
 estimates. Defaults to <code>2</code>. Can override for each line in <code>type</code>.</p></dd>
+
+
+<dt>ratio_digits_decrease</dt>
+<dd><p>Optional. Lower limits of ratios above which
+fewer digits should be shown. Provide a named vector of the format,
+<code>c(`3` = -2, `10` = -2)</code> to reduce the number of rounding digits by
+1 digit for ratios greater than 3 and by 2 digits for ratios greater than
+10 (the default). To disable, set to <code>NULL</code>.</p></dd>
 
 
 <dt>rate_digits</dt>
@@ -327,7 +337,8 @@ obtain "joint" models for exposure and effect modifier that have a
 single reference category.
 Example: <code>type = "hr_joint"</code>. The reference categories
 for exposure and effect modifier are their first factor levels, which
-can be changed using <code>fct_relevel</code>. Note that
+can be changed using <code>fct_relevel</code> from the forcats package.
+Note that
 the joint model will be fit across all non-missing (<code>NA</code>) strata
 of the effect modifier, even if the <code>design</code> table does not
 request all strata be shown.</p></li>

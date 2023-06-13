@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
+    <a class="dropdown-item" href="../articles/faq.html">Frequently Asked Questions</a>
     <a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a>
   </div>
 </li>
@@ -147,14 +148,26 @@ package.</p>
 <code class="sourceCode R"><span><span class="va">design</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># obtain formatted output</span></span></code></pre></div>
-<div id="dqgoedxjhu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+<div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rifttable table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-#dqgoedxjhu .gt_table {
+#rifttable thead, #rifttable tbody, #rifttable tfoot, #rifttable tr, #rifttable td, #rifttable th {
+  border-style: none;
+}
+
+#rifttable p {
+  margin: 0;
+  padding: 0;
+}
+
+#rifttable .gt_table {
   display: table;
   border-collapse: collapse;
+  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -177,24 +190,12 @@ package.</p>
   border-left-color: #D3D3D3;
 }
 
-#dqgoedxjhu .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#dqgoedxjhu .gt_caption {
+#rifttable .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#dqgoedxjhu .gt_title {
+#rifttable .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -206,25 +207,37 @@ package.</p>
   border-bottom-width: 0;
 }
 
-#dqgoedxjhu .gt_subtitle {
+#rifttable .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 6px;
+  padding-top: 3px;
+  padding-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
 
-#dqgoedxjhu .gt_bottom_border {
+#rifttable .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#dqgoedxjhu .gt_col_headings {
+#rifttable .gt_col_headings {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -239,7 +252,7 @@ package.</p>
   border-right-color: #D3D3D3;
 }
 
-#dqgoedxjhu .gt_col_heading {
+#rifttable .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -259,7 +272,7 @@ package.</p>
   overflow-x: hidden;
 }
 
-#dqgoedxjhu .gt_column_spanner_outer {
+#rifttable .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -271,15 +284,15 @@ package.</p>
   padding-right: 4px;
 }
 
-#dqgoedxjhu .gt_column_spanner_outer:first-child {
+#rifttable .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#dqgoedxjhu .gt_column_spanner_outer:last-child {
+#rifttable .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#dqgoedxjhu .gt_column_spanner {
+#rifttable .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -291,7 +304,11 @@ package.</p>
   width: 100%;
 }
 
-#dqgoedxjhu .gt_group_heading {
+#rifttable .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rifttable .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -317,7 +334,7 @@ package.</p>
   text-align: left;
 }
 
-#dqgoedxjhu .gt_empty_group_heading {
+#rifttable .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -332,15 +349,15 @@ package.</p>
   vertical-align: middle;
 }
 
-#dqgoedxjhu .gt_from_md > :first-child {
+#rifttable .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#dqgoedxjhu .gt_from_md > :last-child {
+#rifttable .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#dqgoedxjhu .gt_row {
+#rifttable .gt_row {
   padding-top: 0px;
   padding-bottom: 0px;
   padding-left: 5px;
@@ -359,7 +376,7 @@ package.</p>
   overflow-x: hidden;
 }
 
-#dqgoedxjhu .gt_stub {
+#rifttable .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -372,7 +389,7 @@ package.</p>
   padding-right: 5px;
 }
 
-#dqgoedxjhu .gt_stub_row_group {
+#rifttable .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -386,11 +403,15 @@ package.</p>
   vertical-align: top;
 }
 
-#dqgoedxjhu .gt_row_group_first td {
+#rifttable .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#dqgoedxjhu .gt_summary_row {
+#rifttable .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -400,16 +421,16 @@ package.</p>
   padding-right: 5px;
 }
 
-#dqgoedxjhu .gt_first_summary_row {
+#rifttable .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#dqgoedxjhu .gt_first_summary_row.thick {
+#rifttable .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#dqgoedxjhu .gt_last_summary_row {
+#rifttable .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -419,7 +440,7 @@ package.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#dqgoedxjhu .gt_grand_summary_row {
+#rifttable .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -429,7 +450,7 @@ package.</p>
   padding-right: 5px;
 }
 
-#dqgoedxjhu .gt_first_grand_summary_row {
+#rifttable .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -439,11 +460,21 @@ package.</p>
   border-top-color: #D3D3D3;
 }
 
-#dqgoedxjhu .gt_striped {
+#rifttable .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#dqgoedxjhu .gt_table_body {
+#rifttable .gt_table_body {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -452,7 +483,7 @@ package.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#dqgoedxjhu .gt_footnotes {
+#rifttable .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -466,30 +497,8 @@ package.</p>
   border-right-color: #D3D3D3;
 }
 
-#dqgoedxjhu .gt_footnote {
+#rifttable .gt_footnote {
   margin: 0px;
-  font-size: 90%;
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#dqgoedxjhu .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#dqgoedxjhu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -497,131 +506,176 @@ package.</p>
   padding-right: 5px;
 }
 
-#dqgoedxjhu .gt_left {
+#rifttable .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_left {
   text-align: left;
 }
 
-#dqgoedxjhu .gt_center {
+#rifttable .gt_center {
   text-align: center;
 }
 
-#dqgoedxjhu .gt_right {
+#rifttable .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#dqgoedxjhu .gt_font_normal {
+#rifttable .gt_font_normal {
   font-weight: normal;
 }
 
-#dqgoedxjhu .gt_font_bold {
+#rifttable .gt_font_bold {
   font-weight: bold;
 }
 
-#dqgoedxjhu .gt_font_italic {
+#rifttable .gt_font_italic {
   font-style: italic;
 }
 
-#dqgoedxjhu .gt_super {
+#rifttable .gt_super {
   font-size: 65%;
 }
 
-#dqgoedxjhu .gt_footnote_marks {
-  font-style: italic;
-  font-weight: normal;
+#rifttable .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
+  position: initial;
 }
 
-#dqgoedxjhu .gt_asterisk {
+#rifttable .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#dqgoedxjhu .gt_indent_1 {
+#rifttable .gt_indent_1 {
   text-indent: 5px;
 }
 
-#dqgoedxjhu .gt_indent_2 {
+#rifttable .gt_indent_2 {
   text-indent: 10px;
 }
 
-#dqgoedxjhu .gt_indent_3 {
+#rifttable .gt_indent_3 {
   text-indent: 15px;
 }
 
-#dqgoedxjhu .gt_indent_4 {
+#rifttable .gt_indent_4 {
   text-indent: 20px;
 }
 
-#dqgoedxjhu .gt_indent_5 {
+#rifttable .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="table gt_table">
-<thead class="gt_col_headings"><tr>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="sex">sex</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Male">Male</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Female">Female</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;">N</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>N</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;">138</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">90</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;">age</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>age</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;">64.00 (57.00, 70.00)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">61.00 (55.00, 68.00)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;">ph.ecog</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>ph.ecog</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  0</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>0</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">36 (26%)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">27 (30%)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  1</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>1</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">71 (52%)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">42 (47%)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  2</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>2</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">29 (21%)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">21 (23%)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  3</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>3</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (1%)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (0%)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  Unknown</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>Unknown</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;">ph.karno</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>ph.karno</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;">80.00 (70.00, 90.00)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">80.00 (80.00, 90.00)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  Unknown</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>Unknown</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;">pat.karno</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>pat.karno</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;">80.00 (70.00, 90.00)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">80.00 (70.00, 90.00)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  Unknown</td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>Unknown</p>
+</div></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">2</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1</td>
 </tr>
@@ -636,7 +690,7 @@ different data, if it contains the same variable names, <em>e.g.</em>,
 <div class="section level2">
 <h2 id="customize-the-table">Customize the table<a class="anchor" aria-label="anchor" href="#customize-the-table"></a>
 </h2>
-<p>Label variables, set custom rounding, change estimands, and all
+<p>Label variables, set custom rounding, change estimands, and add
 “Overall” column.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Alternative: set_variable_labels() from the {labelled} package</span></span>
@@ -664,14 +718,26 @@ different data, if it contains the same variable names, <em>e.g.</em>,
 <span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># obtain formatted output</span></span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span></span>
 <span>    footnote <span class="op">=</span> <span class="st">"Data shown are count (percent) or mean (standard deviation)"</span><span class="op">)</span></span></code></pre></div>
-<div id="usjufobfyg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+<div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rifttable table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-#usjufobfyg .gt_table {
+#rifttable thead, #rifttable tbody, #rifttable tfoot, #rifttable tr, #rifttable td, #rifttable th {
+  border-style: none;
+}
+
+#rifttable p {
+  margin: 0;
+  padding: 0;
+}
+
+#rifttable .gt_table {
   display: table;
   border-collapse: collapse;
+  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -694,24 +760,12 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   border-left-color: #D3D3D3;
 }
 
-#usjufobfyg .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#usjufobfyg .gt_caption {
+#rifttable .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#usjufobfyg .gt_title {
+#rifttable .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -723,25 +777,37 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   border-bottom-width: 0;
 }
 
-#usjufobfyg .gt_subtitle {
+#rifttable .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 6px;
+  padding-top: 3px;
+  padding-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
 
-#usjufobfyg .gt_bottom_border {
+#rifttable .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#usjufobfyg .gt_col_headings {
+#rifttable .gt_col_headings {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -756,7 +822,7 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   border-right-color: #D3D3D3;
 }
 
-#usjufobfyg .gt_col_heading {
+#rifttable .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -776,7 +842,7 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   overflow-x: hidden;
 }
 
-#usjufobfyg .gt_column_spanner_outer {
+#rifttable .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -788,15 +854,15 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   padding-right: 4px;
 }
 
-#usjufobfyg .gt_column_spanner_outer:first-child {
+#rifttable .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#usjufobfyg .gt_column_spanner_outer:last-child {
+#rifttable .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#usjufobfyg .gt_column_spanner {
+#rifttable .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -808,7 +874,11 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   width: 100%;
 }
 
-#usjufobfyg .gt_group_heading {
+#rifttable .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rifttable .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -834,7 +904,7 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   text-align: left;
 }
 
-#usjufobfyg .gt_empty_group_heading {
+#rifttable .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -849,15 +919,15 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   vertical-align: middle;
 }
 
-#usjufobfyg .gt_from_md > :first-child {
+#rifttable .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#usjufobfyg .gt_from_md > :last-child {
+#rifttable .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#usjufobfyg .gt_row {
+#rifttable .gt_row {
   padding-top: 0px;
   padding-bottom: 0px;
   padding-left: 5px;
@@ -876,7 +946,7 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   overflow-x: hidden;
 }
 
-#usjufobfyg .gt_stub {
+#rifttable .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -889,7 +959,7 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   padding-right: 5px;
 }
 
-#usjufobfyg .gt_stub_row_group {
+#rifttable .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -903,11 +973,15 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   vertical-align: top;
 }
 
-#usjufobfyg .gt_row_group_first td {
+#rifttable .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#usjufobfyg .gt_summary_row {
+#rifttable .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -917,16 +991,16 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   padding-right: 5px;
 }
 
-#usjufobfyg .gt_first_summary_row {
+#rifttable .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#usjufobfyg .gt_first_summary_row.thick {
+#rifttable .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#usjufobfyg .gt_last_summary_row {
+#rifttable .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -936,7 +1010,7 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   border-bottom-color: #D3D3D3;
 }
 
-#usjufobfyg .gt_grand_summary_row {
+#rifttable .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -946,7 +1020,7 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   padding-right: 5px;
 }
 
-#usjufobfyg .gt_first_grand_summary_row {
+#rifttable .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -956,11 +1030,21 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   border-top-color: #D3D3D3;
 }
 
-#usjufobfyg .gt_striped {
+#rifttable .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#usjufobfyg .gt_table_body {
+#rifttable .gt_table_body {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -969,7 +1053,7 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   border-bottom-color: #D3D3D3;
 }
 
-#usjufobfyg .gt_footnotes {
+#rifttable .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -983,30 +1067,8 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   border-right-color: #D3D3D3;
 }
 
-#usjufobfyg .gt_footnote {
+#rifttable .gt_footnote {
   margin: 0px;
-  font-size: 90%;
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#usjufobfyg .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#usjufobfyg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1014,69 +1076,90 @@ different data, if it contains the same variable names, <em>e.g.</em>,
   padding-right: 5px;
 }
 
-#usjufobfyg .gt_left {
+#rifttable .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_left {
   text-align: left;
 }
 
-#usjufobfyg .gt_center {
+#rifttable .gt_center {
   text-align: center;
 }
 
-#usjufobfyg .gt_right {
+#rifttable .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#usjufobfyg .gt_font_normal {
+#rifttable .gt_font_normal {
   font-weight: normal;
 }
 
-#usjufobfyg .gt_font_bold {
+#rifttable .gt_font_bold {
   font-weight: bold;
 }
 
-#usjufobfyg .gt_font_italic {
+#rifttable .gt_font_italic {
   font-style: italic;
 }
 
-#usjufobfyg .gt_super {
+#rifttable .gt_super {
   font-size: 65%;
 }
 
-#usjufobfyg .gt_footnote_marks {
-  font-style: italic;
-  font-weight: normal;
+#rifttable .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
+  position: initial;
 }
 
-#usjufobfyg .gt_asterisk {
+#rifttable .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#usjufobfyg .gt_indent_1 {
+#rifttable .gt_indent_1 {
   text-indent: 5px;
 }
 
-#usjufobfyg .gt_indent_2 {
+#rifttable .gt_indent_2 {
   text-indent: 10px;
 }
 
-#usjufobfyg .gt_indent_3 {
+#rifttable .gt_indent_3 {
   text-indent: 15px;
 }
 
-#usjufobfyg .gt_indent_4 {
+#rifttable .gt_indent_4 {
   text-indent: 20px;
 }
 
-#usjufobfyg .gt_indent_5 {
+#rifttable .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="table gt_table">
-<thead class="gt_col_headings"><tr>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Summary">Summary</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Overall">Overall</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Male">Male</th>
@@ -1084,73 +1167,97 @@ different data, if it contains the same variable names, <em>e.g.</em>,
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;">N</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>N</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">228</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;">138</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">90</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;">Age, years</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>Age, years</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">62.4 (9.1)</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;">63.3 (9.1)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">61.1 (8.8)</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;">Physician-rated ECOG score</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>Physician-rated ECOG score</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  0</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>0</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">63 (28%)</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">36 (26%)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">27 (30%)</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  1</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>1</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">113 (50%)</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">71 (52%)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">42 (47%)</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  2</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>2</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">50 (22%)</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">29 (21%)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">21 (23%)</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  3</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>3</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (0%)</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (1%)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (0%)</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  Unknown</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>Unknown</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;">Physician-rated Karnofsky score</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>Physician-rated Karnofsky score</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">82 (12)</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;">82 (12)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">82 (12)</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  Unknown</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>Unknown</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;">Patient-rated Karnofsky score</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>Patient-rated Karnofsky score</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">80 (15)</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;">79 (14)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">81 (15)</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">  Unknown</td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>Unknown</p>
+</div></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">3</td>
 <td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">2</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1</td>

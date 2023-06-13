@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
+    <a class="dropdown-item" href="../articles/faq.html">Frequently Asked Questions</a>
     <a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a>
   </div>
 </li>
@@ -217,7 +218,7 @@ risks::riskdiff().</td>
 <td>
 <code>list(approach = "margstd_boot", bootrepeats = 2000)</code> to
 request model fitting via marginal standardization with 2000
-bootstrap.</td>
+bootstraps.</td>
 </tr>
 <tr class="odd">
 <td><code>"rr"</code></td>
@@ -313,7 +314,12 @@ cumulative incidence at 2.5 years.</td>
 <tr class="even">
 <td><code>"hr"</code></td>
 <td>Hazard ratio from Cox proportional hazards regression.</td>
-<td></td>
+<td>
+<code>list(robust = TRUE)</code> for robust (sandwich) standard
+errors; <code>list(weights = "weight_variable", robust = TRUE)</code>
+for sampling (e.g., inverse-probability) weights and robust errors. Use
+<code>"+ cluster(id_variable)"</code> in <code>confounders</code> to
+obtain clustering.</td>
 </tr>
 <tr class="odd">
 <td><code>"survdiff"</code></td>
@@ -448,13 +454,17 @@ censoring.</td>
 <h2 id="joint-models-for-comparative-estimates">Joint models for comparative estimates<a class="anchor" aria-label="anchor" href="#joint-models-for-comparative-estimates"></a>
 </h2>
 <p>By default, regression models will be fit separately for each stratum
-of the <code>effect_modifier</code>. Append <code>"_joint"</code> to
-<code>"hr"</code>, <code>"rr"</code>, <code>"rd"</code>,
-<code>"irr"</code>, <code>"irrrob"</code>, <code>"diff"</code>,
-<code>"fold"</code>, <code>"foldlog"</code>, <code>"quantreg"</code>, or
-<code>"or"</code> to obtain “joint” models for exposure and effect
-modifier that have a single reference category.</p>
+of the <code>effect_modifier</code>.</p>
+<p>Append <code>"_joint"</code> to <code>"hr"</code>, <code>"rr"</code>,
+<code>"rd"</code>, <code>"irr"</code>, <code>"irrrob"</code>,
+<code>"diff"</code>, <code>"fold"</code>, <code>"foldlog"</code>,
+<code>"quantreg"</code>, or <code>"or"</code> to obtain “joint” models
+for exposure and effect modifier that have a single reference
+category.</p>
 <p>Example: <code>type = "hr_joint"</code>.</p>
+<p>Note that the joint model will be fit across all non-missing
+(<code>NA</code>) strata of the effect modifier, even if the
+<code>design</code> table does not request all strata be shown.</p>
 </div>
 <div class="section level2">
 <h2 id="special-types">Special types<a class="anchor" aria-label="anchor" href="#special-types"></a>
@@ -494,10 +504,7 @@ must be called <code>estimate_custom_function()</code>
 </table>
 <p>The reference categories for exposure and effect modifier are their
 first factor levels, which can be changed using
-<code>forcats::fct_relevel()</code>. Note that the joint model will be
-fit across all non-missing (<code>NA</code>) strata of the effect
-modifier, even if the <code>design</code> table does not request all
-strata be shown.</p>
+<code>forcats::fct_relevel()</code>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

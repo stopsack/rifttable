@@ -3,7 +3,8 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   estimators: estimators.html
+  faq: faq.html
   rifttable: rifttable.html
   table1: table1.html
-last_built: 2023-02-21T13:47Z
+last_built: 2023-06-13T13:38Z
 

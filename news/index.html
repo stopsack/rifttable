@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
+    <a class="dropdown-item" href="../articles/faq.html">Frequently Asked Questions</a>
     <a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a>
   </div>
 </li>
@@ -55,6 +56,30 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.1" id="rifttable-061">rifttable 0.6.1<a class="anchor" aria-label="anchor" href="#rifttable-061"></a></h2>
+<ul><li>New functionality:
+<ul><li>Cox models (<code>type = "hr"</code>) allow for <code>weights</code>, clustering, and <code>robust</code> standard errors.</li>
+<li>Argument <code>ratio_digits_decrease</code>: By default, decrease number of decimal digits shown for ratios by 1 digit for ratios &gt; 3 and by 2 digits for ratios &gt; 10. Leads to rounded ratios and confidence intervals of <code>1.23</code>, <code>3.4</code>, and <code>11</code>.</li>
+<li>
+<code><a href="../reference/rt_gt.html">rt_gt()</a></code> now indents the first column and applies markdown formatting to it by default.</li>
+</ul></li>
+<li>New FAQ vignette.</li>
+<li>Bug fixes:
+<ul><li>Binary outcomes returned <code>NA</code> instead of <code>0</code> in unstratified tables with all-null outcome.</li>
+<li>
+<code>type = "maxfu"</code> ignored <code>digits</code> and <code>diff_digits</code>.</li>
+<li>Allow for different <code>exposure</code> (strata labels) and <code>arguments</code> in one table.</li>
+<li>Show unstratified estimate if <code>exposure</code> is <code>""</code>, not just for <code>NA</code>.</li>
+</ul></li>
+<li>Internal:
+<ul><li>
+<code><a href="../reference/rt_gt.html">rt_gt()</a></code>: suppress random <code>id</code> of gt tables to keep git diff slim.</li>
+<li>Keep variables <code>.event</code>, <code>.outcome</code>, etc. available under their original names.</li>
+<li>Require {risks} &gt;= 0.4.2.</li>
+<li>Examples load the <code>breastcancer</code> dataset from the risks package.</li>
+</ul></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.0" id="rifttable-060">rifttable 0.6.0<a class="anchor" aria-label="anchor" href="#rifttable-060"></a></h2>
 <ul><li>Breaking changes:
 <ul><li>
@@ -66,7 +91,7 @@
 </ul></li>
 <li>New function <code><a href="../reference/table1_design.html">table1_design()</a></code>: Generate design of a descriptive “Table 1.”</li>
 <li>New <code>outcome</code> option <code>"variable@level"</code> for categorical variables that displays <code>level</code> as a binary outcome. Used by <code><a href="../reference/table1_design.html">table1_design()</a></code>.</li>
-<li>Unstratified tables displaying the trend/linear slope (<code>trend</code> variable in the <code>design</code>) without an <code>exposure</code>.</li>
+<li>Support unstratified tables displaying the trend/linear slope (<code>trend</code> variable in the <code>design</code>) without an <code>exposure</code>.</li>
 <li>More customization:
 <ul><li>
 <code>rifttable(reference = ...)</code>: Label for the reference category.</li>
@@ -89,7 +114,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="rifttable-050">rifttable 0.5.0<a class="anchor" aria-label="anchor" href="#rifttable-050"></a></h2>
 <ul><li>khsmisc::table2() “graduated” into its own package. See <a href="https://stopsack.github.io/khsmisc/news/" class="external-link">{khsmisc} Changelog</a> for earlier versions.</li>
-<li>Add <code><a href="../reference/breastcancer.html">breastcancer()</a></code> dataset</li>
+<li>Add <code>breastcancer()</code> dataset</li>
 <li>Use R &gt;= 4.1 native pipe, <code>|&gt;</code>
 </li>
 <li>Remove RMTL estimators</li>
