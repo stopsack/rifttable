@@ -27,18 +27,18 @@ data(breastcancer, package = "risks")
 
 design <- tibble::tribble(
   ~label,                       ~type,                   ~stratum,         
-  "Overall",                    "",                      "",               
-  "– Deaths/N",                 "outcomes/total",        c("Low", "High"), 
-  "– Risk",                     "risk",                  c("Low", "High"), 
-  "– Risk ratio (95% CI)",      "rr",                    c("Low", "High"), 
-  "– Risk difference (95% CI)", "rd",                    c("Low", "High"), 
+  "**Overall**",                "",                      "",               
+  "  Deaths/N",                 "outcomes/total",        c("Low", "High"), 
+  "  Risk",                     "risk",                  c("Low", "High"), 
+  "  Risk ratio (95% CI)",      "rr",                    c("Low", "High"), 
+  "  Risk difference (95% CI)", "rd",                    c("Low", "High"), 
   "",                           "",                      "",               
-  "Low hormone receptor",       "",                      "",               
-  "– Deaths/N (Risk)",          "outcomes/total (risk)", "Low",           
-  "– Risk difference (95% CI)", "rd",                    "Low",           
-  "High hormone receptor",      "",                      "",               
-  "– Deaths/N (Risk)",          "outcomes/total (risk)", "High",
-  "– Risk difference (95% CI)", "rd",                    "High") %>%
+  "**Low hormone receptor**",   "",                      "",               
+  "  Deaths/N (Risk)",          "outcomes/total (risk)", "Low",           
+  "  Risk difference (95% CI)", "rd",                    "Low",           
+  "**High hormone receptor**",  "",                      "",               
+  "  Deaths/N (Risk)",          "outcomes/total (risk)", "High",
+  "  Risk difference (95% CI)", "rd",                    "High") %>%
   mutate(
     exposure = "stage",
     outcome = "death",
@@ -46,7 +46,8 @@ design <- tibble::tribble(
 
 rifttable(
   design = design,
-  data = breastcancer)
+  data = breastcancer) %>%
+  rt_gt()  # obtain formatted output
 ```
 
 # How do I add overall statistics?
@@ -58,7 +59,8 @@ Inferential estimators showing comparisons between exposure categories will be b
 rifttable(
   design = design,
   data = breastcancer, 
-  overall = TRUE)
+  overall = TRUE) %>%
+  rt_gt()  # obtain formatted output
 ```
 
 
@@ -74,7 +76,8 @@ rifttable(
   design = design %>%
     mutate(trend = "stage_numeric"),
   data = breastcancer %>%
-    mutate(stage_numeric = as.numeric(stage)))
+    mutate(stage_numeric = as.numeric(stage))) %>%
+  rt_gt()  # obtain formatted output
 ```
 
 
@@ -115,8 +118,8 @@ bind_rows(
     slice(2:5) %>%
     rifttable(
       data = breastcancer_2exposures, 
-      layout = "cols")
-)
+      layout = "cols")) %>%
+  rt_gt()  # obtain formatted output
 ```
 
 
@@ -144,7 +147,8 @@ rifttable(
   design = design,
   data = breastcancer,
   ratio_digits = 3,  # Many digits for ratios
-  risk_digits = 1)   # Fewer digits for risks
+  risk_digits = 1) %>%  # Fewer digits for risks
+  rt_gt()  # obtain formatted output
 ```
 
 As can be seen, ratios > 3 are still shown with 1 fewer decimal, and ratios > 10 are shown with 2 fewer decimals ([Wilcox, *Epidemiology* 2004](https://doi.org/10.1097/01.ede.0000101026.08873.14) motivates why). To disable such additional rounding of extremely high ratios:
@@ -155,7 +159,8 @@ rifttable(
   data = breastcancer,
   ratio_digits = 3,
   ratio_digits_decrease = NULL,  # Do not round high ratios more
-  risk_digits = 1)
+  risk_digits = 1) %>%
+  rt_gt()  # obtain formatted output
 ```
 
 Additionally, rounding can be changed for each row, adding a column `digits` to the rifttable `design`:
@@ -175,7 +180,10 @@ tibble::tribble(
     effect_modifier = "receptor") %>%
 rifttable(
   data = breastcancer,
-  risk_digits = 1)   # Fewer digits for risks, unless specified by "digits"
+  risk_digits = 1) %>%  # Fewer digits for risks, unless specified by "digits"
+  rt_gt()  # obtain formatted output
+```
+
 
 # How can I model differences in continous outcomes?
 
