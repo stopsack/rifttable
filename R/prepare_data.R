@@ -49,7 +49,7 @@ prepare_data <- function(
           "Effect modifier and stratum must be specified for joint ",
           "model ('",
           type, "')."))
-    if(effectmodifier_level == "")
+    if(any(effectmodifier_level == ""))
       stop(
         paste0(
           'An effect modifier stratum cannot be an empty string "" ',
@@ -88,7 +88,7 @@ prepare_data <- function(
       if(!is.null(effectmodifier_level) &
          !(is.null(effectmodifier) |
            is.na(effectmodifier))) {
-        if(effectmodifier_level != "") {
+        if(!(all(effectmodifier_level == ""))) {
           data$.effectmod <- data[[effectmodifier]]
           data <- data %>%
             dplyr::filter(.data$.effectmod %in% effectmodifier_level)
