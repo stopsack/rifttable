@@ -38,7 +38,7 @@ prepare_data <- function(
        missing(effectmodifier_level))
       stop(
         paste0(
-          "Effect modifier and stratum must be specified for joint",
+          "Effect modifier and stratum must be specified for joint ",
           "model ('",
           type, "')."))
     if(is.na(effectmodifier) |
@@ -46,9 +46,16 @@ prepare_data <- function(
        is.null(effectmodifier_level))
       stop(
         paste0(
-          "Effect modifier and stratum must be specified for joint",
+          "Effect modifier and stratum must be specified for joint ",
           "model ('",
           type, "')."))
+    if(effectmodifier_level == "")
+      stop(
+        paste0(
+          'An effect modifier stratum cannot be an empty string "" ',
+          'for a joint model ("',
+          type,
+          '").'))
     pattern <- paste0(
       ".exposure[:digit:]{1,2}__",
       effectmodifier_level,
@@ -81,9 +88,11 @@ prepare_data <- function(
       if(!is.null(effectmodifier_level) &
          !(is.null(effectmodifier) |
            is.na(effectmodifier))) {
-        data$.effectmod <- data[[effectmodifier]]
-        data <- data %>%
-          dplyr::filter(.data$.effectmod %in% effectmodifier_level)
+        if(effectmodifier_level != "") {
+          data$.effectmod <- data[[effectmodifier]]
+          data <- data %>%
+            dplyr::filter(.data$.effectmod %in% effectmodifier_level)
+        }
       }
     }
   }
