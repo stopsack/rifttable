@@ -52,6 +52,11 @@
 #'   \code{type = "diff"}).
 #' @param reference Optional. Defaults to \code{"(reference)"}. Alternative
 #'   label for the reference category.
+#' @param exposure_levels Optional. Defaults to \code{"noempty"}. Show only
+#'   exposure levels that exist in the data or are \code{"NA"}
+#'   (\code{"noempty"}); show only exposure levels that are neither \code{"NA"}
+#'   nor empty (\code{"nona"}); or show all exposure levels (\code{"all"}),
+#'   even if \code{"NA"} or a factor level that does not exist in the data.
 #'
 #' @details The main input parameter is the dataset \code{design}.
 #'   Always required are the column \code{type} (the type of requested
@@ -443,7 +448,8 @@ rifttable <- function(
     to = ", ",
     reference = "(reference)",
     type2_layout = "rows",
-    overall = FALSE) {
+    overall = FALSE,
+    exposure_levels = c("noempty", "nona", "all")) {
   if(!is.data.frame(design))
     stop("No 'design' data frame/tibble was provided.")
   if(missing(data))
@@ -456,6 +462,7 @@ rifttable <- function(
        x = design,
        which = "rt_data")))
     risk_percent <- TRUE
+  exposure_levels <- match.arg(exposure_levels)[1]
 
   if(!("type" %in% names(design))) {
     stop(paste("The 'design' data frame must contain a 'type' column",
@@ -522,7 +529,8 @@ rifttable <- function(
               type2_layout = type2_layout,
               to = to,
               reference = reference,
-              overall = FALSE),
+              overall = FALSE,
+              exposure_levels = exposure_levels),
             rifttable(
               design = design,
               data = data,
@@ -537,7 +545,8 @@ rifttable <- function(
               type2_layout = type2_layout,
               to = to,
               reference = reference,
-              overall = FALSE) %>%
+              overall = FALSE,
+              exposure_levels = exposure_levels) %>%
               dplyr::select(-1)))
       } else {
         res_strat <- rifttable(
@@ -554,7 +563,8 @@ rifttable <- function(
           type2_layout = type2_layout,
           to = to,
           reference = reference,
-          overall = FALSE)
+          overall = FALSE,
+          exposure_levels = exposure_levels)
         return(
           dplyr::bind_rows(
             rifttable(
@@ -572,7 +582,8 @@ rifttable <- function(
               type2_layout = type2_layout,
               to = to,
               reference = reference,
-              overall = FALSE) %>%
+              overall = FALSE,
+              exposure_levels = exposure_levels) %>%
               dplyr::rename(!!names(res_strat)[1] := 1),
             res_strat))
       }
@@ -644,7 +655,8 @@ rifttable <- function(
         ratio_digits = ratio_digits,
         ratio_digits_decrease = ratio_digits_decrease,
         rate_digits = rate_digits,
-        reference = reference))
+        reference = reference,
+        exposure_levels = exposure_levels))
 
   # simple reshaping if only "type" alone
   if(all(design$type2 == "")) {
@@ -713,7 +725,8 @@ rifttable <- function(
           ratio_digits = ratio_digits,
           ratio_digits_decrease = ratio_digits_decrease,
           rate_digits = rate_digits,
-          reference = reference),
+          reference = reference,
+          exposure_levels = exposure_levels),
         result = purrr::map2(
           .x = .data$result,
           .y = .data$result2,

@@ -18,7 +18,8 @@ rifttable(
   to = ", ",
   reference = "(reference)",
   type2_layout = "rows",
-  overall = FALSE
+  overall = FALSE,
+  exposure_levels = c("noempty", "nona", "all")
 )
 }
 \arguments{
@@ -79,6 +80,12 @@ unstratified estimates to an exposure-stratified table? Elements will be
 shown only for absolute estimates (e.g., \code{type = "mean"}) and blank
 for comparatible estimates (e.g., mean difference via
 \code{type = "diff"}).}
+
+\item{exposure_levels}{Optional. Defaults to \code{"noempty"}. Show only
+exposure levels that exist in the data or are \code{"NA"}
+(\code{"noempty"}); show only exposure levels that are neither \code{"NA"}
+nor empty (\code{"nona"}); or show all exposure levels (\code{"all"}),
+even if \code{"NA"} or a factor level that does not exist in the data.}
 }
 \value{
 Tibble. Get formatted output as a gt table by passing on to

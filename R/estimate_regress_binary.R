@@ -53,6 +53,10 @@ estimate_regress_binary <- function(
           .exposure = "Overall",
           res = ""))
   }
+  if(length(unique(stats::na.omit(data$.exposure))) < 2)  # no contrasts estimable
+    return(tibble::tibble(
+      .exposure = unique(data$.exposure)[1],
+      res = ""))
   check_outcome_binary(
     data = data,
     type = type,

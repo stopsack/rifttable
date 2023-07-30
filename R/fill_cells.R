@@ -24,7 +24,8 @@
 #' @param outcome Outcome variable
 #' @param effect_modifier Effect modifier variable
 #' @param arguments Optional list of arguments passed on to estimators
-#' @param reference
+#' @param reference Label of reference category
+#' @param exposure_levels How to handle empty or missing exposure levels
 #'
 #' @return Tibble
 #' @noRd
@@ -53,7 +54,8 @@ fill_cells <- function(
     risk_digits,
     ratio_digits,
     ratio_digits_decrease,
-    rate_digits) {
+    rate_digits,
+    exposure_levels) {
   if(is.na(exposure) | exposure == "") {
     data <- data %>%
       dplyr::mutate(.exposure = "Overall")
@@ -71,7 +73,20 @@ fill_cells <- function(
           "Its type was changed to 'factor' but the result may be ",
           "undesirable, e.g., if the variable is actually continuous ",
           "and thus has many levels."))
-    data$.exposure <- factor(data$.exposure)
+
+    if(is.logical(data$.exposure) & exposure_levels == "all")
+      data$.exposure <- factor(
+        data$.exposure,
+        levels = c(FALSE, TRUE))
+
+    if(!is.factor(data$.exposure) |
+       exposure_levels != "all")  # "nona", "noempty"
+      data$.exposure <- factor(data$.exposure)  # if factor, drops empty levels
+
+    if(exposure_levels == "nona") {
+      data <- data %>%
+        dplyr::filter(!is.na(.data$.exposure))
+    }
   }
 
   # Check that trend variable, if given, is continuous
