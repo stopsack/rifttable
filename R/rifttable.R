@@ -734,10 +734,14 @@ rifttable <- function(
       dplyr::mutate(
         value = dplyr::if_else(
           is.na(.data$value),
-          true = "", false = .data$value))
+          true = "",
+          false = .data$value))
     if(layout == "rows") {
       if(type2_layout == "rows") {
         res <- res %>%
+          dplyr::filter(
+            !(.data$whichres == "res.2" &
+                .data$value == "")) %>%
           tidyr::pivot_wider(
             names_from = ".exposure",
             values_from = .data$value,
@@ -796,14 +800,19 @@ rifttable <- function(
           dplyr::select(-"whichres") %>%
           dplyr::rename(!!name := ".exposure")
       } else {
+        res <- res %>%
+          dplyr::filter(
+            !(.data$whichres == "res.2" &
+                .data$value == "")) %>%
+          dplyr::mutate(
+            label = dplyr::if_else(
+              .data$whichres == "res.1",
+              true = .data$label,
+              false = paste0(
+                .data$label,
+                " ")))
         if(sum(duplicated(design$label)) > 0 | "" %in% design$label) {
           res %>%
-            dplyr::mutate(
-              label = dplyr::if_else(
-                .data$whichres == "res.1",
-                true = .data$label,
-                false = paste0(.data$label,
-                               " "))) %>%
             dplyr::select(-"whichres") %>%
             tidyr::pivot_wider(
               names_from = c(.data$index, .data$label),
@@ -812,12 +821,6 @@ rifttable <- function(
             dplyr::rename(!!name := ".exposure")
         } else {
           res %>%
-            dplyr::mutate(
-              label = dplyr::if_else(
-                .data$whichres == "res.1",
-                true = .data$label,
-                false = paste0(.data$label,
-                               " "))) %>%
             dplyr::select(-"whichres", -"index") %>%
             tidyr::pivot_wider(
               names_from = .data$label,
