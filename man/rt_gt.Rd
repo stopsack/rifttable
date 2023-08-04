@@ -41,9 +41,11 @@ Formatting includes:
 }
 
 \examples{
+\dontrun{
 data(mtcars)
 mtcars \%>\%
   dplyr::slice(1:5) \%>\%
   rt_gt()
+}
 
 }
