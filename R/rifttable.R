@@ -516,7 +516,7 @@ rifttable <- function(
           dplyr::bind_cols(
             rifttable(
               design = design %>%
-                dplyr::select(-"exposure"),
+                dplyr::select(-"exposure", -"trend"),
               data = data,
               layout = layout,
               factor = factor,

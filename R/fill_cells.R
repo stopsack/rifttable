@@ -277,7 +277,7 @@ fill_cells <- function(
   }
 
   if(is.na(trend)) {
-    res_cat
+    return(res_cat)
   } else {
     data_prep <- data %>%
       dplyr::mutate(.exposure = .data$.trend) %>%
@@ -291,37 +291,46 @@ fill_cells <- function(
         type = type,
         effectmodifier = effect_modifier,
         effectmodifier_level = stratum)
-    dplyr::bind_rows(
+    res_trend <- do.call(
+      what = paste0("estimate_", estimator),
+      args = list(
+        data = data_prep$data,
+        type = type,
+        event = event,
+        time = time,
+        time2 = time2,
+        outcome = outcome,
+        exposure = trend,
+        effectmodifier = effect_modifier,
+        effectmodifier_level = stratum,
+        confounders = confounders,
+        digits = digits,
+        nmin = nmin,
+        na_rm = na_rm,
+        ci = ci,
+        xlevels = data_prep$xlevels,
+        pattern = data_prep$pattern,
+        diff_digits = diff_digits,
+        risk_digits = risk_digits,
+        ratio_digits = ratio_digits,
+        ratio_digits_decrease = ratio_digits_decrease,
+        rate_digits = rate_digits,
+        risk_percent = risk_percent,
+        to = to,
+        reference = reference,
+        factor = factor,
+        arguments = arguments,
+        is_trend = TRUE))
+    if(setequal(
       res_cat,
-      do.call(
-        what = paste0("estimate_", estimator),
-        args = list(
-          data = data_prep$data,
-          type = type,
-          event = event,
-          time = time,
-          time2 = time2,
-          outcome = outcome,
-          exposure = trend,
-          effectmodifier = effect_modifier,
-          effectmodifier_level = stratum,
-          confounders = confounders,
-          digits = digits,
-          nmin = nmin,
-          na_rm = na_rm,
-          ci = ci,
-          xlevels = data_prep$xlevels,
-          pattern = data_prep$pattern,
-          diff_digits = diff_digits,
-          risk_digits = risk_digits,
-          ratio_digits = ratio_digits,
-          ratio_digits_decrease = ratio_digits_decrease,
-          rate_digits = rate_digits,
-          risk_percent = risk_percent,
-          to = to,
-          reference = reference,
-          factor = factor,
-          arguments = arguments,
-          is_trend = TRUE)))
+      tibble::tibble(
+        .exposure = "Overall",
+        res = ""))) {
+      return(res_trend)
+    } else {
+      return(dplyr::bind_rows(
+        res_cat,
+        res_trend))
+    }
   }
 }
