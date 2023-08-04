@@ -5,7 +5,7 @@ df <- breastcancer |>
     receptor = dplyr::if_else(dplyr::row_number() %in% 9:11, NA, receptor),
     stage = dplyr::if_else(dplyr::row_number() %in% 29:31, NA, stage),
     death = dplyr::if_else(dplyr::row_number() %in% 99:101, NA, death),
-    allempty = NA_integer_,
+    allempty = NA_real_,
     allempty_lgl = allempty == 1)
 
 
@@ -169,7 +169,7 @@ test_that("All-NA logical variable variable is handled correctly", {
     c("Summary", "Overall", "High", "Low"))
 })
 
-test_that("All-NA integer variable variable is handled correctly", {
+test_that("All-NA real variable variable is handled correctly", {
   result <- tibble::tribble(
     ~label,   ~exposure,  ~outcome,        ~type,
     "N",      NA,         NA,              "total",
@@ -219,3 +219,4 @@ test_that("All-NA integer variable variable is handled correctly", {
     names(result),
     c("Summary", "Overall", "High", "Low"))
 })
+
