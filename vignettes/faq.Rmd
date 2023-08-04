@@ -23,9 +23,10 @@ Most subsequent examples build on this simple rifttable:
 ```{r basic, message = FALSE}
 library(rifttable)
 library(dplyr)  # for data management, e.g., mutate()
+library(tibble)  # for constructing a tibble, e.g. via tribble()
 data(breastcancer, package = "risks")
 
-design <- tibble::tribble(
+design <- tribble(
   ~label,                       ~type,                   ~stratum,         
   "**Overall**",                "",                      "",               
   "  Deaths/N",                 "outcomes/total",        c("Low", "High"), 
@@ -131,7 +132,7 @@ Rounding can be changed by setting the `rifttable()` arguments `diff_digits`, `r
 
 
 ```{r rounding}
-design <- tibble::tribble(
+design <- tribble(
   ~label,                     ~type,
   "Deaths/N",                 "outcomes/total", 
   "Risk",                     "risk",          
@@ -166,7 +167,7 @@ rifttable(
 Additionally, rounding can be changed for each row, adding a column `digits` to the rifttable `design`:
 
 ```{r rounding_digits}
-tibble::tribble(
+tribble(
   ~label,                     ~type,            ~digits,
   "Deaths/N",                 "outcomes/total", NA,  # Uses rifttable default
   "Risk",                     "risk",           NA,  # Uses rifttable default
@@ -201,7 +202,7 @@ cancer <- cancer %>%
 Using `rifttable()`, one can calculate mean differences (`type = "diff"`) or quantile differences (`type = "quantreg"`, by default, at the median):
 
 ```{r table2_diff}
-tibble::tribble(
+tribble(
   ~label,                ~type,
   "Observations",        "total",
   "Mean age",            "mean",
@@ -231,7 +232,7 @@ In all models, beta coefficients can be interpreted as ratios after exponentiati
 In the `cancer` data (see previous question), ratios of usual (arithmetric) means of age could be considered informative, given that `hist(cancer$age)` etc. does not show a major skew in this outcome.
 
 ```{r table2_ratio}
-tibble::tribble(
+tribble(
   ~label,                                       ~type,
   "Observations",                               "total",
   "Mean age",                                   "mean",
