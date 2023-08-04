@@ -56,5 +56,5 @@ format_stratified_results <- function(
         .data$.per_stratum < nmin ~
           paste0("-- (<", nmin, ")"),
         TRUE ~ .data$res)) %>%
-    dplyr::select(-.data$.per_stratum)
+    dplyr::select(-".per_stratum")
 }

@@ -599,7 +599,7 @@ rifttable <- function(
     to_code <- tibble::tibble(
       combo = stringr::str_subset(design$outcome, "@")) %>%
       tidyr::separate(
-        col = .data$combo,
+        col = "combo",
         into = c("outcome", "var_level"),
         sep = "@") %>%
       dplyr::distinct()
@@ -669,10 +669,10 @@ rifttable <- function(
     if(layout == "rows") {
       res <- res %>%
         tidyr::pivot_wider(
-          names_from = .data$.exposure,
-          values_from = .data$res,
+          names_from = ".exposure",
+          values_from = "res",
           values_fill = "") %>%
-        dplyr::rename(!!name := .data$label) %>%
+        dplyr::rename(!!name := "label") %>%
         dplyr::select(-"index")
       return(res)
     } else {
@@ -680,15 +680,15 @@ rifttable <- function(
          "" %in% design$label) {
         res %>%
           tidyr::pivot_wider(
-            names_from = c(.data$index, .data$label),
-            values_from = .data$res,
+            names_from = c("index", "label"),
+            values_from = "res",
             values_fill = "")
       } else {
         res %>%
           dplyr::select(-"index") %>%
           tidyr::pivot_wider(
-            names_from = .data$label,
-            values_from = .data$res,
+            names_from = "label",
+            values_from = "res",
             values_fill = "") %>%
           dplyr::rename(!!name := ".exposure")
       }
@@ -741,7 +741,7 @@ rifttable <- function(
         "result") %>%
       tidyr::unnest(cols = "result") %>%
       tidyr::pivot_longer(
-        cols = c(.data$res.1, .data$res.2),
+        cols = c("res.1", "res.2"),
         names_to = "whichres",
         values_to = "value") %>%
       dplyr::mutate(
@@ -757,7 +757,7 @@ rifttable <- function(
                 .data$value == "")) %>%
           tidyr::pivot_wider(
             names_from = ".exposure",
-            values_from = .data$value,
+            values_from = "value",
             values_fill = "") %>%
           dplyr::group_by(.data$index) %>%
           dplyr::mutate(
@@ -766,7 +766,7 @@ rifttable <- function(
               true = .data$label,
               false = "")) %>%
           dplyr::ungroup() %>%
-          dplyr::rename(!!name := .data$label) %>%
+          dplyr::rename(!!name := "label") %>%
           dplyr::select(-"index", -"whichres")
       } else {
         res <- res %>%
@@ -778,10 +778,10 @@ rifttable <- function(
                              " "))) %>%
           dplyr::select(-"whichres") %>%
           tidyr::pivot_wider(
-            names_from = .data$.exposure,
-            values_from = .data$value,
+            names_from = ".exposure",
+            values_from = "value",
             values_fill = "") %>%
-          dplyr::rename(!!name := .data$label) %>%
+          dplyr::rename(!!name := "label") %>%
           dplyr::select(-"index")
       }
       return(res)
@@ -791,15 +791,15 @@ rifttable <- function(
         if(sum(duplicated(design$label)) > 0 | "" %in% design$label) {
           res <- res %>%
             tidyr::pivot_wider(
-              names_from = c(.data$index, .data$label),
-              values_from = .data$value,
+              names_from = c("index", "label"),
+              values_from = "value",
               values_fill = "")
         } else {
           res <- res %>%
             dplyr::select(-"index") %>%
             tidyr::pivot_wider(
-              names_from = .data$label,
-              values_from = .data$value,
+              names_from = "label",
+              values_from = "value",
               values_fill = "")
         }
         res %>%
@@ -828,16 +828,16 @@ rifttable <- function(
           res %>%
             dplyr::select(-"whichres") %>%
             tidyr::pivot_wider(
-              names_from = c(.data$index, .data$label),
-              values_from = .data$value,
+              names_from = c("index", "label"),
+              values_from = "value",
               values_fill = "") %>%
             dplyr::rename(!!name := ".exposure")
         } else {
           res %>%
             dplyr::select(-"whichres", -"index") %>%
             tidyr::pivot_wider(
-              names_from = .data$label,
-              values_from = .data$value,
+              names_from = "label",
+              values_from = "value",
               values_fill = "") %>%
             dplyr::rename(!!name := ".exposure")
         }

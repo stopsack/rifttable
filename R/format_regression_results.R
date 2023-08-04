@@ -37,18 +37,18 @@ format_regression_results <- function(
     conflimit_check = FALSE) {  # only needed for RR/RD models
   fit <- fit %>%
     dplyr::select(
-      .data$term,
-      .data$estimate,
-      .data$conf.low,
-      .data$conf.high) %>%
+      "term",
+      "estimate",
+      "conf.low",
+      "conf.high") %>%
     dplyr::mutate(
       nonconverg = (.data$conf.low == 0 &
                       .data$conf.high == Inf)) %>%
     dplyr::mutate_at(
-      .vars = dplyr::vars(
-        .data$estimate,
-        .data$conf.low,
-        .data$conf.high),
+      .vars = c(
+        "estimate",
+        "conf.low",
+        "conf.high"),
       .funs = ~format_round(
         . * multiply,
         digits = digits,
@@ -113,5 +113,5 @@ format_regression_results <- function(
         .data$.per_stratum < nmin,
         true = paste0("-- (<", nmin, ")"),
         false = .data$res)) %>%
-    dplyr::select(.data$.exposure, .data$res)
+    dplyr::select(".exposure", "res")
 }
