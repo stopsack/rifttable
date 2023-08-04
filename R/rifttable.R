@@ -547,7 +547,7 @@ rifttable <- function(
               reference = reference,
               overall = FALSE,
               exposure_levels = exposure_levels) %>%
-              dplyr::select(-1)))
+              dplyr::select(-1, -dplyr::any_of("Overall"))))
       } else {
         res_strat <- rifttable(
           design = design,
@@ -665,7 +665,9 @@ rifttable <- function(
         "index",
         "label",
         "result") %>%
-      tidyr::unnest(cols = "result")
+      tidyr::unnest(
+        cols = "result",
+        keep_empty = TRUE)
     if(layout == "rows") {
       res <- res %>%
         tidyr::pivot_wider(
@@ -696,6 +698,8 @@ rifttable <- function(
 
     # handle "type" and "type2" together
   } else {
+    if(any(is.na(design$exposure)))
+      stop("If using 'type2', 'exposure' must be specified for each row of the 'design'.")
     res <- res %>%
       dplyr::mutate(
         result2 = purrr::pmap(

@@ -265,6 +265,17 @@ fill_cells <- function(
       arguments = arguments,
       is_trend = FALSE))
 
+  if(setequal(
+    res_cat,
+    tibble::tibble(
+      .exposure = NA_character_,
+      res = NA_character_,
+      .rows = 0))) {
+    res_cat <- tibble::tibble(
+      .exposure = "Overall",
+      res = "")
+  }
+
   if(is.na(trend)) {
     res_cat
   } else {
