@@ -96,13 +96,13 @@ estimate_regress_continuous <- function(
             "'.\nInstall with:  install.packages(\"sandwich\")"),
           call. = FALSE)
       }
-      fit <- stats::glm(
+      fit <- suppressWarnings(stats::glm(
         formula = stats::as.formula(
           paste(
             ".outcome ~ .exposure",
             confounders)),
         family = stats::poisson(link = "log"),
-        data = data)
+        data = data))
       fit %>%
         broom::tidy(
           conf.int = FALSE,
