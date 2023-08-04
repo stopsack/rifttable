@@ -119,10 +119,10 @@ estimate_regress_continuous <- function(
             stats::qnorm(1 - (1 - ci) / 2) *
             .data$std.error) %>%
         dplyr::mutate_at(
-          .vars = dplyr::vars(
-            .data$estimate,
-            .data$conf.low,
-            .data$conf.high),
+          .vars = c(
+            "estimate",
+            "conf.low",
+            "conf.high"),
           .funs = exp)
     },
     irr_joint =,
