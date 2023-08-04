@@ -164,10 +164,10 @@ estimate_regress_continuous <- function(
           conf.int = TRUE,
           conf.level = ci) %>%
         dplyr::mutate_at(
-          .vars = dplyr::vars(
-            .data$estimate,
-            .data$conf.low,
-            .data$conf.high),
+          .vars = c(
+            "estimate",
+            "conf.low",
+            "conf.high"),
           .funs = exp)
     },
     quantreg_joint =,
