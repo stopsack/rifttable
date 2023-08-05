@@ -96,7 +96,7 @@ design %>%
     overall = TRUE) %>%  # add unstratified "overall" column
   rt_gt() %>%  # obtain formatted output
   gt::tab_footnote(
-    footnote = "Data shown are count (percent) or mean (standard deviation)")
+    footnote = "Data shown are count (percent) or mean (standard deviation).")
 ```
 
 # Add more statistics per variable
@@ -128,5 +128,5 @@ design_new %>%
     overall = TRUE) %>%
   rt_gt() %>%
   gt::tab_footnote(
-    footnote = "Data shown are count (percent) or mean (standard deviation)")
+    footnote = "Data shown are count (percent), unless indicated otherwise.")
 ```

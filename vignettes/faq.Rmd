@@ -56,12 +56,12 @@ rifttable(
 
 R's error messages can be frustrating. When using rifttable, these are the typical sources of errors:
 
-* Clerical errors in variable names and arguments -- no magic here except double-checking the code.
-* Missing data -- see below: [How do I handle missing data?](#how-do-i-handle-missing-data).
-* Discrepancy between estimator (`type`) and the data -- for example, when trying to calculate `type = "mean"` on a categorical (factor) variable.
-* Models that fail to converge -- for example, trying to estimate a risk ratio with 0 outcomes in the reference category, or adjusting for 20 covariates in a Cox model and 5 events overall. (Sometimes such attempts will "just" return warning messages -- still rethink the modeling strategy.)
+* Clerical errors in variable names and arguments. There is no magic here except double-checking the code.
+* Missing data. See below: [How do I handle missing data?](#how-do-i-handle-missing-data).
+* Discrepancy between estimator (`type`) and the data. For example, `type = "mean"` will not work on a categorical (factor) variable.
+* Models that fail to converge. For example, one may be trying to estimate a risk ratio with 0 outcomes in the reference category, or adjusting for 20 covariates in a Cox model with 5 events overall. (Sometimes such attempts will "just" return warning messages -- it is still worth rethinking the modeling strategy.)
 
-To identify where an error is coming from, start simple. Comment out all but one line of the `design`, putting `#` at the beginning of the line. Start with a line that gives basic descriptive data, such as `type = "total"`, `type = "outcomes"` or `type = "events/time"`. Success? Then add more lines with descriptive estimators, one by one. At the end, add lines that fit models, such as `type = "hr"`.
+To identify where an error is coming from, start simple. Comment out all but one line of the `design`, putting `#` at the beginning of the line. Start with a line that gives basic descriptive data, such as `type = "total"`, `type = "outcomes"` or `type = "events/time"`, and re-run `rifttable()`. Then add more lines with descriptive estimators, one by one. At the end, add lines that fit models, such as `type = "hr"`.
 
 
 # What is the `design`?
@@ -72,73 +72,75 @@ The `design` can be constructed in many different ways. All lead to the same tab
 
 1. **A dataset (tibble) defined using `tribble()`**
 
-```{r}
-design1 <- tribble(
-  ~label,   ~exposure, ~outcome, ~type,
-  "N",      "stage",   "death",  "total",
-  "Deaths", "stage",   "death",  "outcomes")
-design1
-rifttable(
-  design = design1,
-  data = breastcancer) %>%
-  rt_gt()
-```
+    ```{r}
+    design1 <- tribble(
+      ~label,   ~exposure, ~outcome, ~type,
+      "N",      "stage",   "death",  "total",
+      "Deaths", "stage",   "death",  "outcomes")
+    design1
+    rifttable(
+      design = design1,
+      data = breastcancer) %>%
+      rt_gt()
+    ```
 
 2. **A dataset (tibble) defined using `tibble()`**
 
-```{r}
-design2 <- tibble(
-    label = c("N", "Deaths"),
-    exposure = "stage",
-    outcome = "death", 
-    type = c("total", "outcomes"))
-design2
-rifttable(
-  design = design2,
-  data = breastcancer) %>%
-  rt_gt()
-```
+    ```{r}
+    design2 <- tibble(
+        label = c("N", "Deaths"),
+        exposure = "stage",
+        outcome = "death", 
+        type = c("total", "outcomes"))
+    design2
+    rifttable(
+      design = design2,
+      data = breastcancer) %>%
+      rt_gt()
+    ```
 
 3. **Concatenating tibbles, then editing with `mutate()`**
 
-```{r}
-design3 <- bind_rows(
-  tibble(  # row 1
-    label = "N",
-    type = "total"),
-  tibble(  # row 2
-    label = "Deaths",
-    type = "outcomes")) %>%
-  mutate(  # elements that are the same for all rows
-    exposure = "stage",
-    outcome = "death")
-design3
-rifttable(
-  design = design3,
-  data = breastcancer) %>%
-  rt_gt()
-```
+    ```{r}
+    design3 <- bind_rows(
+      tibble(  # row 1
+        label = "N",
+        type = "total"),
+      tibble(  # row 2
+        label = "Deaths",
+        type = "outcomes")) %>%
+      mutate(  # elements that are the same for all rows
+        exposure = "stage",
+        outcome = "death")
+    design3
+    rifttable(
+      design = design3,
+      data = breastcancer) %>%
+      rt_gt()
+    ```
 
-See a separate overview about [a descriptive Table 1](table1.html).
 
 4. **For descriptive tables: Use `table1_design()`**
 
-```{r}
-design4 <- breastcancer %>%
-  table1_design(
-    death,  # the total count will automatically be included
-    by = stage)
-design4
-rifttable(
-  design = design4,
-  data = breastcancer) %>%
-  rt_gt()
-```
+    ```{r}
+    design4 <- breastcancer %>%
+      table1_design(
+        death,  # the total count will automatically be included
+        by = stage)
+    design4
+    rifttable(
+      design = design4,
+      data = breastcancer) %>%
+      rt_gt()
+    ```
+    
+    See a separate overview about [a descriptive Table 1](table1.html).
 
 5. **External datasets**
 
-The `design` could even be written out in an external dataset that can be loaded
-with `readr::read_csv()` (for CSV files) or `readxl::read_excel()` (for Excel sheets).
+    The `design` could even be written out in an external dataset that can be
+    loaded with `readr::read_csv()` (for CSV files) or `readxl::read_excel()`
+    (for Excel sheets).
 
 
 # How do I handle missing data?
@@ -146,7 +148,7 @@ with `readr::read_csv()` (for CSV files) or `readxl::read_excel()` (for Excel sh
 rifttable tries to make as few assumptions as possible about how the user wants to treat missing data.
 
 * Missing values in **exposure**: By default, missing vales (`NA`) in the exposure are displayed as a separate exposure category for descriptive statistics (e.g., `type = "total"` or `type = "mean"`). They are omitted by comparative estimators (e.g., regression models). To change this behavior, call `rifttable()` with the argument `exposure_levels = "nona"`.
-* Missing values in **outcome**: By default, descriptive statistics will be missing, and regression models will use the non-missing observations. To change exclude observations with missing outcome altogether, add `na_rm = TRUE` to (specific rows of) the `design`.
+* Missing values in **outcome**: By default, descriptive statistics will be missing (e.g., results will be `--` or `NA`), and regression models will use the non-missing observations. To exclude observations with missing outcome values altogether, add `na_rm = TRUE` to (specific rows of) the `design`.
 * Missing values in **confounders**: Applies only to regression models, which typically exclude observations with missing values.
 * Missing values in the **effect modifier**: Stratified and joint models are only shown for the specified `stratum` of the `effect_modifier`. To include observations with the missing effect modifier, add `NA` to the requested stratum in the `design`, e.g., `effect_modifier = "bmi", stratum = c("<25", NA)`.
 
@@ -167,7 +169,7 @@ rifttable(
 
 # How do I test for trend?
 
-Instead of *testing* a null hypothesis about a trend, **rifttable** proposes 
+Instead of *testing* a null hypothesis about a trend, rifttable proposes 
 *estimating* the difference in the outcome for a one-unit higher exposure. 
 This is also called a linear slope. Here, we estimate the risk associated for 
 stage that is one category higher.
@@ -226,7 +228,7 @@ bind_rows(
 
 # How do I change how results are rounded?
 
-By default, differences measures are being rounded to 2 decimal digits (`0.01`), such as `type = "diff"`, the mean difference, or `type = "quantreg"`, the median difference. The same goes for risk measures, such as `type = "risk"`, unless shown as percentage points. Ratio measures are also shown with 2 decimal digits, such as `type = "hr"`, the hazard ratio, or `type = "fold"`, a ratio of arithmetric means. 
+By default, difference measures are being rounded to 2 decimal digits (`0.01`), such as `type = "diff"`, the mean difference, or `type = "quantreg"`, the median difference. The same goes for risk measures, such as `type = "risk"`, unless shown as percentage points. Ratio measures are also shown with 2 decimal digits, such as `type = "hr"`, the hazard ratio, or `type = "fold"`, a ratio of arithmetric means. 
 
 Rounding can be changed by setting the `rifttable()` arguments `diff_digits`, `risk_digits`, and `ratio_digits` globally for the entire table. 
 
@@ -270,10 +272,10 @@ Additionally, rounding can be changed for each row, adding a column `digits` to 
 tribble(
   ~label,                     ~type,            ~digits,
   "Deaths/N",                 "outcomes/total", NA,  # Uses rifttable default
-  "Risk",                     "risk",           NA,  # Uses rifttable default
-  "Risk ratio (95% CI)",      "",               NA,  # Uses risk_digits below
-  "– Rounded to 1 digit",     "rr",             1,
-  "– Rounded to 2 digits",    "rr",             2,
+  "Risk",                     "risk",           NA,  # Uses risk_digits below
+  "Risk ratio (95% CI)",      "",               NA,
+  "  Rounded to 1 digit",     "rr",             1,
+  "  Rounded to 2 digits",    "rr",             2,
   "Risk difference (95% CI)", "rd",             3) %>%  # Overrides risk_digits
   mutate(
     exposure = "stage",
