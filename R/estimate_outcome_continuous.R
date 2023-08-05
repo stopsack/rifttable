@@ -96,6 +96,13 @@ estimate_outcome_continuous <- function(
             digits = digits),
           ")"))
     },
+    "geomean" = {
+      data %>%
+        dplyr::summarize(
+          res = format_round(
+            exp(mean(log(.data$.outcome))),
+            digits = digits))
+    },
     "median" = {
       data %>%
         dplyr::summarize(res = format_round(

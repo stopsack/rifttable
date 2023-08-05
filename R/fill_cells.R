@@ -171,6 +171,7 @@ fill_cells <- function(
     "mean (sd)" =,
     "sd" =,
     "mean (ci)" =,
+    "geomean" =,
     "median" =,
     "median (iqr)" =,
     "range" = "outcome_continuous",

@@ -325,19 +325,22 @@ Three types of ratios for continuous outcomes are implemented in `rifttable()`:
 
 `type =` | Ratio of ... | Model | Use
 -------|----------|-----------------------|-----------------------------
-`"fold"` | Arithmetric means | Generalized linear model with Gaussian distribution and log link: `glm(y ~ x, family = gaussian(link = "log"))` | Tolerates `0` in the `outcome` variable. Best fit if outcome is normally distributed without transformation.
-`"irrrob"` | Arithmetric means | Generalized linear model with Poisson distribution and log link: `glm(y ~ x, family = poisson())`, with robust (sandwich) standard errors | Tolerates `0` in the `outcome` variable. (Note, `stats::glm()` may issue warnings that the outcome is "non-integer." This warning can be ignored here.)
-`"foldlog"` | Geometric means | Linear model with log-transformed outcome: `lm(log(y) ~ x)` | Does not tolerate `0` in the `outcome` variable, as `log(0)` is undefined (R returns `-Inf`). Best fit if outcome is normally distributed after log transformation.
+`"fold"` | Arithmetric means | Generalized linear model with Gaussian distribution and log link: `glm(y ~ x, family = gaussian(link = "log"))` | Tolerates `0` in the `outcome` variable. May be informative if outcome is normally distributed without transformation.
+`"irrrob"` | Arithmetric means | Generalized linear model with Poisson distribution and log link: `glm(y ~ x, family = poisson())`, with robust (sandwich) standard errors | Tolerates `0` in the `outcome` variable. May be informative if outcome is normally distributed without transformation.
+`"foldlog"` | Geometric means | Linear model with log-transformed outcome: `lm(log(y) ~ x)` | Does not tolerate `0` in the `outcome` variable, as `log(0)` is undefined (R returns `-Inf`). May be informative if outcome is normally distributed after log transformation.
 
-In all models, beta coefficients can be interpreted as ratios after exponentiation. `rifttable`()` automatically does all nessary transformations.
+In all models, after exponentiation, beta coefficients can be interpreted as ratios. rifttable automatically does all necessary transformations.
 
-In the `cancer` data (see previous question), ratios of usual (arithmetric) means of age could be considered informative, given that `hist(cancer$age)` etc. does not show a major skew in this outcome.
+In the `cancer` data (see previous question), ratios of usual (arithmetic) means of age could be considered informative, given that `hist(cancer$age)` etc. does not show a major skew in this outcome.
 
 ```{r table2_ratio}
 tribble(
   ~label,                                       ~type,
   "Observations",                               "total",
-  "Mean age",                                   "mean",
+  "Mean age",                                   "", 
+  "  Arithmetic mean",                          "mean",
+  "  Geometric mean",                           "geomean",
+  "Mean ratio",                                 "",
   "  Ratio of arithmetric means",               "fold",
   "  Ratio of arithmetric means, empirical SE", "irrrob",
   "  Ratio of geometric means",                 "foldlog") %>%
@@ -350,4 +353,4 @@ tribble(
   rt_gt()  # obtain formatted output
 ```
 
-Patients with ECOG performance status of 2, compared to those with performance status 0, are on average 8% older, based on comparing arithmetric means (9%  based on geometric means).
+Patients with ECOG performance status of 2, compared to those with performance status 0, are on average 8% older (or 9%, if based on geometric means).

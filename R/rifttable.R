@@ -195,9 +195,10 @@
 #'        survival for censoring.
 #'      * \code{"medfu (iqr)"} Median and interquartile range for follow-up.
 #'      * \code{"maxfu"} Maximum follow-up time.
-#'      * \code{"mean"} Mean.
+#'      * \code{"mean"} Mean (arithmetic mean).
 #'      * \code{"mean (ci)"} Mean and 95% CI.
 #'      * \code{"mean (sd)"} Mean and standard deviation.
+#'      * \code{"geomean"} Geometric mean.
 #'      * \code{"median"} Median.
 #'      * \code{"median (iqr)"} Median and interquartile range.
 #'      * \code{"range"} Range: Minimum to maximum value.
