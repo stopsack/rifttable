@@ -442,33 +442,6 @@ rifttable(design = design2,
   rt_gt(md = 1)  # get markdown formatting in first column ('label')
 }
 
-# Example 6: Use custom function; add exposure-unstratified overall estimates
-\dontrun{
-# Define custom function, must start with "estimate_"
-estimate_my_example <- function(data, ...) {
-  # Variables have been renamed in '.exposure' and '.outcome'
-  data \%>\%
-    dplyr::group_by(.exposure) \%>\%
-    dplyr::summarize(
-      res = paste(
-        round(
-          mean(.outcome),
-          digits = 3)))
-}
-
-# Call custom function, omit "estimate_"
-tibble::tribble(
-  ~label,                    ~type,        ~stratum,
-  "Mean: Built-in function", "mean",       1,
-  "Mean: Custom function",   "my_example", 1) \%>\%
-  dplyr::mutate(
-    exposure = "sex",
-    outcome = "status",
-    effect_modifier = "ph.ecog") \%>\%
-  rifttable(
-    data = cancer,
-    overall = TRUE)
-}
 }
 \references{
 Greenland S, Rothman KJ (2008). Introduction to Categorical Statistics. In:
