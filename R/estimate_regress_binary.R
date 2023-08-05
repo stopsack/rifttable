@@ -57,10 +57,11 @@ estimate_regress_binary <- function(
     return(tibble::tibble(
       .exposure = unique(data$.exposure)[1],
       res = ""))
-  check_outcome_binary(
+  check_outcome(
     data = data,
     type = type,
-    outcome = outcome)
+    outcome = outcome,
+    outcome_type = "binary")
   digits <- find_rounding_digits(
     digits = digits,
     default = dplyr::if_else(

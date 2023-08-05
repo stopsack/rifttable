@@ -7,6 +7,7 @@
 #' @param to Separator character(s) for confidence interval bounds
 #' @param is_trend If called on a continous (trend) variable
 #' @param type Estimand
+#' @param outcome Outcome variable
 #' @param ratio_digits Digits for ratios
 #' @param ratio_digits_decrease Fewer digits for elevated ratios
 #' @param diff_digits Digits for differences
@@ -25,6 +26,7 @@
 estimate_regress_continuous <- function(
     data,
     type,
+    outcome,
     exposure,
     confounders,
     digits,
@@ -55,6 +57,11 @@ estimate_regress_continuous <- function(
     return(tibble::tibble(
       .exposure = unique(data$.exposure)[1],
       res = ""))
+  check_outcome(
+    data = data,
+    type = type,
+    outcome = outcome,
+    outcome_type = "continuous")
   digits <- find_rounding_digits(
     digits = digits,
     default = dplyr::if_else(

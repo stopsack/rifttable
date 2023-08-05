@@ -220,3 +220,32 @@ test_that("All-NA real variable variable is handled correctly", {
     c("Summary", "Overall", "High", "Low"))
 })
 
+test_that("Missing outcome or outcome of wrong type gets detected", {
+  expect_no_message(
+    tibble::tribble(
+    ~outcome,     ~type,
+    NA,           "total",
+    "continuous", "median") |>
+    rifttable(data = df))
+
+  expect_error(
+    tibble::tribble(
+      ~outcome, ~type,
+      NA,       "cases/controls") |>
+      rifttable(data = df),
+    "The 'design' must contain an 'outcome' variable that exists in the 'data'")
+
+  expect_error(
+    tibble::tribble(
+      ~outcome, ~type,
+      "stage",  "cases/controls") |>
+      rifttable(data = df),
+    "Outcome variable 'stage' must be binary with levels")
+
+  expect_error(
+    tibble::tribble(
+      ~outcome,   ~type,
+      "receptor", "median") |>
+      rifttable(data = df),
+    "Outcome variable 'receptor' must be continuous")
+})

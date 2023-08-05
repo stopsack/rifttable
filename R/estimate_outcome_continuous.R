@@ -5,6 +5,7 @@
 #' @param to Separator character(s) for confidence interval bounds
 #' @param is_trend If called on a continous (trend) variable
 #' @param type Estimand
+#' @param outcome Outcome variable
 #' @param nmin Suppress counts below
 #' @param na_rm Remove observations with missing outcome data
 #' @param diff_digits Digits for differences
@@ -16,6 +17,7 @@
 estimate_outcome_continuous <- function(
     data,
     type,
+    outcome,
     digits,
     nmin,
     na_rm,
@@ -26,6 +28,12 @@ estimate_outcome_continuous <- function(
     ...) {
   if(is_trend)
     return(tibble::tibble())
+  if(type != "total")
+    check_outcome(
+      data = data,
+      type = type,
+      outcome = outcome,
+      outcome_type = "continuous")
   digits <- find_rounding_digits(
     digits = digits,
     default = diff_digits)
