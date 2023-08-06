@@ -642,6 +642,16 @@ rifttable <- function(
       tidyr::unnest(
         cols = "result",
         keep_empty = TRUE)
+    if(".exposure" %in% names(res)) {
+      res <- res %>%
+        dplyr::mutate(
+          .exposure = dplyr::if_else(
+            is.na(.data$.exposure) & .data$res == "",
+            true = stats::na.omit(.data$.exposure)[1],
+            false = .data$.exposure))
+    } else {
+      res$.exposure <- "Overall"
+    }
     if(layout == "rows") {
       res <- res %>%
         tidyr::pivot_wider(

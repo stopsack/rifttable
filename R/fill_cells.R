@@ -115,9 +115,7 @@ fill_cells <- function(
      type == "blank" |
      is.na(type)) {
     if(is.na(exposure) & is.na(trend)) {
-      return(tibble::tibble(
-        .exposure = "Overall",
-        res = ""))
+      return(tibble::tibble(res = ""))
     }
     if(is.na(trend)) {
       return(

@@ -33,7 +33,7 @@ format_stratified_results <- function(
             paste0("NA (NA", to, "NA)"),
             paste0("NaN (NaN", to, "NaN)")),
         true = "--",
-        false = .data$res),
+        false = as.character(.data$res)),
       res = dplyr::case_when(
         stringr::str_detect(
           string = .data$res,

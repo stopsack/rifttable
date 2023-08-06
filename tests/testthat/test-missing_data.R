@@ -9,7 +9,7 @@ df <- breastcancer |>
     allempty_lgl = allempty == 1)
 
 
-test_that("Missing exposure level is handled correctly", {
+test_that("Missing exposure level is handled correctly by 'total'", {
   result <- tibble::tribble(
     ~label,   ~exposure,  ~outcome,     ~type,
     "N",      NA,         NA,           "total",
@@ -116,6 +116,56 @@ test_that("Missing exposure level is handled correctly", {
   expect_equal(
     names(result),
     c("Hormone receptor", "High", "Low"))
+})
+
+test_that("Missing exposure level is handled correctly by 'blank'", {
+  result <- tibble::tribble(
+    ~label,   ~exposure,  ~outcome, ~type,
+    "Blank",  "receptor", "death",  "") |>
+    rifttable(
+      data = df,
+      exposure_levels = "nona")
+  expect_equal(nrow(result), expected = 1)
+  expect_equal(ncol(result), expected = 3)
+  expect_equal(
+    names(result),
+    c("Hormone receptor", "High", "Low"))
+
+  result <- tibble::tribble(
+    ~label,   ~exposure,  ~outcome, ~type,
+    "Blank",  NA,         NA,       "") |>
+    rifttable(data = df)
+  expect_equal(nrow(result), expected = 1)
+  expect_equal(ncol(result), expected = 2)
+  expect_equal(
+    names(result),
+    c("Summary", "Overall"))
+
+  result <- tibble::tribble(
+    ~label,   ~exposure,  ~outcome, ~type,
+    "Blank",  NA,         NA,       "",
+    "N",      "receptor", NA,       "total") |>
+    rifttable(
+      data = df,
+      exposure_levels = "nona")
+  expect_equal(nrow(result), expected = 2)
+  expect_equal(ncol(result), expected = 3)
+  expect_equal(
+    names(result),
+    c("Hormone receptor", "High", "Low"))
+
+  result <- tibble::tribble(
+    ~label,   ~exposure,  ~outcome, ~type,
+    "Blank",  NA,         NA,       "",
+    "N",      "receptor", NA,       "total") |>
+    rifttable(
+      data = df,
+      exposure_levels = "all")
+  expect_equal(nrow(result), expected = 2)
+  expect_equal(ncol(result), expected = 4)
+  expect_equal(
+    names(result),
+    c("Hormone receptor", "High", "Low", "NA"))
 })
 
 test_that("All-NA logical variable variable is handled correctly", {
