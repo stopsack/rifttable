@@ -100,10 +100,9 @@ fill_cells <- function(
     data <- data %>%
       dplyr::rename(.trend = dplyr::one_of(trend))
     if(
-      class(
+      !is.numeric(
         data %>%
-        dplyr::pull(.data$.trend))[1] !=
-      "numeric")
+        dplyr::pull(.data$.trend)))
       stop(
         paste0(
           "Trend variable '",
