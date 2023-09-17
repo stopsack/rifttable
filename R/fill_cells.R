@@ -91,32 +91,35 @@ fill_cells <- function(
 
   # Check that trend variable, if given, is continuous
   if(!is.na(trend)) {
-    if(!(trend %in% names(data)))
-      stop(
-        paste0(
-          "Trend variable '",
-          trend,
-          "' is not valid for the dataset."))
-    data <- data %>%
-      dplyr::rename(.trend = dplyr::one_of(trend))
-    if(
-      !is.numeric(
-        data %>%
-        dplyr::pull(.data$.trend)))
-      stop(
-        paste0(
-          "Trend variable '",
-          trend,
-          "' is not continuous (numeric)."))
+    if(trend != "") {
+      if(!(trend %in% names(data)))
+        stop(
+          paste0(
+            "Trend variable '",
+            trend,
+            "' is not valid for the dataset."))
+      data <- data %>%
+        dplyr::rename(.trend = dplyr::one_of(trend))
+      if(
+        !is.numeric(
+          data %>%
+          dplyr::pull(.data$.trend)))
+        stop(
+          paste0(
+            "Trend variable '",
+            trend,
+            "' is not continuous (numeric)."))
+    }
   }
 
   if(type == "" |
      type == "blank" |
      is.na(type)) {
-    if(is.na(exposure) & is.na(trend)) {
+    if((is.na(exposure) | exposure == "") &
+       (is.na(trend) | trend == "")) {
       return(tibble::tibble(res = ""))
     }
-    if(is.na(trend)) {
+    if(is.na(trend) | trend == "") {
       return(
         tibble::tibble(
           .exposure = data %>%
@@ -274,7 +277,7 @@ fill_cells <- function(
       res = "")
   }
 
-  if(is.na(trend)) {
+  if(is.na(trend) | trend == "") {
     return(res_cat)
   } else {
     data_prep <- data %>%
