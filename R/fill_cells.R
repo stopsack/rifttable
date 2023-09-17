@@ -60,8 +60,7 @@ fill_cells <- function(
     data <- data %>%
       dplyr::mutate(.exposure = "Overall")
   } else {
-    data <- data %>%
-      dplyr::rename(.exposure = dplyr::one_of(exposure))
+    data$.exposure <- data[[exposure]]
 
     # Check that exposure is categorical
     if(!(class(data %>% dplyr::pull(.data$.exposure))[1] %in%
