@@ -96,5 +96,6 @@ estimate_survdiff <- function(
       nmin = nmin,
       to = to,
       reference_label = reference,
-      percent = risk_percent)
+      percent = risk_percent,
+      ratio_digits_decrease = NULL)
 }
