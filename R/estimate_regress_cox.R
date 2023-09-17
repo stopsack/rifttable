@@ -16,6 +16,8 @@
 #' @param pattern Regex pattern for removing regression terms
 #' @param xlevels Strata of exposure variable
 #' @param reference Label for reference category
+#' @param event Name of event variable
+#' @param time Name of time variable
 #' @param time2 Name of second time variable, if any
 #' @param ... Additional arguments
 #'
@@ -24,6 +26,8 @@
 estimate_regress_cox <- function(
     data,
     type,
+    event,
+    time,
     time2,
     exposure,
     confounders,
@@ -53,6 +57,12 @@ estimate_regress_cox <- function(
     return(tibble::tibble(
       .exposure = unique(data$.exposure)[1],
       res = ""))
+  check_event_time(
+    data = data,
+    type = type,
+    event = event,
+    time = time,
+    time2 = time2)
   digits <- find_rounding_digits(
     digits = digits,
     default = ratio_digits)

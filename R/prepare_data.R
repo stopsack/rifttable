@@ -136,6 +136,18 @@ prepare_data <- function(
             "': Time variable '",
             time,
             "' is not valid for the dataset."))
+
+      if(!is.numeric(data[[time]]))
+        stop(
+          paste0(
+            "type = '",
+            type,
+            "': Time variable '",
+            time,
+            "' must be continuous (numeric). Its current class is '",
+            class(data[[time]]),
+            "'."))
+
       # with 'time' and 'time2', the first is enter and the second is exit:
       has_time2 <- FALSE
       if(!is.na(time2)) {
@@ -150,6 +162,16 @@ prepare_data <- function(
                 "' is not valid for the dataset."))
           data$.time_orig <- data[[time]]
           data$.time2 <- data[[time2]]
+          if(!is.numeric(data$.time2))
+            stop(
+              paste0(
+                "type = '",
+                type,
+                "': time2 variable '",
+                time2,
+                "' must be continuous (numeric). Its current class is '",
+                class(data$.time2),
+                "'."))
           data <- data %>%
             # for estimators that just sum the follow-up times:
             dplyr::mutate(.time = .data$.time2 - .data$.time_orig)

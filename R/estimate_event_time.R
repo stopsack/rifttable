@@ -1,6 +1,31 @@
+#' Descriptive Data for Survival Outcomes
+#'
+#' @param data Data set
+#' @param type Estimand
+#' @param event Name of event variable
+#' @param time Name of time variable
+#' @param time2 Name of second time variable, if any
+#' @param digits Number of digits to round estimates to
+#' @param nmin Suppress counts below
+#' @param na_rm Remove observations with missing outcome data
+#' @param ci Confidence interval width
+#' @param diff_digits Digits for differences
+#' @param risk_digits Digits for risks
+#' @param rate_digits Digits for rates
+#' @param risk_percent Show risks as percentages
+#' @param factor Multiplier for rates
+#' @param to Separator character(s) for confidence interval bounds
+#' @param arguments List of optional arguments
+#' @param is_trend Whether estimate is a trend estimate (empty here)
+#' @param ... Additional arguments
+#'
+#' @return Tibble
+#' @noRd
 estimate_event_time <- function(
     data,
     type,
+    event,
+    time,
     time2,
     digits,
     nmin,
@@ -17,6 +42,12 @@ estimate_event_time <- function(
     ...) {
   if(is_trend)
     return(tibble::tibble())
+  check_event_time(
+    data = data,
+    type = type,
+    event = event,
+    time = time,
+    time2 = time2)
   digits <- find_rounding_digits(
     digits = digits,
     default = switch(
