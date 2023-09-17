@@ -92,6 +92,13 @@ prepare_data <- function(
           data$.effectmod <- data[[effectmodifier]]
           data <- data %>%
             dplyr::filter(.data$.effectmod %in% effectmodifier_level)
+          if(nrow(data) == 0)
+            warning(paste0(
+              "Effect modifier '",
+              effectmodifier,
+              "': Stratum '",
+              effectmodifier_level,
+              "' is empty (0 observations). "))
         }
       }
     }
