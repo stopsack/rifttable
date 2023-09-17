@@ -330,7 +330,11 @@ fill_cells <- function(
     } else {
       return(dplyr::bind_rows(
         res_cat,
-        res_trend))
+        res_trend %>%
+          dplyr::mutate(
+            dplyr::across(
+              .cols = dplyr::any_of(".exposure"),
+            .fns = as.character))))
     }
   }
 }
