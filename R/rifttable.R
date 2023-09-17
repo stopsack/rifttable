@@ -659,7 +659,10 @@ rifttable <- function(
           values_from = "res",
           values_fill = "") %>%
         dplyr::rename(!!name := "label") %>%
-        dplyr::select(-"index")
+        dplyr::select(-"index") %>%
+        dplyr::relocate(
+          dplyr::any_of("Trend"),
+          .after = dplyr::last_col())
       return(res)
     } else {
       if(sum(duplicated(design$label)) > 0 |
@@ -755,7 +758,10 @@ rifttable <- function(
               false = "")) %>%
           dplyr::ungroup() %>%
           dplyr::rename(!!name := "label") %>%
-          dplyr::select(-"index", -"whichres")
+          dplyr::select(-"index", -"whichres") %>%
+          dplyr::relocate(
+            dplyr::any_of("Trend"),
+            .after = dplyr::last_col())
       } else {
         res <- res %>%
           dplyr::mutate(

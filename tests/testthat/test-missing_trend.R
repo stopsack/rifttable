@@ -73,7 +73,7 @@ test_that("Trend works anywhere", {
   expect_equal(ncol(result), expected = 6)
   expect_equal(
     names(result),
-    c("Stage", "Trend", "Stage I", "Stage II", "Stage III", "NA"))
+    c("Stage", "Stage I", "Stage II", "Stage III", "NA", "Trend"))
 
   result <- tibble::tribble(
     ~label,   ~exposure, ~trend,      ~outcome,     ~type,
@@ -88,5 +88,5 @@ test_that("Trend works anywhere", {
   expect_equal(ncol(result), expected = 6)
   expect_equal(
     names(result),
-    c("Summary", "Overall", "Trend", "Stage I", "Stage II", "Stage III"))
+    c("Summary", "Overall", "Stage I", "Stage II", "Stage III", "Trend"))
 })
