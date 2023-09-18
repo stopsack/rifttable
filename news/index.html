@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,9 +27,9 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
     <a class="dropdown-item" href="../articles/faq.html">Frequently Asked Questions</a>
     <a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a>
+    <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -55,6 +55,24 @@
       <small>Source: <a href="https://github.com/stopsack/rifttable/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.2" id="rifttable-062">rifttable 0.6.2<a class="anchor" aria-label="anchor" href="#rifttable-062"></a></h2>
+<ul><li>New functionality:
+<ul><li>Add overall argument <code>exposure_levels</code> to let user control handling of missing exposure levels (<code>NA</code>) or factors with empty levels as the exposure.</li>
+<li>
+<code>type = "geomean"</code> for geometric means.</li>
+</ul></li>
+<li>Documentation: Expand FAQs.</li>
+<li>Internal and bug fixes:
+<ul><li>Consider <code>exposure</code> or <code>trend</code> of <code>""</code> as missing, and <code>stratum = ""</code> as no subsetting by the <code>effect_modifier</code>, instead of subsetting to effect modifier being an empty string. Input check that a stratum must be provided for joint models and strata are not empty.</li>
+<li>Consider missing <code>type</code> as <code>"blank"</code>.</li>
+<li>Do not add empty rows/columns if <code>type2</code> has empty results for some cells or if only a <code>trend</code> variable and no <code>exposure</code> is given.</li>
+<li>Rounding works even result vector contains strings (e.g., no estimate).</li>
+<li>More safeguards for all-<code>NA</code> <code>outcome</code> variables. More input checks.</li>
+<li>Do not warn about non-<code>0</code>/<code>1</code> outcomes in log-linear models for ratios of continuous variables.</li>
+<li>Add initial set of unit tests.</li>
+</ul></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.1" id="rifttable-061">rifttable 0.6.1<a class="anchor" aria-label="anchor" href="#rifttable-061"></a></h2>
 <ul><li>New functionality:

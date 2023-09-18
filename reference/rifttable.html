@@ -20,7 +20,7 @@ Model diagnostics for regression models need to be conducted separately."><!-- m
     
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,9 +37,9 @@ Model diagnostics for regression models need to be conducted separately."><!-- m
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
     <a class="dropdown-item" href="../articles/faq.html">Frequently Asked Questions</a>
     <a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a>
+    <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
   </div>
 </li>
 <li class="nav-item">
@@ -91,7 +91,8 @@ Model diagnostics for regression models need to be conducted separately.</p>
 <span>  to <span class="op">=</span> <span class="st">", "</span>,</span>
 <span>  reference <span class="op">=</span> <span class="st">"(reference)"</span>,</span>
 <span>  type2_layout <span class="op">=</span> <span class="st">"rows"</span>,</span>
-<span>  overall <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  overall <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  exposure_levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"noempty"</span>, <span class="st">"nona"</span>, <span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -181,6 +182,14 @@ unstratified estimates to an exposure-stratified table? Elements will be
 shown only for absolute estimates (e.g., <code>type = "mean"</code>) and blank
 for comparatible estimates (e.g., mean difference via
 <code>type = "diff"</code>).</p></dd>
+
+
+<dt>exposure_levels</dt>
+<dd><p>Optional. Defaults to <code>"noempty"</code>. Show only
+exposure levels that exist in the data or are <code>"NA"</code>
+(<code>"noempty"</code>); show only exposure levels that are neither <code>"NA"</code>
+nor empty (<code>"nona"</code>); or show all exposure levels (<code>"all"</code>),
+even if <code>"NA"</code> or a factor level that does not exist in the data.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -321,9 +330,10 @@ followed by rate in parentheses.</p></li>
 survival for censoring.</p></li>
 <li><p><code>"medfu (iqr)"</code> Median and interquartile range for follow-up.</p></li>
 <li><p><code>"maxfu"</code> Maximum follow-up time.</p></li>
-<li><p><code>"mean"</code> Mean.</p></li>
+<li><p><code>"mean"</code> Mean (arithmetic mean).</p></li>
 <li><p><code>"mean (ci)"</code> Mean and 95% CI.</p></li>
 <li><p><code>"mean (sd)"</code> Mean and standard deviation.</p></li>
+<li><p><code>"geomean"</code> Geometric mean.</p></li>
 <li><p><code>"median"</code> Median.</p></li>
 <li><p><code>"median (iqr)"</code> Median and interquartile range.</p></li>
 <li><p><code>"range"</code> Range: Minimum to maximum value.</p></li>
@@ -593,33 +603,6 @@ Philadelpha, PA: Lippincott Williams &amp; Wilkins. Page 242.
 <span class="r-in"><span>  <span class="fu"><a href="rt_gt.html">rt_gt</a></span><span class="op">(</span>md <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>  <span class="co"># get markdown formatting in first column ('label')</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Example 6: Use custom function; add exposure-unstratified overall estimates</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="co"># Define custom function, must start with "estimate_"</span></span></span>
-<span class="r-in"><span><span class="va">estimate_my_example</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="co"># Variables have been renamed in '.exposure' and '.outcome'</span></span></span>
-<span class="r-in"><span>  <span class="va">data</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">.exposure</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>      res <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>          <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.outcome</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>          digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Call custom function, omit "estimate_"</span></span></span>
-<span class="r-in"><span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="op">~</span><span class="va">label</span>,                    <span class="op">~</span><span class="va">type</span>,        <span class="op">~</span><span class="va">stratum</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"Mean: Built-in function"</span>, <span class="st">"mean"</span>,       <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"Mean: Custom function"</span>,   <span class="st">"my_example"</span>, <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    exposure <span class="op">=</span> <span class="st">"sex"</span>,</span></span>
-<span class="r-in"><span>    outcome <span class="op">=</span> <span class="st">"status"</span>,</span></span>
-<span class="r-in"><span>    effect_modifier <span class="op">=</span> <span class="st">"ph.ecog"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu">rifttable</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    data <span class="op">=</span> <span class="va">cancer</span>,</span></span>
-<span class="r-in"><span>    overall <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
