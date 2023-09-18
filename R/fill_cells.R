@@ -24,7 +24,8 @@
 #' @param outcome Outcome variable
 #' @param effect_modifier Effect modifier variable
 #' @param arguments Optional list of arguments passed on to estimators
-#' @param reference
+#' @param reference Label of reference category
+#' @param exposure_levels How to handle empty or missing exposure levels
 #'
 #' @return Tibble
 #' @noRd
@@ -53,13 +54,13 @@ fill_cells <- function(
     risk_digits,
     ratio_digits,
     ratio_digits_decrease,
-    rate_digits) {
+    rate_digits,
+    exposure_levels) {
   if(is.na(exposure) | exposure == "") {
     data <- data %>%
       dplyr::mutate(.exposure = "Overall")
   } else {
-    data <- data %>%
-      dplyr::rename(.exposure = dplyr::one_of(exposure))
+    data$.exposure <- data[[exposure]]
 
     # Check that exposure is categorical
     if(!(class(data %>% dplyr::pull(.data$.exposure))[1] %in%
@@ -71,39 +72,53 @@ fill_cells <- function(
           "Its type was changed to 'factor' but the result may be ",
           "undesirable, e.g., if the variable is actually continuous ",
           "and thus has many levels."))
-    data$.exposure <- factor(data$.exposure)
+
+    if(is.logical(data$.exposure) & exposure_levels == "all")
+      data$.exposure <- factor(
+        data$.exposure,
+        levels = c(FALSE, TRUE))
+
+    if(!is.factor(data$.exposure) |
+       exposure_levels != "all")  # "nona", "noempty"
+      data$.exposure <- factor(data$.exposure)  # if factor, drops empty levels
+
+    if(exposure_levels == "nona") {
+      data <- data %>%
+        dplyr::filter(!is.na(.data$.exposure))
+    }
   }
 
   # Check that trend variable, if given, is continuous
   if(!is.na(trend)) {
-    if(!(trend %in% names(data)))
-      stop(
-        paste0(
-          "Trend variable '",
-          trend,
-          "' is not valid for the dataset."))
-    data <- data %>%
-      dplyr::rename(.trend = dplyr::one_of(trend))
-    if(
-      class(
-        data %>%
-        dplyr::pull(.data$.trend))[1] !=
-      "numeric")
-      stop(
-        paste0(
-          "Trend variable '",
-          trend,
-          "' is not continuous (numeric)."))
+    if(trend != "") {
+      if(!(trend %in% names(data)))
+        stop(
+          paste0(
+            "Trend variable '",
+            trend,
+            "' is not valid for the dataset."))
+      data <- data %>%
+        dplyr::rename(.trend = dplyr::one_of(trend))
+      if(
+        !is.numeric(
+          data %>%
+          dplyr::pull(.data$.trend)))
+        stop(
+          paste0(
+            "Trend variable '",
+            trend,
+            "' is not continuous (numeric)."))
+    }
   }
 
   if(type == "" |
-     type == "blank") {
-    if(is.na(exposure) & is.na(trend)) {
-      return(tibble::tibble(
-        .exposure = "Overall",
-        res = ""))
+     type == "blank" |
+     is.na(type)) {
+    if((is.na(exposure) | exposure == "") &
+       (is.na(trend) | trend == "")) {
+      return(tibble::tibble(res = ""))
     }
-    if(is.na(trend)) {
+    if(is.na(trend) | trend == "") {
       return(
         tibble::tibble(
           .exposure = data %>%
@@ -155,6 +170,7 @@ fill_cells <- function(
     "mean (sd)" =,
     "sd" =,
     "mean (ci)" =,
+    "geomean" =,
     "median" =,
     "median (iqr)" =,
     "range" = "outcome_continuous",
@@ -249,8 +265,19 @@ fill_cells <- function(
       arguments = arguments,
       is_trend = FALSE))
 
-  if(is.na(trend)) {
-    res_cat
+  if(setequal(
+    res_cat,
+    tibble::tibble(
+      .exposure = NA_character_,
+      res = NA_character_,
+      .rows = 0))) {
+    res_cat <- tibble::tibble(
+      .exposure = "Overall",
+      res = "")
+  }
+
+  if(is.na(trend) | trend == "") {
+    return(res_cat)
   } else {
     data_prep <- data %>%
       dplyr::mutate(.exposure = .data$.trend) %>%
@@ -264,37 +291,50 @@ fill_cells <- function(
         type = type,
         effectmodifier = effect_modifier,
         effectmodifier_level = stratum)
-    dplyr::bind_rows(
+    res_trend <- do.call(
+      what = paste0("estimate_", estimator),
+      args = list(
+        data = data_prep$data,
+        type = type,
+        event = event,
+        time = time,
+        time2 = time2,
+        outcome = outcome,
+        exposure = trend,
+        effectmodifier = effect_modifier,
+        effectmodifier_level = stratum,
+        confounders = confounders,
+        digits = digits,
+        nmin = nmin,
+        na_rm = na_rm,
+        ci = ci,
+        xlevels = data_prep$xlevels,
+        pattern = data_prep$pattern,
+        diff_digits = diff_digits,
+        risk_digits = risk_digits,
+        ratio_digits = ratio_digits,
+        ratio_digits_decrease = ratio_digits_decrease,
+        rate_digits = rate_digits,
+        risk_percent = risk_percent,
+        to = to,
+        reference = reference,
+        factor = factor,
+        arguments = arguments,
+        is_trend = TRUE))
+    if(setequal(
       res_cat,
-      do.call(
-        what = paste0("estimate_", estimator),
-        args = list(
-          data = data_prep$data,
-          type = type,
-          event = event,
-          time = time,
-          time2 = time2,
-          outcome = outcome,
-          exposure = trend,
-          effectmodifier = effect_modifier,
-          effectmodifier_level = stratum,
-          confounders = confounders,
-          digits = digits,
-          nmin = nmin,
-          na_rm = na_rm,
-          ci = ci,
-          xlevels = data_prep$xlevels,
-          pattern = data_prep$pattern,
-          diff_digits = diff_digits,
-          risk_digits = risk_digits,
-          ratio_digits = ratio_digits,
-          ratio_digits_decrease = ratio_digits_decrease,
-          rate_digits = rate_digits,
-          risk_percent = risk_percent,
-          to = to,
-          reference = reference,
-          factor = factor,
-          arguments = arguments,
-          is_trend = TRUE)))
+      tibble::tibble(
+        .exposure = "Overall",
+        res = ""))) {
+      return(res_trend)
+    } else {
+      return(dplyr::bind_rows(
+        res_cat,
+        res_trend %>%
+          dplyr::mutate(
+            dplyr::across(
+              .cols = dplyr::any_of(".exposure"),
+            .fns = as.character))))
+    }
   }
 }

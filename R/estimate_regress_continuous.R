@@ -7,6 +7,7 @@
 #' @param to Separator character(s) for confidence interval bounds
 #' @param is_trend If called on a continous (trend) variable
 #' @param type Estimand
+#' @param outcome Outcome variable
 #' @param ratio_digits Digits for ratios
 #' @param ratio_digits_decrease Fewer digits for elevated ratios
 #' @param diff_digits Digits for differences
@@ -25,6 +26,7 @@
 estimate_regress_continuous <- function(
     data,
     type,
+    outcome,
     exposure,
     confounders,
     digits,
@@ -51,6 +53,15 @@ estimate_regress_continuous <- function(
           .exposure = "Overall",
           res = ""))
   }
+  if(length(unique(stats::na.omit(data$.exposure))) < 2)  # no contrasts estimable
+    return(tibble::tibble(
+      .exposure = unique(data$.exposure)[1],
+      res = ""))
+  check_outcome(
+    data = data,
+    type = type,
+    outcome = outcome,
+    outcome_type = "continuous")
   digits <- find_rounding_digits(
     digits = digits,
     default = dplyr::if_else(
@@ -92,13 +103,13 @@ estimate_regress_continuous <- function(
             "'.\nInstall with:  install.packages(\"sandwich\")"),
           call. = FALSE)
       }
-      fit <- stats::glm(
+      fit <- suppressWarnings(stats::glm(
         formula = stats::as.formula(
           paste(
             ".outcome ~ .exposure",
             confounders)),
         family = stats::poisson(link = "log"),
-        data = data)
+        data = data))
       fit %>%
         broom::tidy(
           conf.int = FALSE,
@@ -115,10 +126,10 @@ estimate_regress_continuous <- function(
             stats::qnorm(1 - (1 - ci) / 2) *
             .data$std.error) %>%
         dplyr::mutate_at(
-          .vars = dplyr::vars(
-            .data$estimate,
-            .data$conf.low,
-            .data$conf.high),
+          .vars = c(
+            "estimate",
+            "conf.low",
+            "conf.high"),
           .funs = exp)
     },
     irr_joint =,
@@ -160,10 +171,10 @@ estimate_regress_continuous <- function(
           conf.int = TRUE,
           conf.level = ci) %>%
         dplyr::mutate_at(
-          .vars = dplyr::vars(
-            .data$estimate,
-            .data$conf.low,
-            .data$conf.high),
+          .vars = c(
+            "estimate",
+            "conf.low",
+            "conf.high"),
           .funs = exp)
     },
     quantreg_joint =,

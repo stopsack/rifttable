@@ -18,7 +18,8 @@ rifttable(
   to = ", ",
   reference = "(reference)",
   type2_layout = "rows",
-  overall = FALSE
+  overall = FALSE,
+  exposure_levels = c("noempty", "nona", "all")
 )
 }
 \arguments{
@@ -79,6 +80,12 @@ unstratified estimates to an exposure-stratified table? Elements will be
 shown only for absolute estimates (e.g., \code{type = "mean"}) and blank
 for comparatible estimates (e.g., mean difference via
 \code{type = "diff"}).}
+
+\item{exposure_levels}{Optional. Defaults to \code{"noempty"}. Show only
+exposure levels that exist in the data or are \code{"NA"}
+(\code{"noempty"}); show only exposure levels that are neither \code{"NA"}
+nor empty (\code{"nona"}); or show all exposure levels (\code{"all"}),
+even if \code{"NA"} or a factor level that does not exist in the data.}
 }
 \value{
 Tibble. Get formatted output as a gt table by passing on to
@@ -232,9 +239,10 @@ followed by rate in parentheses.
 survival for censoring.
 \item \code{"medfu (iqr)"} Median and interquartile range for follow-up.
 \item \code{"maxfu"} Maximum follow-up time.
-\item \code{"mean"} Mean.
+\item \code{"mean"} Mean (arithmetic mean).
 \item \code{"mean (ci)"} Mean and 95\% CI.
 \item \code{"mean (sd)"} Mean and standard deviation.
+\item \code{"geomean"} Geometric mean.
 \item \code{"median"} Median.
 \item \code{"median (iqr)"} Median and interquartile range.
 \item \code{"range"} Range: Minimum to maximum value.
@@ -435,33 +443,6 @@ rifttable(design = design2,
   rt_gt(md = 1)  # get markdown formatting in first column ('label')
 }
 
-# Example 6: Use custom function; add exposure-unstratified overall estimates
-\dontrun{
-# Define custom function, must start with "estimate_"
-estimate_my_example <- function(data, ...) {
-  # Variables have been renamed in '.exposure' and '.outcome'
-  data \%>\%
-    dplyr::group_by(.exposure) \%>\%
-    dplyr::summarize(
-      res = paste(
-        round(
-          mean(.outcome),
-          digits = 3)))
-}
-
-# Call custom function, omit "estimate_"
-tibble::tribble(
-  ~label,                    ~type,        ~stratum,
-  "Mean: Built-in function", "mean",       1,
-  "Mean: Custom function",   "my_example", 1) \%>\%
-  dplyr::mutate(
-    exposure = "sex",
-    outcome = "status",
-    effect_modifier = "ph.ecog") \%>\%
-  rifttable(
-    data = cancer,
-    overall = TRUE)
-}
 }
 \references{
 Greenland S, Rothman KJ (2008). Introduction to Categorical Statistics. In:

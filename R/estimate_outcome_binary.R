@@ -30,10 +30,11 @@ estimate_outcome_binary <- function(
     ...) {
   if(is_trend)
     return(tibble::tibble())
-  check_outcome_binary(
+  check_outcome(
     data = data,
     type = type,
-    outcome = outcome)
+    outcome = outcome,
+    outcome_type = "binary")
   digits <- find_rounding_digits(
     digits = digits,
     default = risk_digits)

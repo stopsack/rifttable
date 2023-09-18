@@ -34,21 +34,29 @@ format_round <- function(x, digits, ratio_digits_decrease = NULL) {
           as.numeric(
             names(ratio_digits_decrease))))]
     digits_decrease <- sapply(X = x, function(x) {
-      selected_digit <- ratio_digits_decrease[
+      if(!is.na(suppressWarnings(as.numeric(x)))) {
+        selected_digit <- ratio_digits_decrease[
           which(as.numeric(names(ratio_digits_decrease)) < x)]
-      selected_digit[length(selected_digit)]
+        selected_digit[length(selected_digit)]
+      } else { 0 }
     })
+    if(!is.numeric(digits_decrease)) {
+      digits_decrease <- 0
+    }
     digits <- pmax(digits + digits_decrease, 0)
   }
   mapply(
     FUN = function(x, digits) {
-      format(
-        round(
-          x,
-          digits = digits),
-        nsmall = digits,
-        trim = TRUE,
-        scientific = FALSE)
+      x_numeric <- suppressWarnings(as.numeric(x))
+      if(!is.na(x_numeric)) {
+        format(
+          round(
+            x_numeric,
+            digits = digits),
+          nsmall = digits,
+          trim = TRUE,
+          scientific = FALSE)
+      } else { x }
     },
     x,
     digits)

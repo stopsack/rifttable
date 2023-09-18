@@ -33,7 +33,7 @@ format_stratified_results <- function(
             paste0("NA (NA", to, "NA)"),
             paste0("NaN (NaN", to, "NaN)")),
         true = "--",
-        false = .data$res),
+        false = as.character(.data$res)),
       res = dplyr::case_when(
         stringr::str_detect(
           string = .data$res,
@@ -56,5 +56,5 @@ format_stratified_results <- function(
         .data$.per_stratum < nmin ~
           paste0("-- (<", nmin, ")"),
         TRUE ~ .data$res)) %>%
-    dplyr::select(-.data$.per_stratum)
+    dplyr::select(-".per_stratum")
 }

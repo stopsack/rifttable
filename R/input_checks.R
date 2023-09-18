@@ -7,10 +7,19 @@
 #' @return Nothing
 #'
 #' @noRd
-check_outcome_binary <- function(
+check_outcome <- function(
     data,
     type,
-    outcome) {
+    outcome,
+    outcome_type = NULL) {
+  if(missing(outcome) | !any(names(data) == ".outcome"))
+    stop(
+      paste0(
+        "For type = '",
+        type,
+        "': The 'design' must contain an 'outcome' variable that exists in ",
+        "the 'data'."))
+  if(outcome_type == "binary") {
     if(!(all(data$.outcome %in% c(0, 1, NA)) |
          all(data$.outcome %in% c(FALSE, TRUE, NA))))
       stop(
@@ -20,6 +29,49 @@ check_outcome_binary <- function(
           "': Outcome variable '",
           outcome,
           "' must be binary with levels c(0, 1) or c(FALSE, TRUE)."))
+  }
+  if(outcome_type == "continuous") {
+    if(!is.numeric(data$.outcome))
+      stop(
+        paste0(
+          "type = '",
+          type,
+          "': Outcome variable '",
+          outcome,
+          "' must be continuous (numeric). Its current class is '",
+          class(data$.outcome),
+          "'."))
+  }
+}
+
+#' Check That Event and Time Variables are Valid
+#'
+#' @description The function does not check that the \code{event} variable is
+#' binary to allow for variables denoting more than one competing event.
+#'
+#' @param data Data set
+#' @param type Estimator
+#' @param event Name of event variable
+#' @param time Name of time variable
+#' @param time2 Name of optional second (exit) time variable
+#'
+#' @return Nothing
+#'
+#' @noRd
+check_event_time <- function(
+    data,
+    type,
+    event,
+    time,
+    time2 = NA) {
+  if(missing(event) | !any(names(data) == ".event") |
+     missing(time) | !any(names(data) == ".time"))
+    stop(
+      paste0(
+        "For type = '",
+        type,
+        "': The 'design' must contain 'event' and 'time' variables that exist ",
+        "in the 'data'."))
 }
 
 #' Find Digits to Round At

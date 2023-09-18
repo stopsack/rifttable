@@ -53,10 +53,15 @@ estimate_regress_binary <- function(
           .exposure = "Overall",
           res = ""))
   }
-  check_outcome_binary(
+  if(length(unique(stats::na.omit(data$.exposure))) < 2)  # no contrasts estimable
+    return(tibble::tibble(
+      .exposure = unique(data$.exposure)[1],
+      res = ""))
+  check_outcome(
     data = data,
     type = type,
-    outcome = outcome)
+    outcome = outcome,
+    outcome_type = "binary")
   digits <- find_rounding_digits(
     digits = digits,
     default = dplyr::if_else(

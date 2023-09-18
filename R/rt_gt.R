@@ -47,10 +47,12 @@ rt_tabstyle <- function(mytab) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data(mtcars)
 #' mtcars %>%
 #'   dplyr::slice(1:5) %>%
 #'   rt_gt()
+#' }
 #'
 #' @section Example Output:
 #' \if{html}{\figure{rt_gt.png}{options: width=50\%}}

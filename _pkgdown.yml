@@ -2,3 +2,10 @@ use_url: ~
 template:
   bootstrap: 5
 
+articles:
+- title: Main
+  navbar: ~
+  contents:
+  - faq
+  - table1
+  - estimators

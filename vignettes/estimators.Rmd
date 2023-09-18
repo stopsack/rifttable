@@ -30,9 +30,10 @@ knitr::opts_chunk$set(
 `type` | Description | Options (`arguments = `)
 -------+-------------+--------------
 `"range"` | Range: Minimum to maximum value.
-`"mean"` | Mean.
+`"mean"` | Mean (arithmetic mean).
 `"mean (ci)"` | Mean and 95% CI.
 `"mean (sd)"` | Mean and standard deviation.
+`"geomean"` | Geometric mean.
 `"median"` | Median.
 `"median (iqr)"` | Median and interquartile range.
 

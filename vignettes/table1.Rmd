@@ -96,5 +96,37 @@ design %>%
     overall = TRUE) %>%  # add unstratified "overall" column
   rt_gt() %>%  # obtain formatted output
   gt::tab_footnote(
-    footnote = "Data shown are count (percent) or mean (standard deviation)")
+    footnote = "Data shown are count (percent) or mean (standard deviation).")
+```
+
+# Add more statistics per variable
+
+For the age variable, do not just display mean and standard deviation, but also the range. To this end, edit the `design` just like a regular dataset.
+
+```{r morestats}
+design_new <- design %>%
+  mutate(  # create three rows, not one, for "age"
+    copy = if_else(
+      outcome == "age", 
+      true = 3, 
+      false = 1)) %>%
+  tidyr::uncount(copy, .id = "copy") %>%
+  mutate(  # set new labels and types for the three rows on age
+    label = case_when(
+      outcome == "age" & copy == 2 ~ "  Mean (SD)",
+      outcome == "age" & copy == 3 ~ "  Range",
+      TRUE ~ label),
+    type = case_when(
+      outcome == "age" & copy == 1 ~ "",
+      outcome == "age" & copy == 2 ~ "mean (sd)",
+      outcome == "age" & copy == 3 ~ "range",
+      TRUE ~ type))
+design_new
+design_new %>%
+  rifttable(
+    diff_digits = 0,
+    overall = TRUE) %>%
+  rt_gt() %>%
+  gt::tab_footnote(
+    footnote = "Data shown are count (percent), unless indicated otherwise.")
 ```

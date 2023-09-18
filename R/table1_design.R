@@ -114,7 +114,7 @@ table1_design <- function(
           .x = .data$levels,  # this is TRUE also for "logical" variable
           .f = ~all(stats::na.omit(.x) %in% c(0, 1))) ~
           "binary",
-        .data$type == "numeric" ~
+        .data$type %in% c("numeric", "integer") ~
           "numeric",
         TRUE ~
           "ERROR-undefined"),

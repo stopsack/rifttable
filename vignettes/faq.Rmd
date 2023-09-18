@@ -23,22 +23,23 @@ Most subsequent examples build on this simple rifttable:
 ```{r basic, message = FALSE}
 library(rifttable)
 library(dplyr)  # for data management, e.g., mutate()
+library(tibble)  # for constructing a tibble, e.g. via tribble()
 data(breastcancer, package = "risks")
 
-design <- tibble::tribble(
+design <- tribble(
   ~label,                       ~type,                   ~stratum,         
-  "Overall",                    "",                      "",               
-  "– Deaths/N",                 "outcomes/total",        c("Low", "High"), 
-  "– Risk",                     "risk",                  c("Low", "High"), 
-  "– Risk ratio (95% CI)",      "rr",                    c("Low", "High"), 
-  "– Risk difference (95% CI)", "rd",                    c("Low", "High"), 
+  "**Overall**",                "",                      "",               
+  "  Deaths/N",                 "outcomes/total",        c("Low", "High"), 
+  "  Risk",                     "risk",                  c("Low", "High"), 
+  "  Risk ratio (95% CI)",      "rr",                    c("Low", "High"), 
+  "  Risk difference (95% CI)", "rd",                    c("Low", "High"), 
   "",                           "",                      "",               
-  "Low hormone receptor",       "",                      "",               
-  "– Deaths/N (Risk)",          "outcomes/total (risk)", "Low",           
-  "– Risk difference (95% CI)", "rd",                    "Low",           
-  "High hormone receptor",      "",                      "",               
-  "– Deaths/N (Risk)",          "outcomes/total (risk)", "High",
-  "– Risk difference (95% CI)", "rd",                    "High") %>%
+  "**Low hormone receptor**",   "",                      "",               
+  "  Deaths/N (Risk)",          "outcomes/total (risk)", "Low",           
+  "  Risk difference (95% CI)", "rd",                    "Low",           
+  "**High hormone receptor**",  "",                      "",               
+  "  Deaths/N (Risk)",          "outcomes/total (risk)", "High",
+  "  Risk difference (95% CI)", "rd",                    "High") %>%
   mutate(
     exposure = "stage",
     outcome = "death",
@@ -46,8 +47,111 @@ design <- tibble::tribble(
 
 rifttable(
   design = design,
-  data = breastcancer)
+  data = breastcancer) %>%
+  rt_gt()  # obtain formatted output
 ```
+
+
+# Why do I get an error?
+
+R's error messages can be frustrating. When using rifttable, these are the typical sources of errors:
+
+* Clerical errors in variable names and arguments. There is no magic here except double-checking the code.
+* Missing data. See below: [How do I handle missing data?](#how-do-i-handle-missing-data).
+* Discrepancy between estimator (`type`) and the data. For example, `type = "mean"` will not work on a categorical (factor) variable.
+* Models that fail to converge. For example, one may be trying to estimate a risk ratio with 0 outcomes in the reference category, or adjusting for 20 covariates in a Cox model with 5 events overall. (Sometimes such attempts will "just" return warning messages -- it is still worth rethinking the modeling strategy.)
+
+To identify where an error is coming from, start simple. Comment out all but one line of the `design`, putting `#` at the beginning of the line. Start with a line that gives basic descriptive data, such as `type = "total"`, `type = "outcomes"` or `type = "events/time"`, and re-run `rifttable()`. Then add more lines with descriptive estimators, one by one. At the end, add lines that fit models, such as `type = "hr"`.
+
+
+# What is the `design`?
+
+The `design` that the `rifttable()` function takes as input is simply a dataset that defines how the table should look like when `rifttable()` has processed the `data`.
+
+The `design` can be constructed in many different ways. All lead to the same table:
+
+1. **A dataset (tibble) defined using `tribble()`**
+
+    ```{r}
+    design1 <- tribble(
+      ~label,   ~exposure, ~outcome, ~type,
+      "N",      "stage",   "death",  "total",
+      "Deaths", "stage",   "death",  "outcomes")
+    design1
+    rifttable(
+      design = design1,
+      data = breastcancer) %>%
+      rt_gt()
+    ```
+
+2. **A dataset (tibble) defined using `tibble()`**
+
+    ```{r}
+    design2 <- tibble(
+        label = c("N", "Deaths"),
+        exposure = "stage",
+        outcome = "death", 
+        type = c("total", "outcomes"))
+    design2
+    rifttable(
+      design = design2,
+      data = breastcancer) %>%
+      rt_gt()
+    ```
+
+3. **Concatenating tibbles, then editing with `mutate()`**
+
+    ```{r}
+    design3 <- bind_rows(
+      tibble(  # row 1
+        label = "N",
+        type = "total"),
+      tibble(  # row 2
+        label = "Deaths",
+        type = "outcomes")) %>%
+      mutate(  # elements that are the same for all rows
+        exposure = "stage",
+        outcome = "death")
+    design3
+    rifttable(
+      design = design3,
+      data = breastcancer) %>%
+      rt_gt()
+    ```
+
+
+4. **For descriptive tables: Use `table1_design()`**
+
+    ```{r}
+    design4 <- breastcancer %>%
+      table1_design(
+        death,  # the total count will automatically be included
+        by = stage)
+    design4
+    rifttable(
+      design = design4,
+      data = breastcancer) %>%
+      rt_gt()
+    ```
+    
+    See a separate overview about [a descriptive Table 1](table1.html).
+
+5. **External datasets**
+
+    The `design` could even be written out in an external dataset that can be
+    loaded with `readr::read_csv()` (for CSV files) or `readxl::read_excel()`
+    (for Excel sheets).
+
+
+# How do I handle missing data?
+
+rifttable tries to make as few assumptions as possible about how the user wants to treat missing data.
+
+* Missing values in **exposure**: By default, missing vales (`NA`) in the exposure are displayed as a separate exposure category for descriptive statistics (e.g., `type = "total"` or `type = "mean"`). They are omitted by comparative estimators (e.g., regression models). To change this behavior, call `rifttable()` with the argument `exposure_levels = "nona"`.
+* Missing values in **outcome**: By default, descriptive statistics will be missing (e.g., results will be `--` or `NA`), and regression models will use the non-missing observations. To exclude observations with missing outcome values altogether, add `na_rm = TRUE` to (specific rows of) the `design`.
+* Missing values in **confounders**: Applies only to regression models, which typically exclude observations with missing values.
+* Missing values in the **effect modifier**: Stratified and joint models are only shown for the specified `stratum` of the `effect_modifier`. To include observations with the missing effect modifier, add `NA` to the requested stratum in the `design`, e.g., `effect_modifier = "bmi", stratum = c("<25", NA)`.
+
 
 # How do I add overall statistics?
 
@@ -58,13 +162,14 @@ Inferential estimators showing comparisons between exposure categories will be b
 rifttable(
   design = design,
   data = breastcancer, 
-  overall = TRUE)
+  overall = TRUE) %>%
+  rt_gt()  # obtain formatted output
 ```
 
 
 # How do I test for trend?
 
-Instead of *testing* a null hypothesis about a trend, **rifttable** proposes 
+Instead of *testing* a null hypothesis about a trend, rifttable proposes 
 *estimating* the difference in the outcome for a one-unit higher exposure. 
 This is also called a linear slope. Here, we estimate the risk associated for 
 stage that is one category higher.
@@ -74,7 +179,8 @@ rifttable(
   design = design %>%
     mutate(trend = "stage_numeric"),
   data = breastcancer %>%
-    mutate(stage_numeric = as.numeric(stage)))
+    mutate(stage_numeric = as.numeric(stage))) %>%
+  rt_gt()  # obtain formatted output
 ```
 
 
@@ -115,20 +221,20 @@ bind_rows(
     slice(2:5) %>%
     rifttable(
       data = breastcancer_2exposures, 
-      layout = "cols")
-)
+      layout = "cols")) %>%
+  rt_gt()  # obtain formatted output
 ```
 
 
 # How do I change how results are rounded?
 
-By default, differences measures are being rounded to 2 decimal digits (`0.01`), such as `type = "diff"`, the mean difference, or `type = "quantreg"`, the median difference. The same goes for risk measures, such as `type = "risk"`, unless shown as percentage points. Ratio measures are also shown with 2 decimal digits, such as `type = "hr"`, the hazard ratio, or `type = "fold"`, a ratio of arithmetric means. 
+By default, difference measures are being rounded to 2 decimal digits (`0.01`), such as `type = "diff"`, the mean difference, or `type = "quantreg"`, the median difference. The same goes for risk measures, such as `type = "risk"`, unless shown as percentage points. Ratio measures are also shown with 2 decimal digits, such as `type = "hr"`, the hazard ratio, or `type = "fold"`, a ratio of arithmetric means. 
 
 Rounding can be changed by setting the `rifttable()` arguments `diff_digits`, `risk_digits`, and `ratio_digits` globally for the entire table. 
 
 
 ```{r rounding}
-design <- tibble::tribble(
+design <- tribble(
   ~label,                     ~type,
   "Deaths/N",                 "outcomes/total", 
   "Risk",                     "risk",          
@@ -144,7 +250,8 @@ rifttable(
   design = design,
   data = breastcancer,
   ratio_digits = 3,  # Many digits for ratios
-  risk_digits = 1)   # Fewer digits for risks
+  risk_digits = 1) %>%  # Fewer digits for risks
+  rt_gt()  # obtain formatted output
 ```
 
 As can be seen, ratios > 3 are still shown with 1 fewer decimal, and ratios > 10 are shown with 2 fewer decimals ([Wilcox, *Epidemiology* 2004](https://doi.org/10.1097/01.ede.0000101026.08873.14) motivates why). To disable such additional rounding of extremely high ratios:
@@ -155,19 +262,20 @@ rifttable(
   data = breastcancer,
   ratio_digits = 3,
   ratio_digits_decrease = NULL,  # Do not round high ratios more
-  risk_digits = 1)
+  risk_digits = 1) %>%
+  rt_gt()  # obtain formatted output
 ```
 
 Additionally, rounding can be changed for each row, adding a column `digits` to the rifttable `design`:
 
 ```{r rounding_digits}
-tibble::tribble(
+tribble(
   ~label,                     ~type,            ~digits,
   "Deaths/N",                 "outcomes/total", NA,  # Uses rifttable default
-  "Risk",                     "risk",           NA,  # Uses rifttable default
-  "Risk ratio (95% CI)",      "",               NA,  # Uses risk_digits below
-  "– Rounded to 1 digit",     "rr",             1,
-  "– Rounded to 2 digits",    "rr",             2,
+  "Risk",                     "risk",           NA,  # Uses risk_digits below
+  "Risk ratio (95% CI)",      "",               NA,
+  "  Rounded to 1 digit",     "rr",             1,
+  "  Rounded to 2 digits",    "rr",             2,
   "Risk difference (95% CI)", "rd",             3) %>%  # Overrides risk_digits
   mutate(
     exposure = "stage",
@@ -175,5 +283,74 @@ tibble::tribble(
     effect_modifier = "receptor") %>%
 rifttable(
   data = breastcancer,
-  risk_digits = 1)   # Fewer digits for risks, unless specified by "digits"
+  risk_digits = 1) %>%  # Fewer digits for risks, unless specified by "digits"
+  rt_gt()  # obtain formatted output
 ```
+
+
+# How can I model differences in continous outcomes?
+
+The following two example use the `cancer` data from the survival package. To compare patient age by ECOG performance status, first recode the variable `ph.ecog` to be categorical (a `factor`), and exclude patients with rare elevated `ecog.ps`:
+
+```{r setup}
+data(cancer, package = "survival")
+
+cancer <- cancer %>%
+  filter(ph.ecog < 3) %>%
+  mutate(ph.ecog = factor(ph.ecog))
+```
+
+
+Using `rifttable()`, one can calculate mean differences (`type = "diff"`) or quantile differences (`type = "quantreg"`, by default, at the median):
+
+```{r table2_diff}
+tribble(
+  ~label,                ~type,
+  "Observations",        "total",
+  "Mean age",            "mean",
+  "  Mean difference",   "diff",
+  "Median age",          "median",
+  "  Median difference", "quantreg") %>%
+  mutate(
+    exposure = "ph.ecog",
+    outcome = "age") %>%
+  rifttable(data = cancer) %>%
+  rt_gt()  # obtain formatted output
+```
+
+
+# How can I model ratios of continuous outcomes?
+
+Three types of ratios for continuous outcomes are implemented in `rifttable()`:
+
+`type =` | Ratio of ... | Model | Use
+-------|----------|-----------------------|-----------------------------
+`"fold"` | Arithmetric means | Generalized linear model with Gaussian distribution and log link: `glm(y ~ x, family = gaussian(link = "log"))` | Tolerates `0` in the `outcome` variable. May be informative if outcome is normally distributed without transformation.
+`"irrrob"` | Arithmetric means | Generalized linear model with Poisson distribution and log link: `glm(y ~ x, family = poisson())`, with robust (sandwich) standard errors | Tolerates `0` in the `outcome` variable. May be informative if outcome is normally distributed without transformation.
+`"foldlog"` | Geometric means | Linear model with log-transformed outcome: `lm(log(y) ~ x)` | Does not tolerate `0` in the `outcome` variable, as `log(0)` is undefined (R returns `-Inf`). May be informative if outcome is normally distributed after log transformation.
+
+In all models, after exponentiation, beta coefficients can be interpreted as ratios. rifttable automatically does all necessary transformations.
+
+In the `cancer` data (see previous question), ratios of usual (arithmetic) means of age could be considered informative, given that `hist(cancer$age)` etc. does not show a major skew in this outcome.
+
+```{r table2_ratio}
+tribble(
+  ~label,                                       ~type,
+  "Observations",                               "total",
+  "Mean age",                                   "", 
+  "  Arithmetic mean",                          "mean",
+  "  Geometric mean",                           "geomean",
+  "Mean ratio",                                 "",
+  "  Ratio of arithmetric means",               "fold",
+  "  Ratio of arithmetric means, empirical SE", "irrrob",
+  "  Ratio of geometric means",                 "foldlog") %>%
+  mutate(
+    exposure = "ph.ecog",
+    outcome = "age") %>%
+  rifttable(
+    data = cancer, 
+    ratio_digits = 3) %>%  # show extra digits to highlight (minor) differences
+  rt_gt()  # obtain formatted output
+```
+
+Patients with ECOG performance status of 2, compared to those with performance status 0, are on average 8% older (or 9%, if based on geometric means).

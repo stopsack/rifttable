@@ -38,7 +38,7 @@ prepare_data <- function(
        missing(effectmodifier_level))
       stop(
         paste0(
-          "Effect modifier and stratum must be specified for joint",
+          "Effect modifier and stratum must be specified for joint ",
           "model ('",
           type, "')."))
     if(is.na(effectmodifier) |
@@ -46,9 +46,16 @@ prepare_data <- function(
        is.null(effectmodifier_level))
       stop(
         paste0(
-          "Effect modifier and stratum must be specified for joint",
+          "Effect modifier and stratum must be specified for joint ",
           "model ('",
           type, "')."))
+    if(any(effectmodifier_level == ""))
+      stop(
+        paste0(
+          'An effect modifier stratum cannot be an empty string "" ',
+          'for a joint model ("',
+          type,
+          '").'))
     pattern <- paste0(
       ".exposure[:digit:]{1,2}__",
       effectmodifier_level,
@@ -81,9 +88,18 @@ prepare_data <- function(
       if(!is.null(effectmodifier_level) &
          !(is.null(effectmodifier) |
            is.na(effectmodifier))) {
-        data$.effectmod <- data[[effectmodifier]]
-        data <- data %>%
-          dplyr::filter(.data$.effectmod %in% effectmodifier_level)
+        if(!(all(effectmodifier_level == ""))) {
+          data$.effectmod <- data[[effectmodifier]]
+          data <- data %>%
+            dplyr::filter(.data$.effectmod %in% effectmodifier_level)
+          if(nrow(data) == 0)
+            warning(paste0(
+              "Effect modifier '",
+              effectmodifier,
+              "': Stratum '",
+              effectmodifier_level,
+              "' is empty (0 observations). "))
+        }
       }
     }
   }
@@ -127,6 +143,18 @@ prepare_data <- function(
             "': Time variable '",
             time,
             "' is not valid for the dataset."))
+
+      if(!is.numeric(data[[time]]))
+        stop(
+          paste0(
+            "type = '",
+            type,
+            "': Time variable '",
+            time,
+            "' must be continuous (numeric). Its current class is '",
+            class(data[[time]]),
+            "'."))
+
       # with 'time' and 'time2', the first is enter and the second is exit:
       has_time2 <- FALSE
       if(!is.na(time2)) {
@@ -141,6 +169,16 @@ prepare_data <- function(
                 "' is not valid for the dataset."))
           data$.time_orig <- data[[time]]
           data$.time2 <- data[[time2]]
+          if(!is.numeric(data$.time2))
+            stop(
+              paste0(
+                "type = '",
+                type,
+                "': time2 variable '",
+                time2,
+                "' must be continuous (numeric). Its current class is '",
+                class(data$.time2),
+                "'."))
           data <- data %>%
             # for estimators that just sum the follow-up times:
             dplyr::mutate(.time = .data$.time2 - .data$.time_orig)
