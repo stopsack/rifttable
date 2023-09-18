@@ -1,3 +1,25 @@
+# rifttable 0.6.2
+
+* New functionality:
+  + Add overall argument `exposure_levels` to let user control handling of
+    missing exposure levels (`NA`) or factors with empty levels as the exposure.
+  + `type = "geomean"` for geometric means.
+* Documentation: Expand FAQs.
+* Internal and bug fixes:
+  + Consider `exposure` or `trend` of `""` as missing, and `stratum = ""` as no 
+    subsetting by the `effect_modifier`, instead  of subsetting to effect 
+    modifier being an empty string. Input check that a stratum must be provided 
+    for joint models and strata are not empty.
+  + Consider missing `type` as `"blank"`.
+  + Do not add empty rows/columns if `type2` has empty results for some cells or
+    if only a `trend` variable and no `exposure` is given.
+  + Rounding works even result vector contains strings (e.g., no estimate).
+  + More safeguards for all-`NA` `outcome` variables. More input checks.
+  + Do not warn about non-`0`/`1` outcomes in log-linear models for ratios of
+    continuous variables.
+  + Add initial set of unit tests.
+
+
 # rifttable 0.6.1
 
 * New functionality:
