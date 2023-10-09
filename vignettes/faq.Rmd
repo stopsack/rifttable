@@ -334,6 +334,11 @@ In all models, after exponentiation, beta coefficients can be interpreted as rat
 In the `cancer` data (see previous question), ratios of usual (arithmetic) means of age could be considered informative, given that `hist(cancer$age)` etc. does not show a major skew in this outcome.
 
 ```{r table2_ratio}
+# How I do I change the level for confidence intervals?
+
+Add a `ci` column to the `design`:
+
+```{r change_ci}
 tribble(
   ~label,                                       ~type,
   "Observations",                               "total",
@@ -344,12 +349,22 @@ tribble(
   "  Ratio of arithmetric means",               "fold",
   "  Ratio of arithmetric means, empirical SE", "irrrob",
   "  Ratio of geometric means",                 "foldlog") %>%
+  ~label,            ~type,                   ~ci,
+  "Deaths/N (Risk)", "outcomes/total (risk)", NA,
+  "Risk ratio",      "",                      NA,
+  "  80% CI",        "rr",                    0.8,
+  "  95% CI",        "rr",                    NA,  # Defaults to 0.95
+  "  99% CI",        "rr",                    0.99) %>%
   mutate(
     exposure = "ph.ecog",
     outcome = "age") %>%
+    exposure = "stage",
+    outcome = "death") %>%
   rifttable(
     data = cancer, 
     ratio_digits = 3) %>%  # show extra digits to highlight (minor) differences
+    data = breastcancer,
+    risk_percent = TRUE) %>%
   rt_gt()  # obtain formatted output
 ```
 
