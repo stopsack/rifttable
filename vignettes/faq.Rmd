@@ -232,7 +232,6 @@ By default, difference measures are being rounded to 2 decimal digits (`0.01`), 
 
 Rounding can be changed by setting the `rifttable()` arguments `diff_digits`, `risk_digits`, and `ratio_digits` globally for the entire table. 
 
-
 ```{r rounding}
 design <- tribble(
   ~label,                     ~type,
@@ -243,8 +242,7 @@ design <- tribble(
   "Risk difference (95% CI)", "rd") %>%
   mutate(
     exposure = "stage",
-    outcome = "death",
-    effect_modifier = "receptor")
+    outcome = "death")
 
 rifttable(
   design = design,
@@ -279,8 +277,7 @@ tribble(
   "Risk difference (95% CI)", "rd",             3) %>%  # Overrides risk_digits
   mutate(
     exposure = "stage",
-    outcome = "death",
-    effect_modifier = "receptor") %>%
+    outcome = "death") %>%
 rifttable(
   data = breastcancer,
   risk_digits = 1) %>%  # Fewer digits for risks, unless specified by "digits"
