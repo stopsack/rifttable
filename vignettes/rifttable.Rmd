@@ -216,37 +216,3 @@ tibble::tribble(
       dplyr::mutate(ph.ecog_factor = factor(ph.ecog))) %>% 
   rt_gt()
 ```
-
-
-# Example 7: Custom functions 
-
-This example also adds an overall estimate not stratified by exposure.
-
-```{r ex7}
-library(dplyr)  # for easier data handling
-
-# Define custom function, must start with "estimate_"
-estimate_my_example <- function(data, ...) {
-  # Variables have been renamed in '.exposure' and '.outcome'
-  data %>%
-    group_by(.exposure) %>%
-    summarize(
-      res = paste(
-        round(
-          mean(.outcome),
-          digits = 3)))
-}
-
-# Call custom function, omit "estimate_"
-tibble::tribble(
-  ~label,                    ~type,        ~stratum,
-  "Mean: Built-in function", "mean",       1,
-  "Mean: Custom function",   "my_example", 1) %>%
-  mutate(
-    exposure = "sex",
-    outcome = "status",
-    effect_modifier = "ph.ecog") %>%
-  rifttable(
-    data = cancer,
-    overall = TRUE)
-```

@@ -1,0 +1,105 @@
+---
+title: "Survival outcomes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Survival outcomes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Example
+
+The example uses the `cancer` data set from the survival package and compares survival, defined by the time variable `time` (recoded to years) and the event variable `status` (recoded to 1 = death, 0 = censored), by sex.
+
+```{r example}
+library(rifttable)
+data(cancer, package = "survival")
+
+cancer <- cancer %>%
+  tibble::as_tibble() %>%
+  dplyr::mutate(
+    # The exposure (here, 'sex') must be categorical (a factor)
+    sex = factor(
+      sex,
+      levels = 1:2,
+      labels = c("Male", "Female")),
+    time = time / 365.25,  # transform to years
+    status = status - 1)
+
+tibble::tribble(
+  ~label,                                  ~type,
+  "**Absolute estimates**",                "",
+  "*Counts and sums*",                     "",
+  "  Observations, *N*",                   "total",
+  "  Events, *n*",                         "events",
+  "  Events/observations",                 "events/total",
+  "  Events/person-years",                 "events/time",
+  "*Follow-up*",                           "",
+  "  Person-years",                        "time",
+  "  Maximum follow-up, years",            "maxfu",
+  "  Median follow-up, years",             "medfu",
+  "  Median follow-up (IQR), years",       "medfu (iqr)",
+  "*Rates*",                               "",
+  "  Rate per 1000 person-years",          "rate",
+  "  Rate per 1000 person-years (95% CI)", "rate (ci)",
+  "  Events/py (rate per 1000 py)",        "events/time (rate)",
+  "*Risks*",                               "",
+  "  1-year survival",                     "surv",
+  "  1-year survival (95% CI)",            "surv (ci)",
+  "  1-year risk/cumulative incidence",    "cuminc",
+  "  1-year risk (95% CI)",                "cuminc (ci)",
+  "  Median survival, years",              "medsurv",
+  "  Median survival (95 CI), years",      "medsurv (ci)",
+  "",                                      "",
+  "**Comparative estimates**",             "",
+  "Difference in 1-year survival",         "survdiff",
+  "Difference in 1-year risk",             "cumincdiff",
+  "Hazard ratio (95% CI)",                 "hr") %>%
+  dplyr::mutate(
+    time = "time", 
+    event = "status", 
+    exposure = "sex",
+    arguments = list(list(timepoint = 1))) %>%
+  rifttable(
+    data = cancer, 
+    overall = TRUE) %>%
+  rt_gt()
+```
+
+
+# Absolute estimates per exposure category
+
+`type` | Description | Options (`arguments = `)
+-------+-------------+--------------
+`"cuminc"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator. If no time point is provided, returns cumulative incidence at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show cumulative incidence at 2.5 years.
+`"cuminc (ci)"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator with confidence intervals (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"cuminc"`.
+`"events"` | Event count.
+`"events/time"` | Events slash person-time.
+`"events/time (rate)"` | A combination: Events slash time followed by rate in parentheses.
+`"events/total"` | Events slash number of observations.
+`"rate"` | Event rate: event count divided by person-time, multiplied by the `rifttable()` parameter `factor`.
+`"rate (ci)"` | Event rate with confidence interval (default: 95%; Poisson-type large-sample interval).
+`"surv"` | Survival from the Kaplan-Meier estimator. If no time point is provided, returns survival at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show survival at 2.5 years.
+`"surv (ci)"` | Survival from the Kaplan-Meier estimator with confidence interval (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"surv"`.
+`"time"` | Person-time.
+`"maxfu"` | Maximum follow-up time.
+`"medfu"` | Median follow-up (reverse Kaplan-Meier), equals median survival for censoring.
+`"medfu (iqr)"` | Median and interquartile range for follow-up.
+`"medsurv"` | Median survival.
+`"medsurv (ci)"` | Median survival with confidence interval (default: 95%).
+
+
+# Comparative estimates with confidence intervals
+
+`type` | Description | Options (`arguments = `)
+-------+-------------+--------------
+`"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator, with confidence interval (default: 95%). Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in cumulative incidence at 2.5 years.
+`"hr"`    | Hazard ratio from Cox proportional hazards regression, with confidence interval (default: 95%). | `list(robust = TRUE)` for robust (sandwich) standard errors; `list(weights = "weight_variable", robust = TRUE)` for sampling (e.g., inverse-probability) weights and robust errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
+`"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%).  Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in survival at 2.5 years.

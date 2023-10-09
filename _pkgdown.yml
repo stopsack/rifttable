@@ -2,10 +2,29 @@ use_url: ~
 template:
   bootstrap: 5
 
-articles:
-- title: Main
-  navbar: ~
-  contents:
-  - faq
-  - table1
-  - estimators
+navbar:
+  structure:
+    left:  [intro, faq, tables, more]
+    right: [search, github]
+  components:
+   faq:
+    text: FAQ
+    href: articles/faq.html
+   tables:
+    text: Example Tables
+    menu:
+    - text: A Descriptive Table 1
+      href: articles/table1.html
+    - text: Binary Outcomes
+      href: articles/estimators_binary.html
+    - text: Continuous Outcomes
+      href: articles/estimators_continuous.html
+    - text: Survival Outcomes
+      href: articles/estimators_survival.html
+   more:
+    text: More
+    menu:
+    - text: Function reference
+      href: reference/index.html
+    - text: Changelog
+      href: news/index.html
