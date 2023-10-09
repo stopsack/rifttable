@@ -38,19 +38,24 @@
 <li class="nav-item">
   <a class="nav-link" href="../articles/rifttable.html">Get started</a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+<li class="active nav-item">
+  <a class="nav-link" href="../articles/faq.html">FAQ</a>
 </li>
-<li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/faq.html">Frequently Asked Questions</a>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-example-tables">Example Tables</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-example-tables">
     <a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a>
-    <a class="dropdown-item" href="../articles/estimators.html">Available estimators ('type')</a>
+    <a class="dropdown-item" href="../articles/estimators_binary.html">Binary Outcomes</a>
+    <a class="dropdown-item" href="../articles/estimators_continuous.html">Continuous Outcomes</a>
+    <a class="dropdown-item" href="../articles/estimators_survival.html">Survival Outcomes</a>
   </div>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-more">More</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-more">
+    <a class="dropdown-item" href="../reference/index.html">Function reference</a>
+    <a class="dropdown-item" href="../news/index.html">Changelog</a>
+  </div>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -4397,8 +4402,7 @@ arguments <code>diff_digits</code>, <code>risk_digits</code>, and
 <span>  <span class="st">"Risk difference (95% CI)"</span>, <span class="st">"rd"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    exposure <span class="op">=</span> <span class="st">"stage"</span>,</span>
-<span>    outcome <span class="op">=</span> <span class="st">"death"</span>,</span>
-<span>    effect_modifier <span class="op">=</span> <span class="st">"receptor"</span><span class="op">)</span></span>
+<span>    outcome <span class="op">=</span> <span class="st">"death"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
 <span>  design <span class="op">=</span> <span class="va">design</span>,</span>
@@ -5413,8 +5417,7 @@ additional rounding of extremely high ratios:</p>
 <span>  <span class="st">"Risk difference (95% CI)"</span>, <span class="st">"rd"</span>,             <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># Overrides risk_digits</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    exposure <span class="op">=</span> <span class="st">"stage"</span>,</span>
-<span>    outcome <span class="op">=</span> <span class="st">"death"</span>,</span>
-<span>    effect_modifier <span class="op">=</span> <span class="st">"receptor"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    outcome <span class="op">=</span> <span class="st">"death"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span><span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">breastcancer</span>,</span>
 <span>  risk_digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># Fewer digits for risks, unless specified by "digits"</span></span>
@@ -5920,35 +5923,39 @@ additional rounding of extremely high ratios:</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="how-can-i-model-differences-in-continous-outcomes">How can I model differences in continous outcomes?<a class="anchor" aria-label="anchor" href="#how-can-i-model-differences-in-continous-outcomes"></a>
+<h2 id="how-can-i-create-joint-models">How can I create joint models?<a class="anchor" aria-label="anchor" href="#how-can-i-create-joint-models"></a>
 </h2>
-<p>The following two example use the <code>cancer</code> data from the
-survival package. To compare patient age by ECOG performance status,
-first recode the variable <code>ph.ecog</code> to be categorical (a
-<code>factor</code>), and exclude patients with rare elevated
-<code>ecog.ps</code>:</p>
+<p>By default, regression models will be fit separately for each stratum
+of the <code>effect_modifier</code>.</p>
+<p>Append <code>"_joint"</code> to <code>"hr"</code>, <code>"rr"</code>,
+<code>"rd"</code>, <code>"irr"</code>, <code>"irrrob"</code>,
+<code>"diff"</code>, <code>"fold"</code>, <code>"foldlog"</code>,
+<code>"quantreg"</code>, or <code>"or"</code> to obtain “joint” models
+for exposure and effect modifier that have a single reference
+category.</p>
+<p>Note that the joint model will be fit across all non-missing
+(<code>NA</code>) strata of the effect modifier, even if the
+<code>design</code> table does not request all strata be shown.</p>
+<p>Compare stratified models to joint models for risk differences (for
+simplicity of presentation, count data are omitted):</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cancer</span>, package <span class="op">=</span> <span class="st">"survival"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">cancer</span> <span class="op">&lt;-</span> <span class="va">cancer</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ph.ecog</span> <span class="op">&lt;</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ph.ecog <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ph.ecog</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Using <code><a href="../reference/rifttable.html">rifttable()</a></code>, one can calculate mean differences
-(<code>type = "diff"</code>) or quantile differences
-(<code>type = "quantreg"</code>, by default, at the median):</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span>  <span class="op">~</span><span class="va">label</span>,                <span class="op">~</span><span class="va">type</span>,</span>
-<span>  <span class="st">"Observations"</span>,        <span class="st">"total"</span>,</span>
-<span>  <span class="st">"Mean age"</span>,            <span class="st">"mean"</span>,</span>
-<span>  <span class="st">"  Mean difference"</span>,   <span class="st">"diff"</span>,</span>
-<span>  <span class="st">"Median age"</span>,          <span class="st">"median"</span>,</span>
-<span>  <span class="st">"  Median difference"</span>, <span class="st">"quantreg"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="op">~</span><span class="va">label</span>,                       <span class="op">~</span><span class="va">type</span>,      <span class="op">~</span><span class="va">stratum</span>,         </span>
+<span>  <span class="st">"**Overall**"</span>,                <span class="st">"rd"</span>,       <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"High"</span><span class="op">)</span>, </span>
+<span>  <span class="st">""</span>,                           <span class="st">""</span>,         <span class="st">""</span>,               </span>
+<span>  <span class="st">"**Stratified models**"</span>,      <span class="st">""</span>,         <span class="st">""</span>,               </span>
+<span>  <span class="st">"  Low hormone receptor"</span>,     <span class="st">"rd"</span>,       <span class="st">"Low"</span>,           </span>
+<span>  <span class="st">"  High hormone receptor"</span>,    <span class="st">"rd"</span>,       <span class="st">"High"</span>,           </span>
+<span>  <span class="st">""</span>,                           <span class="st">""</span>,         <span class="st">""</span>,               </span>
+<span>  <span class="st">"**Joint models**"</span>,           <span class="st">""</span>,         <span class="st">""</span>,               </span>
+<span>  <span class="st">"  Low hormone receptor"</span>,     <span class="st">"rd_joint"</span>, <span class="st">"Low"</span>,</span>
+<span>  <span class="st">"  High hormone receptor"</span>,    <span class="st">"rd_joint"</span>, <span class="st">"High"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    exposure <span class="op">=</span> <span class="st">"ph.ecog"</span>,</span>
-<span>    outcome <span class="op">=</span> <span class="st">"age"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">cancer</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># obtain formatted output</span></span></code></pre></div>
+<span>    exposure <span class="op">=</span> <span class="st">"stage"</span>,</span>
+<span>    outcome <span class="op">=</span> <span class="st">"death"</span>,</span>
+<span>    effect_modifier <span class="op">=</span> <span class="st">"receptor"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">breastcancer</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rifttable table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -6391,132 +6398,1547 @@ first recode the variable <code>ph.ecog</code> to be categorical (a
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ph.ecog">ph.ecog</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="0">0</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="1">1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="2">2</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage">Stage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage I">Stage I</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage II">Stage II</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage III">Stage III</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Observations</p>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p><strong>Overall</strong></p>
 </div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">63</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">113</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">50</td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0 (reference)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top;">0.17 (0.05, 0.28)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top;">0.62 (0.44, 0.80)</td>
 </tr>
 <tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Mean age</p>
-</div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">61.16</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">61.45</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">66.22</td>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md"></div></td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 </tr>
 <tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Mean difference</p>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p><strong>Stratified models</strong></p>
 </div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (reference)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.29 (-2.47, 3.05)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">5.06 (1.74, 8.39)</td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Median age</p>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>Low hormone receptor</p>
 </div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">61.00</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">63.00</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">68.00</td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (reference)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.24 (-0.05, 0.54)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.69 (0.41, 0.97)</td>
 </tr>
 <tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Median difference</p>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>High hormone receptor</p>
 </div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (reference)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">2.00 (-4.77, 8.77)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">7.00 (1.30, 12.20)</td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (reference)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.14 (0.02, 0.26)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.51 (0.25, 0.77)</td>
+</tr>
+<tr>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md"></div></td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
+</tr>
+<tr>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p><strong>Joint models</strong></p>
+</div></td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+</tr>
+<tr>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>Low hormone receptor</p>
+</div></td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.08 (-0.15, 0.30)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.32 (0.10, 0.54)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.77 (0.57, 0.96)</td>
+</tr>
+<tr>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>High hormone receptor</p>
+</div></td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (reference)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.14 (0.02, 0.26)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.51 (0.25, 0.77)</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="section level2">
-<h2 id="how-can-i-model-ratios-of-continuous-outcomes">How can I model ratios of continuous outcomes?<a class="anchor" aria-label="anchor" href="#how-can-i-model-ratios-of-continuous-outcomes"></a>
+<h2 id="how-can-i-change-the-reference-category">How can I change the reference category?<a class="anchor" aria-label="anchor" href="#how-can-i-change-the-reference-category"></a>
 </h2>
-<p>Three types of ratios for continuous outcomes are implemented in
-<code><a href="../reference/rifttable.html">rifttable()</a></code>:</p>
-<table class="table">
-<colgroup>
-<col width="10%">
-<col width="14%">
-<col width="33%">
-<col width="42%">
-</colgroup>
-<thead><tr class="header">
-<th><code>type =</code></th>
-<th>Ratio of …</th>
-<th>Model</th>
-<th>Use</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>"fold"</code></td>
-<td>Arithmetric means</td>
-<td>Generalized linear model with Gaussian distribution and log link:
-<code>glm(y ~ x, family = gaussian(link = "log"))</code>
-</td>
-<td>Tolerates <code>0</code> in the <code>outcome</code> variable. May
-be informative if outcome is normally distributed without
-transformation.</td>
+<p>The reference categories for exposure and effect modifier are always
+their first factor levels. Compare the preceding example:
+<code>"High"</code> is, alphabetically, before <code>"Low"</code>. To
+change the reference category, use <code>forcats::fct_relevel()</code>
+or the base R alternative <code><a href="https://rdrr.io/r/stats/relevel.html" class="external-link">relevel()</a></code> on variables in the
+<code>data</code> provided to <code><a href="../reference/rifttable.html">rifttable()</a></code>:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">label</span>,                       <span class="op">~</span><span class="va">type</span>,      <span class="op">~</span><span class="va">stratum</span>,         </span>
+<span>  <span class="st">"**Joint models**"</span>,           <span class="st">""</span>,         <span class="st">""</span>,               </span>
+<span>  <span class="st">"  Low hormone receptor"</span>,     <span class="st">"rd_joint"</span>, <span class="st">"Low"</span>,</span>
+<span>  <span class="st">"  High hormone receptor"</span>,    <span class="st">"rd_joint"</span>, <span class="st">"High"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    exposure <span class="op">=</span> <span class="st">"stage"</span>,</span>
+<span>    outcome <span class="op">=</span> <span class="st">"death"</span>,</span>
+<span>    effect_modifier <span class="op">=</span> <span class="st">"receptor"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">breastcancer</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>        receptor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/relevel.html" class="external-link">relevel</a></span><span class="op">(</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">receptor</span><span class="op">)</span>,  <span class="co"># Make "receptor" a factor in the first place</span></span>
+<span>          ref <span class="op">=</span> <span class="st">"Low"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># Set new reference category</span></span>
+<span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rifttable table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#rifttable thead, #rifttable tbody, #rifttable tfoot, #rifttable tr, #rifttable td, #rifttable th {
+  border-style: none;
+}
+
+#rifttable p {
+  margin: 0;
+  padding: 0;
+}
+
+#rifttable .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#rifttable .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rifttable .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rifttable .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rifttable .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_col_headings {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#rifttable .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rifttable .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#rifttable .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#rifttable .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#rifttable .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rifttable .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#rifttable .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#rifttable .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rifttable .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rifttable .gt_row {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rifttable .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#rifttable .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#rifttable .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rifttable .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#rifttable .gt_table_body {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_left {
+  text-align: left;
+}
+
+#rifttable .gt_center {
+  text-align: center;
+}
+
+#rifttable .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rifttable .gt_font_normal {
+  font-weight: normal;
+}
+
+#rifttable .gt_font_bold {
+  font-weight: bold;
+}
+
+#rifttable .gt_font_italic {
+  font-style: italic;
+}
+
+#rifttable .gt_super {
+  font-size: 65%;
+}
+
+#rifttable .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#rifttable .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#rifttable .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#rifttable .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#rifttable .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#rifttable .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#rifttable .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage">Stage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage I">Stage I</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage II">Stage II</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage III">Stage III</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p><strong>Joint models</strong></p>
+</div></td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
-<tr class="even">
-<td><code>"irrrob"</code></td>
-<td>Arithmetric means</td>
-<td>Generalized linear model with Poisson distribution and log link:
-<code>glm(y ~ x, family = poisson())</code>, with robust (sandwich)
-standard errors</td>
-<td>Tolerates <code>0</code> in the <code>outcome</code> variable. May
-be informative if outcome is normally distributed without
-transformation.</td>
+<tr>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>Low hormone receptor</p>
+</div></td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (reference)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.24 (-0.05, 0.54)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.69 (0.41, 0.97)</td>
 </tr>
-<tr class="odd">
-<td><code>"foldlog"</code></td>
-<td>Geometric means</td>
-<td>Linear model with log-transformed outcome:
-<code>lm(log(y) ~ x)</code>
-</td>
-<td>Does not tolerate <code>0</code> in the <code>outcome</code>
-variable, as <code>log(0)</code> is undefined (R returns
-<code>-Inf</code>). May be informative if outcome is normally
-distributed after log transformation.</td>
+<tr>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>High hormone receptor</p>
+</div></td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">-0.08 (-0.30, 0.15)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.06 (-0.17, 0.29)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.43 (0.11, 0.76)</td>
 </tr>
 </tbody>
 </table>
-<p>In all models, after exponentiation, beta coefficients can be
-interpreted as ratios. rifttable automatically does all necessary
-transformations.</p>
-<p>In the <code>cancer</code> data (see previous question), ratios of
-usual (arithmetic) means of age could be considered informative, given
-that <code>hist(cancer$age)</code> etc. does not show a major skew in
-this outcome.</p>
+</div>
+<p>If a middle category of the exposure <code>stage</code> is desired as
+the reference:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
-<span>  <span class="op">~</span><span class="va">label</span>,                                       <span class="op">~</span><span class="va">type</span>,</span>
-<span>  <span class="st">"Observations"</span>,                               <span class="st">"total"</span>,</span>
-<span>  <span class="st">"Mean age"</span>,                                   <span class="st">""</span>, </span>
-<span>  <span class="st">"  Arithmetic mean"</span>,                          <span class="st">"mean"</span>,</span>
-<span>  <span class="st">"  Geometric mean"</span>,                           <span class="st">"geomean"</span>,</span>
-<span>  <span class="st">"Mean ratio"</span>,                                 <span class="st">""</span>,</span>
-<span>  <span class="st">"  Ratio of arithmetric means"</span>,               <span class="st">"fold"</span>,</span>
-<span>  <span class="st">"  Ratio of arithmetric means, empirical SE"</span>, <span class="st">"irrrob"</span>,</span>
-<span>  <span class="st">"  Ratio of geometric means"</span>,                 <span class="st">"foldlog"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    exposure <span class="op">=</span> <span class="st">"ph.ecog"</span>,</span>
-<span>    outcome <span class="op">=</span> <span class="st">"age"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">result_reordered</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  label <span class="op">=</span> <span class="st">"**RD (95% CI)**"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"rd"</span>,</span>
+<span>  exposure <span class="op">=</span> <span class="st">"stage"</span>,</span>
+<span>  outcome <span class="op">=</span> <span class="st">"death"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">cancer</span>, </span>
-<span>    ratio_digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># show extra digits to highlight (minor) differences</span></span>
+<span>    data <span class="op">=</span> <span class="va">breastcancer</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>        stage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/relevel.html" class="external-link">relevel</a></span><span class="op">(</span></span>
+<span>          <span class="va">stage</span>,</span>
+<span>          ref <span class="op">=</span> <span class="st">"Stage II"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">result_reordered</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rifttable table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#rifttable thead, #rifttable tbody, #rifttable tfoot, #rifttable tr, #rifttable td, #rifttable th {
+  border-style: none;
+}
+
+#rifttable p {
+  margin: 0;
+  padding: 0;
+}
+
+#rifttable .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#rifttable .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rifttable .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rifttable .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rifttable .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_col_headings {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#rifttable .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rifttable .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#rifttable .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#rifttable .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#rifttable .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rifttable .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#rifttable .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#rifttable .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rifttable .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rifttable .gt_row {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rifttable .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#rifttable .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#rifttable .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rifttable .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#rifttable .gt_table_body {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_left {
+  text-align: left;
+}
+
+#rifttable .gt_center {
+  text-align: center;
+}
+
+#rifttable .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rifttable .gt_font_normal {
+  font-weight: normal;
+}
+
+#rifttable .gt_font_bold {
+  font-weight: bold;
+}
+
+#rifttable .gt_font_italic {
+  font-style: italic;
+}
+
+#rifttable .gt_super {
+  font-size: 65%;
+}
+
+#rifttable .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#rifttable .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#rifttable .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#rifttable .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#rifttable .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#rifttable .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#rifttable .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="stage">stage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage II">Stage II</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage I">Stage I</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage III">Stage III</th>
+    </tr></thead>
+<tbody class="gt_table_body"><tr>
+<td headers="stage" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p><strong>RD (95% CI)</strong></p>
+</div></td>
+<td headers="Stage II" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0 (reference)</td>
+<td headers="Stage I" class="gt_row gt_right" style="text-align: left; vertical-align: top;">-0.17 (-0.28, -0.05)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top;">0.45 (0.27, 0.64)</td>
+</tr></tbody>
+</table>
+</div>
+<p>Using <code>forcats::fct_relevel()</code> may be preferable over
+<code><a href="https://rdrr.io/r/stats/relevel.html" class="external-link">relevel()</a></code>, as it preserves the variable label: here, the
+variable <code>stage</code> lost its label, <code>"Stage"</code>
+starting with upper case S.</p>
+<p>That results for “Stage II” are now listed first is probably
+undesirable. Reorder the columns of the table that
+<code><a href="../reference/rifttable.html">rifttable()</a></code> produced to print results for “Stage I”
+first:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">result_reordered</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">stage</span>, <span class="st">"Stage I"</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rifttable table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#rifttable thead, #rifttable tbody, #rifttable tfoot, #rifttable tr, #rifttable td, #rifttable th {
+  border-style: none;
+}
+
+#rifttable p {
+  margin: 0;
+  padding: 0;
+}
+
+#rifttable .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#rifttable .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rifttable .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rifttable .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rifttable .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_col_headings {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#rifttable .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rifttable .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#rifttable .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#rifttable .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#rifttable .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rifttable .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#rifttable .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#rifttable .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rifttable .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rifttable .gt_row {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rifttable .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#rifttable .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#rifttable .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rifttable .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#rifttable .gt_table_body {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_left {
+  text-align: left;
+}
+
+#rifttable .gt_center {
+  text-align: center;
+}
+
+#rifttable .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rifttable .gt_font_normal {
+  font-weight: normal;
+}
+
+#rifttable .gt_font_bold {
+  font-weight: bold;
+}
+
+#rifttable .gt_font_italic {
+  font-style: italic;
+}
+
+#rifttable .gt_super {
+  font-size: 65%;
+}
+
+#rifttable .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#rifttable .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#rifttable .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#rifttable .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#rifttable .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#rifttable .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#rifttable .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="stage">stage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage I">Stage I</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage II">Stage II</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage III">Stage III</th>
+    </tr></thead>
+<tbody class="gt_table_body"><tr>
+<td headers="stage" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p><strong>RD (95% CI)</strong></p>
+</div></td>
+<td headers="Stage I" class="gt_row gt_right" style="text-align: left; vertical-align: top;">-0.17 (-0.28, -0.05)</td>
+<td headers="Stage II" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0 (reference)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top;">0.45 (0.27, 0.64)</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="how-i-do-i-change-the-level-for-confidence-intervals">How I do I change the level for confidence intervals?<a class="anchor" aria-label="anchor" href="#how-i-do-i-change-the-level-for-confidence-intervals"></a>
+</h2>
+<p>Add a <code>ci</code> column to the <code>design</code>:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span>  <span class="op">~</span><span class="va">label</span>,            <span class="op">~</span><span class="va">type</span>,                   <span class="op">~</span><span class="va">ci</span>,</span>
+<span>  <span class="st">"Deaths/N (Risk)"</span>, <span class="st">"outcomes/total (risk)"</span>, <span class="cn">NA</span>,</span>
+<span>  <span class="st">"Risk ratio"</span>,      <span class="st">""</span>,                      <span class="cn">NA</span>,</span>
+<span>  <span class="st">"  80% CI"</span>,        <span class="st">"rr"</span>,                    <span class="fl">0.8</span>,</span>
+<span>  <span class="st">"  95% CI"</span>,        <span class="st">"rr"</span>,                    <span class="cn">NA</span>,  <span class="co"># Defaults to 0.95</span></span>
+<span>  <span class="st">"  99% CI"</span>,        <span class="st">"rr"</span>,                    <span class="fl">0.99</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    exposure <span class="op">=</span> <span class="st">"stage"</span>,</span>
+<span>    outcome <span class="op">=</span> <span class="st">"death"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">breastcancer</span>,</span>
+<span>    risk_percent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># obtain formatted output</span></span></code></pre></div>
 <div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rifttable table {
@@ -6960,82 +8382,1074 @@ this outcome.</p>
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ph.ecog">ph.ecog</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="0">0</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="1">1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="2">2</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage">Stage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage I">Stage I</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage II">Stage II</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Stage III">Stage III</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Observations</p>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>Deaths/N (Risk)</p>
 </div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">63</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">113</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">50</td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top;">7/67 (10%)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top;">26/96 (27%)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top;">21/29 (72%)</td>
 </tr>
 <tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Mean age</p>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>Risk ratio</p>
 </div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Arithmetic mean</p>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>80% CI</p>
 </div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.16</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.45</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">66.22</td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">2.59 (1.56, 4.3)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">6.9 (4.3, 11)</td>
 </tr>
 <tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Geometric mean</p>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>95% CI</p>
 </div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">60.38</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">60.78</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">65.70</td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">2.59 (1.20, 5.6)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">6.9 (3.3, 14)</td>
 </tr>
 <tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Mean ratio</p>
+<td headers="Stage" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
+<p>99% CI</p>
 </div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-</tr>
-<tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Ratio of arithmetric means</p>
-</div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.005 (0.961, 1.051)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.083 (1.028, 1.140)</td>
-</tr>
-<tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Ratio of arithmetric means, empirical SE</p>
-</div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.005 (0.959, 1.053)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.083 (1.029, 1.139)</td>
-</tr>
-<tr>
-<td headers="ph.ecog" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Ratio of geometric means</p>
-</div></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.007 (0.961, 1.055)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.088 (1.029, 1.151)</td>
+<td headers="Stage I" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
+<td headers="Stage II" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">2.59 (0.94, 7.2)</td>
+<td headers="Stage III" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">6.9 (2.63, 18)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Patients with ECOG performance status of 2, compared to those with
-performance status 0, are on average 8% older (or 9%, if based on
-geometric means).</p>
+</div>
+<div class="section level2">
+<h2 id="how-do-i-make-rifttable-calculate-an-estimand-that-is-not-built-in">How do I make rifttable calculate an estimand that is not
+built-in?<a class="anchor" aria-label="anchor" href="#how-do-i-make-rifttable-calculate-an-estimand-that-is-not-built-in"></a>
+</h2>
+<p>While the package provides a number of estimators commonly used in
+epidemiology, it will never be able to include all possible estimators.
+However, any custom estimate can be integrated into a rifttable by a
+defining custom estimation function.</p>
+<p>The subsequent example will reproduce the following basic rifttable,
+which shows the mean age by sex, stratified by ECOG performance status,
+in the <code>cancer</code> data set:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cancer</span>, package <span class="op">=</span> <span class="st">"survival"</span><span class="op">)</span></span>
+<span><span class="va">cancer</span> <span class="op">&lt;-</span> <span class="va">cancer</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
+<span>      <span class="va">sex</span>,</span>
+<span>      levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
+<span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  type <span class="op">=</span> <span class="st">"mean"</span>,</span>
+<span>  exposure <span class="op">=</span> <span class="st">"sex"</span>,</span>
+<span>  outcome <span class="op">=</span> <span class="st">"age"</span>,</span>
+<span>  effect_modifier <span class="op">=</span> <span class="st">"ph.ecog"</span>,</span>
+<span>  stratum <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
+<span>  label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"ECOG PS "</span>, <span class="va">stratum</span>, <span class="st">": mean age"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">design</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">cancer</span>,</span>
+<span>    overall <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rifttable table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#rifttable thead, #rifttable tbody, #rifttable tfoot, #rifttable tr, #rifttable td, #rifttable th {
+  border-style: none;
+}
+
+#rifttable p {
+  margin: 0;
+  padding: 0;
+}
+
+#rifttable .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#rifttable .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rifttable .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rifttable .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rifttable .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_col_headings {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#rifttable .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rifttable .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#rifttable .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#rifttable .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#rifttable .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rifttable .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#rifttable .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#rifttable .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rifttable .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rifttable .gt_row {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rifttable .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#rifttable .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#rifttable .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rifttable .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#rifttable .gt_table_body {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_left {
+  text-align: left;
+}
+
+#rifttable .gt_center {
+  text-align: center;
+}
+
+#rifttable .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rifttable .gt_font_normal {
+  font-weight: normal;
+}
+
+#rifttable .gt_font_bold {
+  font-weight: bold;
+}
+
+#rifttable .gt_font_italic {
+  font-style: italic;
+}
+
+#rifttable .gt_super {
+  font-size: 65%;
+}
+
+#rifttable .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#rifttable .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#rifttable .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#rifttable .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#rifttable .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#rifttable .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#rifttable .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Summary">Summary</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Overall">Overall</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Male">Male</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Female">Female</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>ECOG PS 1: mean age</p>
+</div></td>
+<td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">61.45</td>
+<td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;">62.79</td>
+<td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">59.19</td>
+</tr>
+<tr>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>ECOG PS 2: mean age</p>
+</div></td>
+<td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">66.22</td>
+<td headers="Male" class="gt_row gt_right" style="text-align: left; vertical-align: top;">65.00</td>
+<td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">67.90</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Instead of relying on rifttable’s built-in estimator
+<code>type = "mean"</code>, we will define a custom function that
+calculates the mean:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">estimate_my_mean</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">.exposure</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>      res <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.outcome</span><span class="op">)</span>,</span>
+<span>          digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
+<span>        <span class="st">"yrs"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Use the custom function <code>my_mean</code> instead of the built-in
+<code>mean</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">design</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  <span class="co"># Edit the previous design</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    type <span class="op">=</span> <span class="st">"my_mean"</span>,  <span class="co"># Replace built-in "mean" by custom "my_mean"</span></span>
+<span>    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">label</span>, <span class="st">" (custom)"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">cancer</span>,</span>
+<span>    overall <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rifttable table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#rifttable thead, #rifttable tbody, #rifttable tfoot, #rifttable tr, #rifttable td, #rifttable th {
+  border-style: none;
+}
+
+#rifttable p {
+  margin: 0;
+  padding: 0;
+}
+
+#rifttable .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#rifttable .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rifttable .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rifttable .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rifttable .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_col_headings {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#rifttable .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rifttable .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#rifttable .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#rifttable .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#rifttable .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rifttable .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#rifttable .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#rifttable .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rifttable .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rifttable .gt_row {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rifttable .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#rifttable .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#rifttable .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#rifttable .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rifttable .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#rifttable .gt_table_body {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rifttable .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rifttable .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rifttable .gt_left {
+  text-align: left;
+}
+
+#rifttable .gt_center {
+  text-align: center;
+}
+
+#rifttable .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rifttable .gt_font_normal {
+  font-weight: normal;
+}
+
+#rifttable .gt_font_bold {
+  font-weight: bold;
+}
+
+#rifttable .gt_font_italic {
+  font-style: italic;
+}
+
+#rifttable .gt_super {
+  font-size: 65%;
+}
+
+#rifttable .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#rifttable .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#rifttable .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#rifttable .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#rifttable .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#rifttable .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#rifttable .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Summary">Summary</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Overall">Overall</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Male">Male</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Female">Female</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>ECOG PS 1: mean age (custom)</p>
+</div></td>
+<td headers="Overall" class="gt_row gt_left" style="text-align: left; vertical-align: top;">61.451 yrs</td>
+<td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">62.789 yrs</td>
+<td headers="Female" class="gt_row gt_left" style="text-align: left; vertical-align: top;">59.19 yrs</td>
+</tr>
+<tr>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
+<p>ECOG PS 2: mean age (custom)</p>
+</div></td>
+<td headers="Overall" class="gt_row gt_left" style="text-align: left; vertical-align: top;">66.22 yrs</td>
+<td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">65 yrs</td>
+<td headers="Female" class="gt_row gt_left" style="text-align: left; vertical-align: top;">67.905 yrs</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Specifications for custom functions:</p>
+<ul>
+<li>The function name must start with <code>estimate_</code>; this
+prefix is to be omitted when later calling the custom function within
+<code><a href="../reference/rifttable.html">rifttable()</a></code>.</li>
+<li>The <code>data</code> provided to <code><a href="../reference/rifttable.html">rifttable()</a></code> will be
+available to the custom function as an argument named
+<code>data</code>.</li>
+<li>The <code>data</code> are already subsetted to the
+<code>stratum</code> of the <code>effect_modifier</code>, if
+applicable.</li>
+<li>Copies of key variables are accessible under the names,
+<code>.exposure</code>, <code>.outcome</code>, <code>.event</code>,
+<code>.time</code>, and <code>.time2</code>, as applicable.</li>
+<li>The function must accept all elements of a rifttable
+<code>design</code> (e.g., <code>confounders</code>,
+<code>digits</code>, <code>na_rm</code>, etc.) and of the
+<code><a href="../reference/rifttable.html">rifttable()</a></code> function (e.g., <code>reference</code>,
+<code>risk_percent</code>) as arguments. Many may not be relevant and
+can be captured in the argument list, <code>...</code> (see
+example).</li>
+<li>The function must return a tibble/data frame with one column for
+<code>.exposure</code>, with one row per exposure category, and one
+string column <code>res</code> for the estimate.</li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

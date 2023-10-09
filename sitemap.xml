@@ -7,7 +7,13 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/articles/estimators.html</loc>
+    <loc>/articles/estimators_binary.html</loc>
+  </url>
+  <url>
+    <loc>/articles/estimators_continuous.html</loc>
+  </url>
+  <url>
+    <loc>/articles/estimators_survival.html</loc>
   </url>
   <url>
     <loc>/articles/faq.html</loc>
