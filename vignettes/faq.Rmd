@@ -354,3 +354,71 @@ tribble(
 ```
 
 Patients with ECOG performance status of 2, compared to those with performance status 0, are on average 8% older (or 9%, if based on geometric means).
+
+# How do I make rifttable calculate an estimand that is not built-in?
+
+While the package provides a number of estimators commonly used in epidemiology, it will never be able to include all possible estimators. However, any custom estimate can be integrated into a rifttable by a defining custom estimation function.
+
+The subsequent example will reproduce the following basic rifttable, which shows the mean age by sex, stratified by ECOG performance status, in the `cancer` data set:
+
+```{r custom, message = FALSE}
+data(cancer, package = "survival")
+cancer <- cancer %>%
+  tibble::as_tibble() %>%
+  mutate(
+    sex = factor(
+      sex,
+      levels = 1:2,
+      labels = c("Male", "Female")))
+
+design <- tibble::tibble(
+  type = "mean",
+  exposure = "sex",
+  outcome = "age",
+  effect_modifier = "ph.ecog",
+  stratum = 1:2,
+  label = paste0("ECOG PS ", stratum, ": mean age"))
+
+design %>%
+  rifttable(
+    data = cancer,
+    overall = TRUE) %>%
+  rt_gt()
+```
+
+Instead of relying on rifttable's built-in estimator `type = "mean"`, we will define a custom function that calculates the mean:
+
+```{r custom_fn}
+estimate_my_mean <- function(data, ...) {
+  data %>%
+    group_by(.exposure) %>%
+    summarize(
+      res = paste(
+        round(
+          mean(.outcome),
+          digits = 3),
+        "yrs"))
+}
+```
+
+Use the custom function `my_mean` instead of the built-in `mean`:
+
+```{r custom_use}
+design %>%  # Edit the previous design
+  mutate(
+    type = "my_mean",  # Replace built-in "mean" by custom "my_mean"
+    label = paste0(label, " (custom)")) %>%
+  rifttable(
+    data = cancer,
+    overall = TRUE) %>%
+  rt_gt()
+```
+
+Specifications for custom functions:
+
+* The function name must start with `estimate_`; this prefix is to be omitted when later calling the custom function within `rifttable()`.
+* The `data` provided to `rifttable()` will be available to the custom function as an argument named `data`.
+* The `data` are already subsetted to the `stratum` of the `effect_modifier`, if applicable.
+* Copies of key variables are accessible under the names, `.exposure`, `.outcome`, `.event`, `.time`, and `.time2`, as applicable.
+* The function must accept all elements of a rifttable `design` (e.g., `confounders`,  `digits`, `na_rm`, etc.) and of the `rifttable()` function (e.g., `reference`, `risk_percent`) as arguments. Many may not be relevant and can be captured in the argument list, `...` (see example).
+* The function must return a tibble/data frame with one column for `.exposure`, with one row per exposure category, and one string column `res` for the estimate.
