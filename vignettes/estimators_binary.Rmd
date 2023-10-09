@@ -1,0 +1,71 @@
+---
+title: "Binary outcomes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Binary outcomes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Example
+
+The example uses the `breastcancer` data set from the risks package and compares the risk of death (a binary variable in this case) by categories of cancer stage.
+
+```{r example, message = FALSE}
+library(rifttable)
+library(dplyr)
+data(breastcancer, package = "risks")
+
+tibble::tribble(
+  ~label,                      ~type,
+  "**Absolute estimates**",    "",
+  "Observations",              "total",
+  "Outcomes",                  "outcomes",
+  "Outcomes/Total",            "outcomes/total",
+  "Cases/Controls",            "cases/controls",
+  "Risk",                      "risk",
+  "Risk (95% CI)",             "risk (ci)",
+  "Outcomes (Risk)",           "outcomes (risk)",
+  "Outcomes/Total (Risk)",     "outcomes/total (risk)",
+  "",                          "",
+  "**Comparative estimates**", "",
+  "Risk ratio (95% CI)",       "rr",
+  "Risk difference (95% CI)",  "rd",
+  "Odds ratio (95% CI)",       "or") %>%
+  mutate(
+    exposure = "stage",
+    outcome = "death") %>%
+  rifttable(
+    data = breastcancer,
+    overall = TRUE) %>%
+  rt_gt()  # Formatted output
+```
+
+
+# Absolute estimates per exposure category
+
+`type` | Description | Options (`arguments = `)
+-------+-------------+--------------
+`"cases/controls"` | Cases and non-cases (events and non-events); useful for case-control studies.
+`"outcomes"` | Outcome count.
+`"outcomes (risk)"` | A combination: Outcomes followed by risk in parentheses.
+`"outcomes/total (risk)"` | A combination: Outcomes slash total followed by risk in parentheses.
+`"risk"` | Risk (or prevalence), calculated as a proportion, *i.e.*, outcomes divided by number of observations. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`.
+`"risk (ci)"` | Risk with confidence interval (default: 95%): Wilson score interval for binomial proportions, see `rifttable::scoreci()`.
+
+
+# Comparative estimates with confidence intervals
+
+`type` | Description | Options (`arguments = `)
+-------+-------------+--------------
+`"irr"` | Incidence rate ratio for count outcomes from Poisson regression model, with confidence interval (default: 95%).
+`"or"` | Odds ratio from logistic regression, with confidence interval (default: 95%).
+`"rd"` | Risk difference (or prevalence difference) from risks::riskdiff(), with confidence interval (default: 95%). | `list(approach = "margstd_boot", bootrepeats = 2000)` to request model fitting via marginal standardization with 2000 bootstraps.
+`"rr"` | Risk ratio (or prevalence ratio) from `risks::riskratio()`, with confidence interval (default: 95%). | See `"rd"`.

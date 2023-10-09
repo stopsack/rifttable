@@ -15,29 +15,6 @@ knitr::opts_chunk$set(
 ```
 
 
-# Binary outcomes
-
-## Comparative estimates with 95% confidence intervals
-
-`type` | Description | Options (`arguments = `)
--------+-------------+--------------
-`"irr"`   | Incidence rate ratio for count outcomes from Poisson regression model.
-`"irrrob"` | Ratio for other outcomes from Poisson regression model with robust (sandwich) standard errors.
-`"or"` | Odds ratio from logistic regression.
-`"rd"` | Risk difference (or prevalence difference) from risks::riskdiff(). | `list(approach = "margstd_boot", bootrepeats = 2000)` to request model fitting via marginal standardization with 2000 bootstraps.
-`"rr"` | Risk ratio (or prevalence ratio) from `risks::riskratio()`. | See `"rd"`.
-
-## Absolute estimates per exposure category
-
-`type` | Description | Options (`arguments = `)
--------+-------------+--------------
-`"cases/controls"` | Cases and non-cases (events and non-events); useful for case-control studies.
-`"outcomes"` | Outcome count.
-`"outcomes (risk)"` | A combination: Outcomes followed by risk in parentheses.
-`"outcomes/total (risk)"` | A combination: Outcomes slash total followed by risk in parentheses.
-`"risk"` | Risk (or prevalence), calculated as a proportion, *i.e.*, outcomes divided by number of observations. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`.
-`"risk (ci)"` | Risk with 95% confidence interval (Wilson score interval for binomial proportions, see `rifttable::scoreci()`).
-
 
 # Time-to-event/survival outcomes
 
