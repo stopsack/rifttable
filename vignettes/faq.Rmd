@@ -319,15 +319,57 @@ tribble(
 ```
 
 
+# How can I change the reference category?
 
+The reference categories for exposure and effect modifier are always their first factor levels. Compare the preceding example: `"High"` is, alphabetically, before `"Low"`. To change the reference category, use `forcats::fct_relevel()` or the base R alternative `relevel()` on variables in the `data` provided to `rifttable()`: 
+
+```{r joint_reorder}
 tribble(
+  ~label,                       ~type,      ~stratum,         
+  "**Joint models**",           "",         "",               
+  "  Low hormone receptor",     "rd_joint", "Low",
+  "  High hormone receptor",    "rd_joint", "High") %>%
   mutate(
+    exposure = "stage",
+    outcome = "death",
+    effect_modifier = "receptor") %>%
+  rifttable(
+    data = breastcancer %>%
+      mutate(
+        receptor = relevel(
+          factor(receptor),  # Make "receptor" a factor in the first place
+          ref = "Low"))) %>%  # Set new reference category
+  rt_gt()
 ```
 
+If a middle category of the exposure `stage` is desired as the reference:
 
+```{r reorder_middle}
+result_reordered <- tibble(
+  label = "**RD (95% CI)**",
+  type = "rd",
+  exposure = "stage",
+  outcome = "death") %>%
+  rifttable(
+    data = breastcancer %>%
+      mutate(
+        stage = relevel(
+          stage,
+          ref = "Stage II")))
 
+result_reordered %>%
+  rt_gt()
+```
 
+Using `forcats::fct_relevel()` may be preferable over `relevel()`, as it preserves the variable label: here, the variable `stage` lost its label, `"Stage"` starting with upper case S.
 
+That results for "Stage II" are now listed first is probably undesirable. Reorder the columns of the table that `rifttable()` produced to print results for "Stage I" first:
+
+```{r reorder_middle2}
+result_reordered %>%
+  select(stage, "Stage I", everything()) %>%
+  rt_gt()
+```
 
 
 # How I do I change the level for confidence intervals?
