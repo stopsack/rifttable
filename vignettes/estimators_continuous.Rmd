@@ -1,0 +1,99 @@
+---
+title: "Continuous outcomes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Continuous outcomes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Example
+
+The example uses the `cancer` data from the survival package. To compare patient age by ECOG performance status, recode the variable `ph.ecog` to be categorical (a `factor`) and exclude patients with rare elevated `ecog.ps`:
+
+```{r ex_continuous, message = FALSE}
+library(dplyr)
+library(rifttable)
+data(cancer, package = "survival")
+cancer <- cancer %>%
+  filter(ph.ecog < 3) %>%
+  mutate(ph.ecog = factor(ph.ecog))
+attr(cancer$ph.ecog, which = "label") <- "ECOG performance status"
+
+tribble(
+  ~label,                                       ~type,
+  "**Absolute estimates**",                     "",
+  "Observations",                               "total",
+  "Range",                                      "range",
+  "Mean",                                       "", 
+  "  Mean (i.e., arithmetic mean)",             "mean",
+  "  Mean (95% CI)",                            "mean (ci)",
+  "  Mean (standard deviation)",                "mean (sd)",
+  "  Geometric mean",                           "geomean",
+  "Median",                                     "median",
+  "Median (interquartile range)",               "median (iqr)",
+  "",                                           "",
+  "**Comparative estimates**",                  "",
+  "Mean difference (95% CI)",                   "diff",
+  "Median difference (95% CI)",                 "quantreg",
+  "Mean ratio",                                 "",
+  "  of arithmetic means",                      "fold",
+  "  of arithmetic means, empirical SE",        "irrrob",
+  "  of geometric means",                       "foldlog") %>%
+  mutate(
+    exposure = "ph.ecog",
+    outcome = "age") %>%
+  rifttable(
+    data = cancer, 
+    diff_digits = 1,  # Suppress unnecessary precision in most estimates
+    # Show extraneous digits to highlight (minor) differences in ratio  models:
+    ratio_digits = 3,
+    overall = TRUE) %>%  
+  rt_gt()  # obtain formatted output
+```
+
+
+# Absolute estimates per exposure category
+
+`type` | Description | Options (`arguments = `)
+-------+-------------+--------------
+`"range"` | Range: Minimum to maximum value.
+`"mean"` | Mean (arithmetic mean).
+`"mean (ci)"` | Mean and CI (default: 95%).
+`"mean (sd)"` | Mean and standard deviation.
+`"geomean"` | Geometric mean.
+`"median"` | Median.
+`"median (iqr)"` | Median and interquartile range.
+
+
+# Comparative estimates with confidence intervals
+
+`type` | Description | Options (`arguments = `)
+-------+-------------+--------------
+`"diff"` | Mean difference from linear model. |
+`"fold"` | Fold change from generalized linear model with log link (i.e., ratio of arithmetic means).
+`"foldlog"` | Fold change from linear model after log transformation of the outcome (*i.e.*, ratio of geometric means).
+`"irrrob"` | Fold change from generalized linear model with Poisson distribution and log link and robust (sandwich) standard errors
+`"quantreg"` | Quantile difference from quantile regression using `quantreg::rq()` with `method = "fn"`. By default, this is the difference in medians. | `list(tau = 0.75)` to change the quantile to, e.g., the 75th percentile.
+   
+
+# More on ratios of continuous outcomes
+
+Three types of ratios for continuous outcomes are implemented in `rifttable()`:
+
+`type =` | Ratio of ... | Model | Use
+-------|----------|-----------------------|-----------------------------
+`"fold"` | Arithmetic means | Generalized linear model with Gaussian distribution and log link: `glm(y ~ x, family = gaussian(link = "log"))` | Tolerates `0` in the `outcome` variable. May be informative if outcome is normally distributed without transformation.
+`"irrrob"` | Arithmetic means | Generalized linear model with Poisson distribution and log link: `glm(y ~ x, family = poisson())`, with robust (sandwich) standard errors | Tolerates `0` in the `outcome` variable. May be informative if outcome is normally distributed without transformation.
+`"foldlog"` | Geometric means | Linear model with log-transformed outcome: `lm(log(y) ~ x)` | Does not tolerate `0` in the `outcome` variable, as `log(0)` is undefined (R returns `-Inf`). May be informative if outcome is normally distributed after log transformation.
+
+In all models, after exponentiation, beta coefficients can be interpreted as ratios. rifttable automatically does all necessary transformations.
+
+In the `cancer` data, ratios of usual (arithmetic) means of age could be considered informative, given that `hist(cancer$age)` etc. does not show a major skew in this outcome.

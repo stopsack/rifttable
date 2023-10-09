@@ -288,21 +288,14 @@ rifttable(
 ```
 
 
-# How can I model differences in continous outcomes?
 # How can I create joint models?
 
-The following two example use the `cancer` data from the survival package. To compare patient age by ECOG performance status, first recode the variable `ph.ecog` to be categorical (a `factor`), and exclude patients with rare elevated `ecog.ps`:
 By default, regression models will be fit separately for each stratum of the `effect_modifier`. 
 
-```{r setup}
-data(cancer, package = "survival")
 Append `"_joint"` to `"hr"`, `"rr"`, `"rd"`, `"irr"`, `"irrrob"`, `"diff"`, `"fold"`, `"foldlog"`, `"quantreg"`, or `"or"` to obtain "joint" models for exposure and effect modifier that have a single reference category.
  
 Note that the joint model will be fit across all non-missing (`NA`) strata of the effect modifier, even if the `design` table does not request all strata be shown.
 
-cancer <- cancer %>%
-  filter(ph.ecog < 3) %>%
-  mutate(ph.ecog = factor(ph.ecog))
 Compare stratified models to joint models for risk differences (for simplicity of presentation, count data are omitted):
 
 ```{r joint}
@@ -326,54 +319,23 @@ tribble(
 ```
 
 
-Using `rifttable()`, one can calculate mean differences (`type = "diff"`) or quantile differences (`type = "quantreg"`, by default, at the median):
 
-```{r table2_diff}
 tribble(
-  ~label,                ~type,
-  "Observations",        "total",
-  "Mean age",            "mean",
-  "  Mean difference",   "diff",
-  "Median age",          "median",
-  "  Median difference", "quantreg") %>%
   mutate(
-    exposure = "ph.ecog",
-    outcome = "age") %>%
-  rifttable(data = cancer) %>%
-  rt_gt()  # obtain formatted output
 ```
 
 
-# How can I model ratios of continuous outcomes?
 
-Three types of ratios for continuous outcomes are implemented in `rifttable()`:
 
-`type =` | Ratio of ... | Model | Use
--------|----------|-----------------------|-----------------------------
-`"fold"` | Arithmetric means | Generalized linear model with Gaussian distribution and log link: `glm(y ~ x, family = gaussian(link = "log"))` | Tolerates `0` in the `outcome` variable. May be informative if outcome is normally distributed without transformation.
-`"irrrob"` | Arithmetric means | Generalized linear model with Poisson distribution and log link: `glm(y ~ x, family = poisson())`, with robust (sandwich) standard errors | Tolerates `0` in the `outcome` variable. May be informative if outcome is normally distributed without transformation.
-`"foldlog"` | Geometric means | Linear model with log-transformed outcome: `lm(log(y) ~ x)` | Does not tolerate `0` in the `outcome` variable, as `log(0)` is undefined (R returns `-Inf`). May be informative if outcome is normally distributed after log transformation.
 
-In all models, after exponentiation, beta coefficients can be interpreted as ratios. rifttable automatically does all necessary transformations.
 
-In the `cancer` data (see previous question), ratios of usual (arithmetic) means of age could be considered informative, given that `hist(cancer$age)` etc. does not show a major skew in this outcome.
 
-```{r table2_ratio}
 # How I do I change the level for confidence intervals?
 
 Add a `ci` column to the `design`:
 
 ```{r change_ci}
 tribble(
-  ~label,                                       ~type,
-  "Observations",                               "total",
-  "Mean age",                                   "", 
-  "  Arithmetic mean",                          "mean",
-  "  Geometric mean",                           "geomean",
-  "Mean ratio",                                 "",
-  "  Ratio of arithmetric means",               "fold",
-  "  Ratio of arithmetric means, empirical SE", "irrrob",
-  "  Ratio of geometric means",                 "foldlog") %>%
   ~label,            ~type,                   ~ci,
   "Deaths/N (Risk)", "outcomes/total (risk)", NA,
   "Risk ratio",      "",                      NA,
@@ -381,19 +343,14 @@ tribble(
   "  95% CI",        "rr",                    NA,  # Defaults to 0.95
   "  99% CI",        "rr",                    0.99) %>%
   mutate(
-    exposure = "ph.ecog",
-    outcome = "age") %>%
     exposure = "stage",
     outcome = "death") %>%
   rifttable(
-    data = cancer, 
-    ratio_digits = 3) %>%  # show extra digits to highlight (minor) differences
     data = breastcancer,
     risk_percent = TRUE) %>%
   rt_gt()  # obtain formatted output
 ```
 
-Patients with ECOG performance status of 2, compared to those with performance status 0, are on average 8% older (or 9%, if based on geometric means).
 
 # How do I make rifttable calculate an estimand that is not built-in?
 

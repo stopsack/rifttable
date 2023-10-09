@@ -14,29 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Continuous outcomes
-
-## Comparative estimates with 95% confidence intervals
-
-`type` | Description | Options (`arguments = `)
--------+-------------+--------------
-`"diff"` | Mean difference from linear model. |
-`"fold"` | Fold change from generalized linear model with log link (i.e., ratio of arithmetic means).
-`"foldlog"` | Fold change from linear model after log transformation of the outcome (*i.e.*, ratio of geometric means).
-`"quantreg"` | Quantile difference from quantile regression using `quantreg::rq()` with `method = "fn"`. By default, this is the difference in medians. | `list(tau = 0.75)` to change the quantile to, e.g., the 75th percentile.
-   
-## Absolute estimates per exposure category
-
-`type` | Description | Options (`arguments = `)
--------+-------------+--------------
-`"range"` | Range: Minimum to maximum value.
-`"mean"` | Mean (arithmetic mean).
-`"mean (ci)"` | Mean and 95% CI.
-`"mean (sd)"` | Mean and standard deviation.
-`"geomean"` | Geometric mean.
-`"median"` | Median.
-`"median (iqr)"` | Median and interquartile range.
-
 
 # Binary outcomes
 
