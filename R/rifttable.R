@@ -203,6 +203,9 @@
 #'      * \code{"median (iqr)"} Median and interquartile range.
 #'      * \code{"range"} Range: Minimum to maximum value.
 #'      * \code{"blank"} or \code{""} An empty line.
+#'      * Custom: A custom function that must be available under the name
+#'        \code{estimate_my_function} in order to be callable as
+#'        \code{type = "my_function"}.
 #'
 #'      By default, regression models will be fit separately for each
 #'      stratum of the \code{effect_modifier}. Append \code{"_joint"}
