@@ -282,6 +282,7 @@ observations or, for survival analyses, fewer events than \code{nmin}.
 Defaults to \code{NA}, i.e., to print all estimates.
 \item \code{na_rm}. Optional. Exclude observations with missing outcome.
 Defaults to \code{FALSE}. Use with caution.
+\item \code{ci}. Optional. Confidence level. Defaults to \code{0.95}.
 }
 
 Use \code{\link[tibble]{tibble}}, \code{\link[tibble]{tribble}}, and

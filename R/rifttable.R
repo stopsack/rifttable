@@ -238,6 +238,7 @@
 #'     Defaults to \code{NA}, i.e., to print all estimates.
 #'   * \code{na_rm}. Optional. Exclude observations with missing outcome.
 #'     Defaults to \code{FALSE}. Use with caution.
+#'   * \code{ci}. Optional. Confidence level. Defaults to \code{0.95}.
 #'
 #' Use \code{\link[tibble]{tibble}}, \code{\link[tibble]{tribble}}, and
 #' \code{\link[dplyr]{mutate}} to construct the \code{design} dataset,
