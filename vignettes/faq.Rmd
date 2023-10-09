@@ -289,15 +289,40 @@ rifttable(
 
 
 # How can I model differences in continous outcomes?
+# How can I create joint models?
 
 The following two example use the `cancer` data from the survival package. To compare patient age by ECOG performance status, first recode the variable `ph.ecog` to be categorical (a `factor`), and exclude patients with rare elevated `ecog.ps`:
+By default, regression models will be fit separately for each stratum of the `effect_modifier`. 
 
 ```{r setup}
 data(cancer, package = "survival")
+Append `"_joint"` to `"hr"`, `"rr"`, `"rd"`, `"irr"`, `"irrrob"`, `"diff"`, `"fold"`, `"foldlog"`, `"quantreg"`, or `"or"` to obtain "joint" models for exposure and effect modifier that have a single reference category.
+ 
+Note that the joint model will be fit across all non-missing (`NA`) strata of the effect modifier, even if the `design` table does not request all strata be shown.
 
 cancer <- cancer %>%
   filter(ph.ecog < 3) %>%
   mutate(ph.ecog = factor(ph.ecog))
+Compare stratified models to joint models for risk differences (for simplicity of presentation, count data are omitted):
+
+```{r joint}
+tribble(
+  ~label,                       ~type,      ~stratum,         
+  "**Overall**",                "rd",       c("Low", "High"), 
+  "",                           "",         "",               
+  "**Stratified models**",      "",         "",               
+  "  Low hormone receptor",     "rd",       "Low",           
+  "  High hormone receptor",    "rd",       "High",           
+  "",                           "",         "",               
+  "**Joint models**",           "",         "",               
+  "  Low hormone receptor",     "rd_joint", "Low",
+  "  High hormone receptor",    "rd_joint", "High") %>%
+  mutate(
+    exposure = "stage",
+    outcome = "death",
+    effect_modifier = "receptor") %>%
+  rifttable(data = breastcancer) %>%
+  rt_gt()
 ```
 
 

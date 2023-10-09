@@ -95,16 +95,6 @@ knitr::opts_chunk$set(
 `"medsurv (ci)"` | Median survival with 95% confidence interval.
 
 
-# Joint models for comparative estimates
-
-By default, regression models will be fit separately for each stratum of the `effect_modifier`. 
-
-Append `"_joint"` to `"hr"`, `"rr"`, `"rd"`, `"irr"`, `"irrrob"`, `"diff"`, `"fold"`, `"foldlog"`, `"quantreg"`, or `"or"` to obtain "joint" models for exposure and effect modifier that have a single reference category.
- 
-Example: `type = "hr_joint"`.
-
-Note that the joint model will be fit across all non-missing (`NA`) strata of the effect modifier, even if the `design` table does not request all strata be shown.
-
 
 # Special types
 
