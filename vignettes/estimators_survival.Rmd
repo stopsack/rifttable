@@ -77,7 +77,7 @@ tibble::tribble(
 # Absolute estimates per exposure category
 
 `type` | Description | Options (`arguments = `)
--------+-------------+--------------
+-----+-----------------+---------
 `"cuminc"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator. If no time point is provided, returns cumulative incidence at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show cumulative incidence at 2.5 years.
 `"cuminc (ci)"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator with confidence intervals (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"cuminc"`.
 `"events"` | Event count.
@@ -99,7 +99,7 @@ tibble::tribble(
 # Comparative estimates with confidence intervals
 
 `type` | Description | Options (`arguments = `)
--------+-------------+--------------
+-----+-----------------+-------------
 `"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator, with confidence interval (default: 95%). Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in cumulative incidence at 2.5 years.
 `"hr"`    | Hazard ratio from Cox proportional hazards regression, with confidence interval (default: 95%). | `list(robust = TRUE)` for robust (sandwich) standard errors; `list(weights = "weight_variable", robust = TRUE)` for sampling (e.g., inverse-probability) weights and robust errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
 `"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%).  Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in survival at 2.5 years.

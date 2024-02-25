@@ -76,7 +76,7 @@ tribble(
 # Comparative estimates with confidence intervals
 
 `type` | Description | Options (`arguments = `)
--------+-------------+--------------
+-----+------------------+---------
 `"diff"` | Mean difference from linear model. |
 `"fold"` | Fold change from generalized linear model with log link (i.e., ratio of arithmetic means).
 `"foldlog"` | Fold change from linear model after log transformation of the outcome (*i.e.*, ratio of geometric means).
@@ -89,7 +89,7 @@ tribble(
 Three types of ratios for continuous outcomes are implemented in `rifttable()`:
 
 `type =` | Ratio of ... | Model | Use
--------|----------|-----------------------|-----------------------------
+------|----------|-----------------------|-----------------------------
 `"fold"` | Arithmetic means | Generalized linear model with Gaussian distribution and log link: `glm(y ~ x, family = gaussian(link = "log"))` | Tolerates `0` in the `outcome` variable. May be informative if outcome is normally distributed without transformation.
 `"irrrob"` | Arithmetic means | Generalized linear model with Poisson distribution and log link: `glm(y ~ x, family = poisson())`, with robust (sandwich) standard errors | Tolerates `0` in the `outcome` variable. May be informative if outcome is normally distributed without transformation.
 `"foldlog"` | Geometric means | Linear model with log-transformed outcome: `lm(log(y) ~ x)` | Does not tolerate `0` in the `outcome` variable, as `log(0)` is undefined (R returns `-Inf`). May be informative if outcome is normally distributed after log transformation.
