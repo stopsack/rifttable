@@ -49,8 +49,10 @@
 #'     sex = factor(
 #'       sex,
 #'       levels = 1:2,
-#'       labels = c("Male", "Female")),
-#'       status = status - 1)
+#'       labels = c("Male", "Female")
+#'     ),
+#'     status = status - 1
+#'   )
 #'
 #' survdiff_ci(
 #'   formula = survival::Surv(time = time, event = status) ~ sex,
@@ -58,26 +60,38 @@
 #'   time = 365.25)
 #' # Females have 19 percentage points higher one-year survival than males
 #' # (95% CI, 5 to 34 percentage points).
-survdiff_ci <- function(formula, data, time,
-                        estimand = c("survival", "cuminc"),
-                        conf.level = 0.95) {
+survdiff_ci <- function(
+    formula,
+    data,
+    time,
+    estimand = c("survival", "cuminc"),
+    conf.level = 0.95
+) {
   zval <- stats::qnorm(1 - (1 - conf.level) / 2)
   estimand <- match.arg(estimand)
-  res <- summary(survival::survfit(formula = formula, data = data), time = time)
-  res <- tibble::tibble(term = res$strata,
-                        surv = res$surv,
-                        se = res$std.err)
+  res <- summary(
+    survival::survfit(
+      formula = formula,
+      data = data),
+    time = time)
+  res <- tibble::tibble(
+    term = res$strata,
+    surv = res$surv,
+    se = res$std.err
+  )
   if(estimand == "cuminc")
     res$surv <- 1 - res$surv
   res %>%
     dplyr::transmute(
-      term = stringr::str_remove_all(string = .data$term,
-                                     pattern = "([:alnum:]|\\.|_)+="),
+      term = stringr::str_remove_all(
+        string = .data$term,
+        pattern = "([:alnum:]|\\.|_)+="),
       estimate = .data$surv - .data$surv[1],
       std.error = sqrt(.data$se^2 + .data$se[1]^2),
       statistic = .data$estimate / .data$std.error,
       p.value = 1 - stats::pnorm(.data$statistic),
       conf.low = .data$estimate - zval * .data$std.error,
-      conf.high = .data$estimate + zval * .data$std.error) %>%
+      conf.high = .data$estimate + zval * .data$std.error
+    ) %>%
     dplyr::slice(-1)
 }

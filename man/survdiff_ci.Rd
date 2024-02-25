@@ -56,8 +56,10 @@ cancer <- cancer \%>\%
     sex = factor(
       sex,
       levels = 1:2,
-      labels = c("Male", "Female")),
-      status = status - 1)
+      labels = c("Male", "Female")
+    ),
+    status = status - 1
+  )
 
 survdiff_ci(
   formula = survival::Surv(time = time, event = status) ~ sex,
