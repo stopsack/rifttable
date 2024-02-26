@@ -111,6 +111,6 @@ With only one event type, the `event` variable only has two levels: censoring, t
 
 With competing events, the `event` variable will have additional levels. The `survival::Surv()` function used by rifttable assumes that the first-ordered level represents censoring and the others are different non-censoring events. For example, if the event variable is a factor, then `"Censoring"` needs to be the first of the factor's `levels()`.
 
-It is necessary to specify the event of interest in the `design` if competing events are present. For example, if the `event` variable is a factor variable `status`, with levels `"Censored"`, `"Outcome of interest"`, and `"Other-cause death"`, then specify `type = "status@Outcome of interest"` in the table design.
+It is necessary to specify the event of interest in the `design` if competing events are present. For example, if the `event` variable is a factor variable `status`, with levels `"Censored"`, `"Outcome of interest"`, and `"Other-cause death"`, then specify `event = "status@Outcome of interest"` in the table design.
 
 See the tables above for how competing events are handled. When no details are noted, the event of interest is recoded as the sole event and other events are considered censoring.
