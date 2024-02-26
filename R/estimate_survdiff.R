@@ -19,6 +19,7 @@
 #' @param event Name of event variable
 #' @param time Name of time variable
 #' @param time2 Name of second time variable, if any
+#' @param event_type Level of event variable with competing risks, if any
 #' @param ...
 #'
 #' @return Tibble
@@ -43,6 +44,7 @@ estimate_survdiff <- function(
     to,
     reference,
     arguments,
+    event_type,
     ...) {
   if(is_trend)
     return(tibble::tibble())
@@ -79,7 +81,7 @@ estimate_survdiff <- function(
           is.na(time2),
           true = "survival::Surv(time = .time, ",
           false = "survival::Surv(time = .time_orig, time2 = .time2, "),
-        "event = .event) ~ .exposure")),
+        "event = .event_compete) ~ .exposure")),
     data = data,
     time = timepoint,
     estimand = dplyr::if_else(
@@ -88,7 +90,8 @@ estimate_survdiff <- function(
         pattern = "survdiff"),
       true = "survival",
       false = "cuminc"),
-    conf.level = ci) %>%
+    conf.level = ci,
+    event_type = event_type) %>%
     dplyr::mutate(
       term = paste0(".exposure", .data$term)) %>%
     format_regression_results(

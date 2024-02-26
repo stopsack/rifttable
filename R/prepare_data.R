@@ -118,8 +118,22 @@ prepare_data <- function(
       data$.outcome <- data[[outcome]]
     }
   }
+  event_type <- NULL
   if(!is.na(time) & !is.na(event)) {
     if(time != "" & event != "") {
+      if(stringr::str_detect(
+        string = event,
+        pattern = "@")
+      ) {
+        event_type <- stringr::str_split_i(
+          string = event,
+          pattern = "@",
+          i = 2)
+        event <- stringr::str_split_i(
+          string = event,
+          pattern = "@",
+          i = 1)
+      }
       if(event != outcome | is.na(outcome)) {
         if(!(event %in% names(data)))
           stop(
@@ -135,6 +149,62 @@ prepare_data <- function(
         data <- data %>%
           dplyr::mutate(.event = .data$.outcome)
       }
+      if(!is.null(event_type)) {
+        if(!any(event_type %in% unique(data$.event))) {
+          stop(paste0(
+            "For event variable '",
+            event,
+            "', the specified event type '",
+            event_type,
+            "' is not available in the data. Available are: ",
+            paste(
+              unique(data$.event),
+              collapse = " "
+            )
+          ))
+        }
+        if(!length(stats::na.omit(unique(data$.event))) > 2)
+          stop(paste0(
+            "For event variable '",
+            event,
+            "', the event type '",
+            event_type,
+            "' has been specified. However, the event variable does not ",
+            "appear to have more than two levels to encode competing events ",
+            "and censoring. Available levels are only: ",
+            paste(
+              unique(data$.event),
+              collapse = " "
+            )
+          ))
+      } else {
+        if(length(stats::na.omit(unique(data$.event))) > 2)
+          stop(paste0(
+            "The event variable '",
+            event,
+            "' has more than two non-missing levels, suggesting that ",
+            "competing events may be encoded, but no specific event type ",
+            "(variable level) has been requested via ",
+            "event = 'event_variable@level'. Available levels are: ",
+            paste(
+              unique(data$.event),
+              collapse = " "
+            )
+          ))
+      }
+      # Recode event variable for estimators that only handle one event type
+      data$.event_compete <- data$.event
+      if(!is.null(event_type)) {
+        data <- data %>%
+          dplyr::mutate(
+            .event = dplyr::if_else(
+              condition = .data$.event == event_type,
+              true = 1,
+              false = 0
+            )
+          )
+      }
+
       if(!(time %in% names(data)))
         stop(
           paste0(
@@ -207,5 +277,6 @@ prepare_data <- function(
   list(
     data = data,
     pattern = pattern,
-    xlevels = xlevels)
+    xlevels = xlevels,
+    event_type = event_type)
 }

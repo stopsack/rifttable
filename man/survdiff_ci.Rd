@@ -9,7 +9,8 @@ survdiff_ci(
   data,
   time,
   estimand = c("survival", "cuminc"),
-  conf.level = 0.95
+  conf.level = 0.95,
+  event_type = NULL
 )
 }
 \arguments{
@@ -27,6 +28,9 @@ or cumulative incidence (\code{"cuminc"})? This parameter affects the
 sign of the differences. Defaults to \code{"survival"}.}
 
 \item{conf.level}{Optional. Confidence level. Defaults to \code{0.95}.}
+
+\item{event_type}{Optional. Event type (level) for event variable with
+competing events. Defaults to \code{NULL}.}
 }
 \value{
 Tibble in \code{\link[broom]{tidy}} format:

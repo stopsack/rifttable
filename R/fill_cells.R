@@ -263,6 +263,7 @@ fill_cells <- function(
       reference = reference,
       factor = factor,
       arguments = arguments,
+      event_type = data_prep$event_type,
       is_trend = FALSE))
 
   if(setequal(
@@ -320,6 +321,7 @@ fill_cells <- function(
         reference = reference,
         factor = factor,
         arguments = arguments,
+        event_type = data_prep$event_type,
         is_trend = TRUE))
     if(setequal(
       res_cat,

@@ -39,6 +39,7 @@ estimate_event_time <- function(
     to,
     arguments,
     is_trend,
+    event_type = NULL,
     ...) {
   if(is_trend)
     return(tibble::tibble())
@@ -169,6 +170,10 @@ estimate_event_time <- function(
     },
     "medsurv" =,
     "medsurv (ci)" = {
+      if(!is.null(event_type)) {
+        warning(paste(
+          "type = 'medsurv': Note the presence of competing events."))
+      }
       data %>%
         dplyr::summarize(
           res = {
@@ -254,6 +259,15 @@ estimate_event_time <- function(
     "surv (ci)" =,
     "cuminc" =,
     "cuminc (ci)" = {
+      if(!is.null(event_type) &
+         stringr::str_detect(
+           string = type,
+           pattern = "surv")
+      ) {
+        stop(paste(
+          "Survival (type = 'surv') is not estimated with competing risks.",
+          "Use type = 'cuminc'."))
+      }
       data %>%
         dplyr::summarize(
           res = {
@@ -261,14 +275,14 @@ estimate_event_time <- function(
               fit <- survival::survfit(
                 formula = survival::Surv(
                   time  = .data$.time,
-                  event = .data$.event) ~ 1,
+                  event = .data$.event_compete) ~ 1,
                 conf.int = ci)
             } else {
               fit <- survival::survfit(
                 formula = survival::Surv(
                   time  = .data$.time_orig,
                   time2 = .data$.time2,
-                  event = .data$.event) ~ 1,
+                  event = .data$.event_compete) ~ 1,
                 conf.int = ci)
             }
             if(is.na(timepoint))
@@ -281,7 +295,9 @@ estimate_event_time <- function(
 
             if(stringr::str_detect(
               string = type,
-              pattern = "cuminc")) {
+              pattern = "cuminc") &
+              is.null(event_type)
+            ) {
               added <- 1
               multiply <- -1
               first_limit <- "upper"
@@ -293,13 +309,37 @@ estimate_event_time <- function(
               second_limit <- "upper"
             }
 
+            if(is.null(event_type)) {
+              est <- fit %>%
+                purrr::pluck("surv") %>%
+                dplyr::last()
+              ci_first <- fit %>%
+                purrr::pluck(first_limit) %>%
+                dplyr::last()
+              ci_second <- fit %>%
+                purrr::pluck(second_limit) %>%
+                dplyr::last()
+            } else {
+              est <- utils::tail(
+                fit$pstate[, which(fit$states == event_type)],
+                n = 1)
+              ci_first <- fit %>%
+                purrr::pluck(first_limit)
+              ci_first <- utils::tail(
+                ci_first[, which(fit$states == event_type)],
+                n = 1)
+              ci_second <- fit %>%
+                purrr::pluck(second_limit)
+              ci_second <- utils::tail(
+                ci_second[, which(fit$states == event_type)],
+                n = 1)
+            }
+
             paste0(
               format_round(
                 (added +
                    multiply *
-                   (fit %>%
-                      purrr::pluck("surv") %>%
-                      dplyr::last())) *
+                   est) *
                   percent_100,
                 digits = digits),
               percent_symbol,
@@ -311,18 +351,14 @@ estimate_event_time <- function(
                   format_round(
                     (added +
                        multiply *
-                       (fit %>%
-                          purrr::pluck(first_limit) %>%
-                          dplyr::last())) *
+                       ci_first) *
                       percent_100,
                     digits = digits),
                   to,
                   format_round(
                     (added +
                        multiply *
-                       (fit %>%
-                          purrr::pluck(second_limit) %>%
-                          dplyr::last())) *
+                       ci_second) *
                       percent_100,
                     digits = digits),
                   ")"),

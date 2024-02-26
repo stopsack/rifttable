@@ -14,6 +14,8 @@
 #'   or cumulative incidence (\code{"cuminc"})? This parameter affects the
 #'   sign of the differences. Defaults to \code{"survival"}.
 #' @param conf.level Optional. Confidence level. Defaults to \code{0.95}.
+#' @param event_type Optional. Event type (level) for event variable with
+#'   competing events. Defaults to \code{NULL}.
 #'
 #' @references
 #' Com-Nougue C, Rodary C, Patte C. How to establish equivalence when data are
@@ -65,7 +67,8 @@ survdiff_ci <- function(
     data,
     time,
     estimand = c("survival", "cuminc"),
-    conf.level = 0.95
+    conf.level = 0.95,
+    event_type = NULL
 ) {
   zval <- stats::qnorm(1 - (1 - conf.level) / 2)
   estimand <- match.arg(estimand)
@@ -73,14 +76,27 @@ survdiff_ci <- function(
     survival::survfit(
       formula = formula,
       data = data),
-    time = time)
-  res <- tibble::tibble(
-    term = res$strata,
-    surv = res$surv,
-    se = res$std.err
-  )
-  if(estimand == "cuminc")
-    res$surv <- 1 - res$surv
+    time = time,
+    extend = TRUE)
+  if(is.null(event_type)) {
+    res <- tibble::tibble(
+      term = res$strata,
+      surv = res$surv,
+      se = res$std.err
+    )
+    if(estimand == "cuminc")
+      res$surv <- 1 - res$surv
+  } else {
+    if(estimand == "survival")
+      stop(paste(
+        "type = 'survdiff' may not be meaningful with competing events.",
+        "Use: type = 'cumincdiff'."))
+    res <- tibble::tibble(
+      term = res$strata,
+      surv = res$pstate[, which(res$states == event_type)],
+      se = res$std.err[, which(res$states == event_type)]
+    )
+  }
   res %>%
     dplyr::transmute(
       term = stringr::str_remove_all(

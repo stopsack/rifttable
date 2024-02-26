@@ -78,20 +78,20 @@ tibble::tribble(
 
 `type` | Description | Options (`arguments = `)
 -----+-----------------+---------
-`"cuminc"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator. If no time point is provided, returns cumulative incidence at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show cumulative incidence at 2.5 years.
-`"cuminc (ci)"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator with confidence intervals (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"cuminc"`.
+`"cuminc"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator. If no time point is provided, returns cumulative incidence at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show cumulative incidence at 2.5 years.
+`"cuminc (ci)"` | Cumulative incidence ("risk"), as above, with confidence intervals (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"cuminc"`.
 `"events"` | Event count.
 `"events/time"` | Events slash person-time.
 `"events/time (rate)"` | A combination: Events slash time followed by rate in parentheses.
 `"events/total"` | Events slash number of observations.
 `"rate"` | Event rate: event count divided by person-time, multiplied by the `rifttable()` parameter `factor`.
 `"rate (ci)"` | Event rate with confidence interval (default: 95%; Poisson-type large-sample interval).
-`"surv"` | Survival from the Kaplan-Meier estimator. If no time point is provided, returns survival at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show survival at 2.5 years.
-`"surv (ci)"` | Survival from the Kaplan-Meier estimator with confidence interval (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"surv"`.
+`"surv"` | Survival from the Kaplan-Meier estimator. Not estimated if competing risks are present. If no time point is provided, returns survival at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show survival at 2.5 years.
+`"surv (ci)"` | Survival from the Kaplan-Meier estimator, as above, with confidence interval (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"surv"`.
 `"time"` | Person-time.
 `"maxfu"` | Maximum follow-up time.
-`"medfu"` | Median follow-up (reverse Kaplan-Meier), equals median survival for censoring.
-`"medfu (iqr)"` | Median and interquartile range for follow-up.
+`"medfu"` | Median follow-up ("reverse Kaplan-Meier"), equals median survival for censoring. If competing risks are present, events other than the event of interest are also considered censoring to estimate the median follow-up for the event of interest.
+`"medfu (iqr)"` | Median and interquartile range for follow-up, as above.
 `"medsurv"` | Median survival.
 `"medsurv (ci)"` | Median survival with confidence interval (default: 95%).
 
@@ -100,6 +100,17 @@ tibble::tribble(
 
 `type` | Description | Options (`arguments = `)
 -----+-----------------+-------------
-`"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator, with confidence interval (default: 95%). Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in cumulative incidence at 2.5 years.
-`"hr"`    | Hazard ratio from Cox proportional hazards regression, with confidence interval (default: 95%). | `list(robust = TRUE)` for robust (sandwich) standard errors; `list(weights = "weight_variable", robust = TRUE)` for sampling (e.g., inverse-probability) weights and robust errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
-`"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%).  Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in survival at 2.5 years.
+`"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator, with confidence interval (default: 95%). Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in cumulative incidence at 2.5 years.
+`"hr"`    | Hazard ratio from Cox proportional hazards regression, with confidence interval (default: 95%). If competing events are present, hazard ratios are cause-specific for the event of interest. | `list(robust = TRUE)` for robust (sandwich) standard errors; `list(weights = "weight_variable", robust = TRUE)` for sampling (e.g., inverse-probability) weights and robust errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
+`"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%). Not estimated if competing risks are present. Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in survival at 2.5 years.
+
+
+# Competing events
+
+With only one event type, the `event` variable only has two levels: censoring, typically encoded as `0`, and the event, typically encoded as `1`. 
+
+With competing events, the `event` variable will have additional levels. The `survival::Surv()` function used by rifttable assumes that the first-ordered level represents censoring and the others are different non-censoring events. For example, if the event variable is a factor, then `"Censoring"` needs to be the first of the factor's `levels()`.
+
+It is necessary to specify the event of interest in the `design` if competing events are present. For example, if the `event` variable is a factor variable `status`, with levels `"Censored"`, `"Outcome of interest"`, and `"Other-cause death"`, then specify `type = "status@Outcome of interest"` in the table design.
+
+See the tables above for how competing events are handled. When no details are noted, the event of interest is recoded as the sole event and other events are considered censoring.
