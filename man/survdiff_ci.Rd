@@ -25,7 +25,9 @@ least 2 categories.}
 
 \item{estimand}{Optional. Estimate difference in survival (\code{"survival"})
 or cumulative incidence (\code{"cuminc"})? This parameter affects the
-sign of the differences. Defaults to \code{"survival"}.}
+sign of the differences. Only \code{"cuminc"} is available if competing
+events are present, i.e., \code{event_type} is not \code{NULL}.
+Defaults to \code{"survival"}.}
 
 \item{conf.level}{Optional. Confidence level. Defaults to \code{0.95}.}
 
@@ -48,8 +50,10 @@ survival package/\code{\link[survival]{survfit}}).
 }
 }
 \description{
-This function estimates the unadjusted difference in survival at a given time
-point based on the difference between per-group Kaplan-Meier estimates.
+This function estimates the unadjusted difference in survival or cumulative
+incidence (risk) at a given time point based on the difference between
+per-group Kaplan-Meier estimates or, if competing events are prevent,
+Aalen-Johansen estimates of the cumulative incidence.
 }
 \examples{
 # Load 'cancer' dataset from survival package (Used in all examples)

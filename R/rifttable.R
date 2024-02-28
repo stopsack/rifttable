@@ -82,8 +82,13 @@
 #'        \code{\link[survival]{Surv}}.
 #'   *  \code{event} The event variable for survival data.
 #'        Events are typically \code{1}, censored observations \code{0}.
-#'        Needed for, e.g., \code{type = "hr"} and \code{type = "rate"}
-#'        (i.e., whenever \code{outcome} is not used).
+#'        If competing events are present, censoring should be the
+#'        first-ordered level, e.g., of a factor, and the level corresponding
+#'        to the event of interest should be supplied as
+#'        \code{event = "event_variable@Recurrence"} if \code{"Recurrence"} is
+#'        the event of interest. The \code{event} variable is needed for, e.g.,
+#'        \code{type = "hr"} and \code{type = "rate"}, i.e., whenever
+#'        \code{outcome} is not used.
 #'   *  \code{trend} Optional. For regression models, a continuous
 #'        representation of the exposure, for which a slope per one unit
 #'        increase ("trend") will be estimated. Must be a numeric variable.
@@ -136,9 +141,10 @@
 #'        Provide time horizon, e.g., \code{"survdiff 2.5"} to evaluate
 #'        differences in survival at 2.5 years. Cannot not handle confounders.
 #'        Uses \code{\link[rifttable]{survdiff_ci}}.
-#'      * \code{"cumincdiff"} Difference in cumulative incidence from
-#'        Kaplan-Meier estimator. Provide time horizon, e.g.,
-#'        \code{"cumincdiff 2.5"} to evaluate differences in cumulative
+#'      * \code{"cumincdiff"} Difference in cumulative incidence from the
+#'        Kaplan-Meier estimator or, if competing risks are present, its
+#'        generalized form, the Aalen-Johansen estimator. Provide time horizon,
+#'        e.g., \code{"cumincdiff 2.5"} to evaluate differences in cumulative
 #'        incidence at 2.5 years. Cannot not handle confounders.
 #'        Uses \code{\link[rifttable]{survdiff_ci}}.
 #'
@@ -160,14 +166,16 @@
 #'        (Wilson score interval for binomial proportions, see
 #'        \code{\link[rifttable]{scoreci}}).
 #'      * \code{"cuminc"} Cumulative incidence ("risk") from the Kaplan-Meier
-#'        estimator. Provide time point (e.g., 1.5-year cumulative incidence)
-#'        using \code{"cuminc 1.5"}. If no time point is provided, returns
-#'        cumulative incidence at end of follow-up. Change between display as
-#'        proportion or percent using the parameter \code{risk_percent}.
-#'      * \code{"cuminc (ci)"} Cumulative incidence ("risk") from the
-#'        Kaplan-Meier estimator with 95% confidence intervals (Greenwood
-#'        standard errors with log transformation, the
-#'        default of the survival package/\code{\link[survival]{survfit}}).
+#'        estimator or, if competing risks are present, its generalized form,
+#'        the Aalen-Johansen estimator. Provide time point (e.g., 1.5-year
+#'        cumulative incidence) using \code{"cuminc 1.5"}. If no time point is
+#'        provided, the cumulative incidence at end of follow-up is returned.
+#'        Change between display as proportion or percent using the parameter
+#'        \code{risk_percent}.
+#'      * \code{"cuminc (ci)"} Cumulative incidence ("risk"), as above,
+#'        with 95% confidence intervals (Greenwood standard errors with log
+#'        transformation, the default of the survival package/
+#'        \code{\link[survival]{survfit}}).
 #'        Provide time point as in \code{"cuminc"}.
 #'      * \code{"surv"} Survival from the Kaplan-Meier
 #'        estimator. Provide time point (e.g., 1.5-year survival)
