@@ -20,6 +20,9 @@
 #' @param conf.level Optional. Confidence level. Defaults to \code{0.95}.
 #' @param event_type Optional. Event type (level) for event variable with
 #'   competing events. Defaults to \code{NULL}.
+#' @param id_variable Optional. Identifiers for individual oberversations, required
+#'   if data are clustered, or if competing events and time/time2 notation are
+#'   used concomitantly.
 #'
 #' @references
 #' Com-Nougue C, Rodary C, Patte C. How to establish equivalence when data are
@@ -72,14 +75,22 @@ survdiff_ci <- function(
     time,
     estimand = c("survival", "cuminc"),
     conf.level = 0.95,
-    event_type = NULL
+    event_type = NULL,
+    id_variable = NULL
 ) {
+  .id <- NULL  # address seemingly global variable ".id" in survfit() call
+  data$.id <- find_id(
+    data = data,
+    id_variable = id_variable
+  )
   zval <- stats::qnorm(1 - (1 - conf.level) / 2)
   estimand <- match.arg(estimand)
   res <- summary(
     survival::survfit(
       formula = formula,
-      data = data),
+      data = data,
+      id = .id
+    ),
     time = time,
     extend = TRUE)
   if(is.null(event_type)) {

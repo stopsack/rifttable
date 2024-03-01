@@ -87,6 +87,15 @@ estimate_event_time <- function(
     arguments = arguments,
     which_argument = "timepoint",
     is_numeric = TRUE)  # default: NA
+  data$.id <- find_id(
+    data = data,
+    id_variable = find_argument(
+      arguments = arguments,
+      which_argument = "id",
+      is_numeric = FALSE,
+      default = NULL
+    )
+  )
 
   switch(
     EXPR = type,
@@ -276,14 +285,18 @@ estimate_event_time <- function(
                 formula = survival::Surv(
                   time  = .data$.time,
                   event = .data$.event_compete) ~ 1,
-                conf.int = ci)
+                conf.int = ci,
+                id = .data$.id,
+              )
             } else {
               fit <- survival::survfit(
                 formula = survival::Surv(
                   time  = .data$.time_orig,
                   time2 = .data$.time2,
                   event = .data$.event_compete) ~ 1,
-                conf.int = ci)
+                conf.int = ci,
+                id = .data$.id
+              )
             }
             if(is.na(timepoint))
               fit <- summary(fit)

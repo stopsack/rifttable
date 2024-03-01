@@ -91,7 +91,14 @@ estimate_survdiff <- function(
       true = "survival",
       false = "cuminc"),
     conf.level = ci,
-    event_type = event_type) %>%
+    event_type = event_type,
+    id_variable = find_argument(
+      arguments = arguments,
+      which_argument = "id",
+      is_numeric = FALSE,
+      default = NULL
+    )
+  ) %>%
     dplyr::mutate(
       term = paste0(".exposure", .data$term)) %>%
     format_regression_results(

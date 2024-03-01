@@ -10,7 +10,8 @@ survdiff_ci(
   time,
   estimand = c("survival", "cuminc"),
   conf.level = 0.95,
-  event_type = NULL
+  event_type = NULL,
+  id_variable = NULL
 )
 }
 \arguments{
@@ -33,6 +34,10 @@ Defaults to \code{"survival"}.}
 
 \item{event_type}{Optional. Event type (level) for event variable with
 competing events. Defaults to \code{NULL}.}
+
+\item{id_variable}{Optional. Identifiers for individual oberversations, required
+if data are clustered, or if competing events and time/time2 notation are
+used concomitantly.}
 }
 \value{
 Tibble in \code{\link[broom]{tidy}} format:

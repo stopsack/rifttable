@@ -78,7 +78,7 @@ tibble::tribble(
 
 `type` | Description | Options (`arguments = `)
 -----+-----------------+---------
-`"cuminc"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator. If no time point is provided, returns cumulative incidence at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show cumulative incidence at 2.5 years.
+`"cuminc"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator. If no time point is provided, returns cumulative incidence at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `timepoint`, `id`. Example: `list(timepoint = 2.5, id = "id_variable")` to show 2.5-year risk and to set a variable identifying individuals  (for `survival::survfit()`, e.g., with `time` and `time2` set up; if none is set, each row is taken as one individual).
 `"cuminc (ci)"` | Cumulative incidence ("risk"), as above, with confidence intervals (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"cuminc"`.
 `"events"` | Event count.
 `"events/time"` | Events slash person-time.
@@ -86,8 +86,8 @@ tibble::tribble(
 `"events/total"` | Events slash number of observations.
 `"rate"` | Event rate: event count divided by person-time, multiplied by the `rifttable()` parameter `factor`.
 `"rate (ci)"` | Event rate with confidence interval (default: 95%; Poisson-type large-sample interval).
-`"surv"` | Survival from the Kaplan-Meier estimator. Not estimated if competing risks are present. If no time point is provided, returns survival at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `list(timepoint = 2.5)` to show survival at 2.5 years.
-`"surv (ci)"` | Survival from the Kaplan-Meier estimator, as above, with confidence interval (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"surv"`.
+`"surv"` | Survival from the Kaplan-Meier estimator. Not estimated if competing risks are present. If no time point is provided, returns survival at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | See `"cuminc"`.
+`"surv (ci)"` | Survival from the Kaplan-Meier estimator, as above, with confidence interval (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"cuminc"`.
 `"time"` | Person-time.
 `"maxfu"` | Maximum follow-up time.
 `"medfu"` | Median follow-up ("reverse Kaplan-Meier"), equals median survival for censoring. If competing risks are present, events other than the event of interest are also considered censoring to estimate the median follow-up for the event of interest.
@@ -100,9 +100,9 @@ tibble::tribble(
 
 `type` | Description | Options (`arguments = `)
 -----+-----------------+-------------
-`"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator, with confidence interval (default: 95%). Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in cumulative incidence at 2.5 years.
+`"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator, with confidence interval (default: 95%). Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `timepoint`, `id`. Example: `list(timepoint = 2.5, id = "id_variable")` to calculate difference in 2.5-year risk and to set a variable identifying individuals  (for `survival::survfit()`, e.g., with `time` and `time2` set up; if none is set, each row is taken as one individual).
 `"hr"`    | Hazard ratio from Cox proportional hazards regression, with confidence interval (default: 95%). If competing events are present, hazard ratios are cause-specific for the event of interest. | `list(robust = TRUE)` for robust (sandwich) standard errors; `list(weights = "weight_variable", robust = TRUE)` for sampling (e.g., inverse-probability) weights and robust errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
-`"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%). Not estimated if competing risks are present. Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `list(timepoint = 2.5)` to evaluate differences in survival at 2.5 years.
+`"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%). Not estimated if competing risks are present. Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | See `"cuminc"`.
 
 
 # Competing events
