@@ -177,6 +177,15 @@ prepare_data <- function(
               collapse = " "
             )
           ))
+        if(!is.factor(data$.event))
+          stop(paste0(
+            "The event variable '",
+            event,
+            "' with more than two levels to presumably encode competing ",
+            "events must be a factor. However, the current type was '",
+            class(data$.event),
+            "'."
+          ))
       } else {
         if(length(stats::na.omit(unique(data$.event))) > 2)
           stop(paste0(
