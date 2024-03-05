@@ -462,6 +462,7 @@ rifttable <- function(
   if(!("outcome"     %in% names(design))) design$outcome     <- NA
   if(!("trend"       %in% names(design))) design$trend       <- NA
   if(!("confounders" %in% names(design))) design$confounders <- ""
+  if(!("weights"     %in% names(design))) design$weights     <- NA
   if(!("type2"       %in% names(design))) design$type2       <- ""
   if(!("digits"      %in% names(design))) design$digits      <- NA
   if(!("digits2"     %in% names(design))) design$digits2     <- NA
@@ -625,6 +626,7 @@ rifttable <- function(
           .data$effect_modifier,
           .data$stratum,
           .data$confounders,
+          .data$weights,
           .data$type,
           .data$trend,
           .data$digits,
@@ -712,6 +714,7 @@ rifttable <- function(
             .data$effect_modifier,
             .data$stratum,
             .data$confounders,
+            .data$weights,
             .data$type2,  # !
             .data$trend,
             .data$digits2,  # !

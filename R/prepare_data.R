@@ -8,6 +8,7 @@
 #' @param event String: Name of the event variable. Optional.
 #' @param time String: Name of the first time (entry) variable. Optional.
 #' @param time2 String: Name of the second time (exit) variable. Optional.
+#' @param weights String: Name of the weighting variable. Optional.
 #' @param type String: Name of estimator. Optional.
 #' @param effectmodifier String: Name of the effect modifier variable.
 #'   Optional.
@@ -23,6 +24,7 @@ prepare_data <- function(
     event = NA,
     time = NA,
     time2 = NA,
+    weights = NA,
     type = "",
     effectmodifier = NULL,
     effectmodifier_level = NULL) {
@@ -282,6 +284,26 @@ prepare_data <- function(
             tidyr::drop_na(".outcome")
     }
   }
+
+  if(!is.na(weights)) {
+    if(weights != "") {
+      if(!(weights %in% names(data)))
+        stop(
+          paste0(
+            "weights = '",
+            weights,
+            "': Variable is not valid for the dataset."))
+      data$.weights <- data[[weights]]
+      if(!is.numeric(data$.weights))
+        stop(
+          paste0(
+            "weights = '",
+            weights,
+            "': Variable is not numeric."))
+    }
+  }
+  if(!".weights" %in% colnames(data))
+    data$.weights <- 1
 
   list(
     data = data,

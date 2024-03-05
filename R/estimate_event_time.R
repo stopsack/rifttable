@@ -286,6 +286,7 @@ estimate_event_time <- function(
                   time  = .data$.time,
                   event = .data$.event_compete) ~ 1,
                 conf.int = ci,
+                weights = .data$.weights,
                 id = .data$.id,
               )
             } else {
@@ -295,6 +296,7 @@ estimate_event_time <- function(
                   time2 = .data$.time2,
                   event = .data$.event_compete) ~ 1,
                 conf.int = ci,
+                weights = .data$.weights,
                 id = .data$.id
               )
             }
