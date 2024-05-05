@@ -34,6 +34,12 @@ Formatting includes:
 \item No top border
 \item Bold column labels
 }
+
+If this function is called within a document that is being knit to plain
+markdown, such as \code{format: gfm} in a Quarto document or
+\code{format: github_document} in an RMarkdown document, then a
+markdown-formatted table (e.g., without footnotes) is returned via
+\code{\link[knitr]{kable}}.
 }
 \section{Example Output}{
 
