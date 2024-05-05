@@ -62,9 +62,14 @@ rt_gt <- function(
     indent = 10,
     remove_border = TRUE) {
   # RMarkdown "output: github_document" cannot handle HTML styles
-  if(any(stringr::str_detect(
-    string = c("", knitr::opts_knit$get("rmarkdown.pandoc.to")),
-    pattern = "gfm"))) {
+  # Likewise Quarto counterpart "output: gfm"
+  if(
+    any(
+      stringr::str_detect(
+        string = c("", knitr::opts_knit$get("rmarkdown.pandoc.to")),
+        pattern = "gfm|commonmark")
+    )
+  ) {
     res <- knitr::kable(df)
     attr(x = res, which = "mydata") <- df
     return(res)
