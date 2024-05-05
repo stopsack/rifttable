@@ -90,7 +90,12 @@ prepare_data <- function(
       if(!is.null(effectmodifier_level) &
          !(is.null(effectmodifier) |
            is.na(effectmodifier))) {
-        if(!(all(effectmodifier_level == ""))) {
+        if(
+          !all(
+            effectmodifier_level == "",
+            na.rm = TRUE
+          )
+        ) {
           data$.effectmod <- data[[effectmodifier]]
           data <- data %>%
             dplyr::filter(.data$.effectmod %in% effectmodifier_level)
