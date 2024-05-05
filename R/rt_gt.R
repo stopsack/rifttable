@@ -61,15 +61,6 @@ rt_gt <- function(
     md = 1,
     indent = 10,
     remove_border = TRUE) {
-  if (!requireNamespace("gt", quietly = TRUE)) {
-    stop(
-      paste(
-        "The package \"gt\" must be installed to create formatted tables",
-        "via rifttable::rt_gt(). Use alternative packages for table",
-        "formatting or install \"gt\":\n   install.packages(\"gt\")"),
-      call. = FALSE)
-  }
-
   # RMarkdown "output: github_document" cannot handle HTML styles
   if(any(stringr::str_detect(
     string = c("", knitr::opts_knit$get("rmarkdown.pandoc.to")),
@@ -78,6 +69,14 @@ rt_gt <- function(
     attr(x = res, which = "mydata") <- df
     return(res)
   } else {
+    if (!requireNamespace("gt", quietly = TRUE)) {
+      stop(
+        paste(
+          "The package \"gt\" must be installed to create formatted tables",
+          "via rifttable::rt_gt(). Use alternative packages for table",
+          "formatting or install \"gt\":\n   install.packages(\"gt\")"),
+        call. = FALSE)
+    }
     df_gt <- df %>%
       gt::gt(id = "rifttable") %>%
       rt_tabstyle()
