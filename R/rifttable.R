@@ -147,6 +147,16 @@
 #'        e.g., \code{"cumincdiff 2.5"} to evaluate differences in cumulative
 #'        incidence at 2.5 years. Cannot not handle confounders.
 #'        Uses \code{\link[rifttable]{survdiff_ci}}.
+#'      * \code{"survratio"} Ratio in survival from Kaplan-Meier estimator.
+#'        Provide time horizon, e.g., \code{"survdiff 2.5"} to evaluate
+#'        2.5-year relative risk. Cannot not handle confounders.
+#'        Uses \code{\link[rifttable]{survdiff_ci}}.
+#'      * \code{"cumincratio"} Ratio in cumulative incidence from the
+#'        Kaplan-Meier estimator or, if competing risks are present, its
+#'        generalized form, the Aalen-Johansen estimator. Provide time horizon,
+#'        e.g., \code{"cumincdiff 2.5"} to evaluate the 2.5-year risk
+#'        difference. Cannot not handle confounders.
+#'        Uses \code{\link[rifttable]{survdiff_ci}}.
 #'
 #'      Absolute estimates per exposure category:
 #'

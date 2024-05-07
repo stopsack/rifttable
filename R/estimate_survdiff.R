@@ -87,9 +87,15 @@ estimate_survdiff <- function(
     estimand = dplyr::if_else(
       stringr::str_detect(
         string = type,
-        pattern = "survdiff"),
+        pattern = "surv"),
       true = "survival",
       false = "cuminc"),
+    type = dplyr::if_else(
+      stringr::str_detect(
+        string = type,
+        pattern = "diff"),
+      true = "diff",
+      false = "ratio"),
     conf.level = ci,
     event_type = event_type,
     id_variable = find_argument(
@@ -112,7 +118,12 @@ estimate_survdiff <- function(
       digits = digits,
       pattern = pattern,
       xlevels = xlevels,
-      reference = 0,
+      reference = dplyr::if_else(
+        stringr::str_detect(
+          string = type,
+          pattern = "diff"),
+        true = 0,
+        false = 1),
       nmin = nmin,
       to = to,
       reference_label = reference,

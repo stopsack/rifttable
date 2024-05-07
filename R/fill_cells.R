@@ -198,7 +198,11 @@ fill_cells <- function(
     "survdiff" =,
     "survdiff_joint" =,
     "cumincdiff" =,
-    "cumincdiff_joint" = "survdiff",
+    "cumincdiff_joint" =,
+    "survratio" =,
+    "survratio_joint" =,
+    "cumincratio" =,
+    "cumincratio_joint" = "survdiff",
 
     "hr" =,
     "hr_joint" = "regress_cox",

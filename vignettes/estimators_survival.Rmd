@@ -59,9 +59,11 @@ tibble::tribble(
   "  Median survival (95 CI), years",      "medsurv (ci)",
   "",                                      "",
   "**Comparative estimates**",             "",
-  "Difference in 1-year survival",         "survdiff",
-  "Difference in 1-year risk",             "cumincdiff",
-  "Hazard ratio (95% CI)",                 "hr") %>%
+  "  1-year survival difference",          "survdiff",
+  "  1-year risk difference",              "cumincdiff",
+  "  1-year survival ratio",               "survratio",
+  "  1-year risk ratio",                   "cumincratio",
+  "  Hazard ratio (95% CI)",               "hr") %>%
   dplyr::mutate(
     time = "time", 
     event = "status", 
@@ -100,9 +102,11 @@ tibble::tribble(
 
 `type` | Description | Options (`arguments = `)
 -----+-----------------+-------------
-`"cumincdiff"` | Difference in cumulative incidence from Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator, with confidence interval (default: 95%). Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `timepoint`, `id`. Example: `list(timepoint = 2.5, id = "id_variable")` to calculate difference in 2.5-year risk and to set a variable identifying individuals  (for `survival::survfit()`, e.g., with `time` and `time2` set up; if none is set, each row is taken as one individual).
+`"cumincdiff"` | Difference in cumulative incidence (risk difference) from Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator, with confidence interval (default: 95%). Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `timepoint`, `id`. Example: `list(timepoint = 2.5, id = "id_variable")` to calculate difference in 2.5-year risk and to set a variable identifying individuals  (for `survival::survfit()`, e.g., with `time` and `time2` set up; if none is set, each row is taken as one individual).
+`"cumincratio"` | Ratio of cumulative incidence (risk ratio), with confidence interval (default: 95%), similar to `"cumincdiff"`. | `timepoint`, `id`
 `"hr"`    | Hazard ratio from Cox proportional hazards regression, with confidence interval (default: 95%). If competing events are present, hazard ratios are cause-specific for the event of interest. | `list(robust = TRUE)` for robust (sandwich) standard errors; `list(weights = "weight_variable", robust = TRUE)` for sampling (e.g., inverse-probability) weights and robust errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
-`"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%). Not estimated if competing risks are present. Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | See `"cuminc"`.
+`"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%). Not estimated if competing risks are present. Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | See `"cumincdiff"`.
+`"survratio"` | Ratio of survival from Kaplan-Meier estimator, with confidence interval (default: 95%), similar to `"survdiff"`. | See `"cumincdiff"`.
 
 
 # Competing events

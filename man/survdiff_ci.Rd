@@ -9,6 +9,7 @@ survdiff_ci(
   data,
   time,
   estimand = c("survival", "cuminc"),
+  type = c("diff", "ratio"),
   conf.level = 0.95,
   event_type = NULL,
   id_variable = NULL
@@ -30,6 +31,10 @@ sign of the differences. Only \code{"cuminc"} is available if competing
 events are present, i.e., \code{event_type} is not \code{NULL}.
 Defaults to \code{"survival"}.}
 
+\item{type}{Optional. Estimate differences (\code{"diff"}) or ratio
+(\code{"ratio"}) of survival or cumulative incidence? Defaults to
+\code{"diff"}.}
+
 \item{conf.level}{Optional. Confidence level. Defaults to \code{0.95}.}
 
 \item{event_type}{Optional. Event type (level) for event variable with
@@ -43,7 +48,7 @@ used concomitantly.}
 Tibble in \code{\link[broom]{tidy}} format:
 \itemize{
 \item \code{term} Name of the exposure stratum.
-\item \code{estimate} Difference in survival at \code{time}.
+\item \code{estimate} Difference or ratio.
 \item \code{std.error} Large-sample standard error of the difference in survival
 functions (see References). For each survival function, Greenwood
 standard errors with log transformation are used, the default of the
@@ -55,10 +60,13 @@ survival package/\code{\link[survival]{survfit}}).
 }
 }
 \description{
-This function estimates the unadjusted difference in survival or cumulative
-incidence (risk) at a given time point based on the difference between
-per-group Kaplan-Meier estimates or, if competing events are prevent,
+This function estimates the unadjusted difference or ratio in survival or
+cumulative incidence (risk) at a given time point based on the difference
+between per-group Kaplan-Meier estimates or, if competing events are prevent,
 Aalen-Johansen estimates of the cumulative incidence.
+
+For constructing confidence limits of ratios, the approach described by Zou
+and Donner (2008) is used.
 }
 \examples{
 # Load 'cancer' dataset from survival package (Used in all examples)
@@ -89,4 +97,8 @@ Stat Med 1993;12:1353–64. \url{https://doi.org/10.1002/sim.4780121407}.
 Altman DG, Andersen PK. Calculating the number needed to treat for trials
 where the outcome is time to an event. BMJ 1999;319:1492–5.
 \url{https://doi.org/10.1136/bmj.319.7223.14929}.
+
+Zou GY, Donner A. Construction of confidence limits about effect measures:
+A general approach. Statist Med 2008;27:1693–1702.
+\url{https://doi.org/10.1002/sim.3095}
 }
