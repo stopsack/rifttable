@@ -120,7 +120,7 @@ survdiff_ci <- function(
       estimate = .data$surv - .data$surv[1],
       std.error = sqrt(.data$se^2 + .data$se[1]^2),
       statistic = .data$estimate / .data$std.error,
-      p.value = 1 - stats::pnorm(.data$statistic),
+      p.value = 1 - stats::pnorm(abs(.data$statistic)),
       conf.low = .data$estimate - zval * .data$std.error,
       conf.high = .data$estimate + zval * .data$std.error
     ) %>%
