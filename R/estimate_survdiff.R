@@ -73,7 +73,12 @@ estimate_survdiff <- function(
       paste0(
         "Must provide a time horizon for survival analysis of type '",
         type, "'. Example 'design': arguments = list(timepoint = 123)"))
-
+  if(stringr::str_detect(
+    string = type,
+    pattern = "ratio")
+  ) {
+    risk_percent <- FALSE
+  }
   survdiff_ci(
     formula = stats::as.formula(
       paste0(
