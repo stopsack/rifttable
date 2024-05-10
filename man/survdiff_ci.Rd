@@ -10,6 +10,7 @@ survdiff_ci(
   time,
   estimand = c("survival", "cuminc"),
   type = c("diff", "ratio"),
+  approach = c("mover", "squareadd"),
   conf.level = 0.95,
   event_type = NULL,
   id_variable = NULL
@@ -35,14 +36,19 @@ Defaults to \code{"survival"}.}
 (\code{"ratio"}) of survival or cumulative incidence? Defaults to
 \code{"diff"}.}
 
+\item{approach}{Optional. For estimating confidence limits of differences,
+use the MOVER approach based on upper and lower confidence limits of each
+group (\code{"mover"}), or square-and-add standard errors
+(\code{"squareadd"})? Defaults to \code{"mover"}.}
+
 \item{conf.level}{Optional. Confidence level. Defaults to \code{0.95}.}
 
 \item{event_type}{Optional. Event type (level) for event variable with
 competing events. Defaults to \code{NULL}.}
 
-\item{id_variable}{Optional. Identifiers for individual oberversations, required
-if data are clustered, or if competing events and time/time2 notation are
-used concomitantly.}
+\item{id_variable}{Optional. Identifiers for individual oberversations,
+required if data are clustered, or if competing events and time/time2
+notation are used concomitantly.}
 }
 \value{
 Tibble in \code{\link[broom]{tidy}} format:
@@ -54,7 +60,7 @@ functions (see References). For each survival function, Greenwood
 standard errors with log transformation are used, the default of the
 survival package/\code{\link[survival]{survfit}}).
 \item \code{statistic} z statistic.
-\item \code{p.value}
+\item \code{p.value} From the z statistic.
 \item \code{conf.low} Lower confidence limit
 \item \code{conf.high} Upper confidence limit
 }
@@ -65,8 +71,8 @@ cumulative incidence (risk) at a given time point based on the difference
 between per-group Kaplan-Meier estimates or, if competing events are prevent,
 Aalen-Johansen estimates of the cumulative incidence.
 
-For constructing confidence limits of ratios, the approach described by Zou
-and Donner (2008) is used.
+For constructing confidence limits, the MOVER approach described by Zou and
+Donner (2008) is used, with estimation on the log scale for ratios.
 }
 \examples{
 # Load 'cancer' dataset from survival package (Used in all examples)

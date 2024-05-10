@@ -6,8 +6,8 @@
 #' between per-group Kaplan-Meier estimates or, if competing events are prevent,
 #' Aalen-Johansen estimates of the cumulative incidence.
 #'
-#' For constructing confidence limits of ratios, the approach described by Zou
-#' and Donner (2008) is used.
+#' For constructing confidence limits, the MOVER approach described by Zou and
+#' Donner (2008) is used, with estimation on the log scale for ratios.
 #'
 #' @param formula Formula of a survival object using
 #'   \code{\link[survival]{Surv}} of the form, \code{Surv(time, event) ~ group}.
@@ -23,12 +23,16 @@
 #' @param type Optional. Estimate differences (\code{"diff"}) or ratio
 #'   (\code{"ratio"}) of survival or cumulative incidence? Defaults to
 #'   \code{"diff"}.
+#' @param approach Optional. For estimating confidence limits of differences,
+#'   use the MOVER approach based on upper and lower confidence limits of each
+#'   group (\code{"mover"}), or square-and-add standard errors
+#'   (\code{"squareadd"})? Defaults to \code{"mover"}.
 #' @param conf.level Optional. Confidence level. Defaults to \code{0.95}.
 #' @param event_type Optional. Event type (level) for event variable with
 #'   competing events. Defaults to \code{NULL}.
-#' @param id_variable Optional. Identifiers for individual oberversations, required
-#'   if data are clustered, or if competing events and time/time2 notation are
-#'   used concomitantly.
+#' @param id_variable Optional. Identifiers for individual oberversations,
+#'   required if data are clustered, or if competing events and time/time2
+#'   notation are used concomitantly.
 #'
 #' @references
 #' Com-Nougue C, Rodary C, Patte C. How to establish equivalence when data are
@@ -53,7 +57,7 @@
 #'    standard errors with log transformation are used, the default of the
 #'    survival package/\code{\link[survival]{survfit}}).
 #' * \code{statistic} z statistic.
-#' * \code{p.value}
+#' * \code{p.value} From the z statistic.
 #' * \code{conf.low} Lower confidence limit
 #' * \code{conf.high} Upper confidence limit
 #'
@@ -85,6 +89,7 @@ survdiff_ci <- function(
     time,
     estimand = c("survival", "cuminc"),
     type = c("diff", "ratio"),
+    approach = c("mover", "squareadd"),
     conf.level = 0.95,
     event_type = NULL,
     id_variable = NULL
@@ -97,6 +102,7 @@ survdiff_ci <- function(
   zval <- stats::qnorm(1 - (1 - conf.level) / 2)
   estimand <- match.arg(estimand)
   type <- match.arg(type)
+  approach <- match.arg(approach)
   res <- summary(
     survival::survfit(
       formula = formula,
@@ -134,20 +140,45 @@ survdiff_ci <- function(
       uci = res$upper[, which(res$states == event_type)]
     )
   }
-  if(type == "diff") {
-  res <- res %>%
-    dplyr::transmute(
-      term = stringr::str_remove_all(
-        string = .data$term,
-        pattern = "([:alnum:]|\\.|_)+="),
-      estimate = .data$surv - .data$surv[1],
-      std.error = sqrt(.data$se^2 + .data$se[1]^2),
-      statistic = .data$estimate / .data$std.error,
-      p.value = 1 - stats::pnorm(abs(.data$statistic)),
-      conf.low = .data$estimate - zval * .data$std.error,
-      conf.high = .data$estimate + zval * .data$std.error
-    ) %>%
-    dplyr::slice(-1)
+  if(type == "diff" & approach == "squareadd") {
+    res <- res %>%
+      dplyr::transmute(
+        term = stringr::str_remove_all(
+          string = .data$term,
+          pattern = "([:alnum:]|\\.|_)+="),
+        estimate = .data$surv - .data$surv[1],
+        std.error = sqrt(.data$se^2 + .data$se[1]^2),
+        statistic = .data$estimate / .data$std.error,
+        p.value = 1 - stats::pnorm(abs(.data$statistic)),
+        conf.low = .data$estimate - zval * .data$std.error,
+        conf.high = .data$estimate + zval * .data$std.error
+      ) %>%
+      dplyr::slice(-1)
+  }
+  if(type == "diff" & approach == "mover") {
+    res <- res %>%
+      dplyr::transmute(
+        term = stringr::str_remove_all(
+          string = .data$term,
+          pattern = "([:alnum:]|\\.|_)+="),
+        estimate = .data$surv - .data$surv[1],
+        conf.low = .data$estimate -
+          sqrt((.data$surv - .data$lci)^2 +
+                 (.data$uci[1] - .data$surv[1])^2
+          ),
+        conf.high = .data$estimate +
+          sqrt((.data$uci - .data$surv)^2 +
+                 (.data$surv[1] - .data$lci[1])^2
+          ),
+        std.error = (.data$conf.high - .data$conf.low) / 2 / zval,
+        statistic = .data$estimate / .data$std.error,
+        p.value = 1 - stats::pnorm(abs(.data$statistic))
+      ) %>%
+      dplyr::select(
+        "term", "estimate", "std.error", "statistic", "p.value",
+        "conf.low", "conf.high"
+      ) %>%
+      dplyr::slice(-1)
   }
   if(type == "ratio") {
     res <- res %>%
