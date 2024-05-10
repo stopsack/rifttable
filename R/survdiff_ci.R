@@ -33,6 +33,10 @@
 #' @param id_variable Optional. Identifiers for individual oberversations,
 #'   required if data are clustered, or if competing events and time/time2
 #'   notation are used concomitantly.
+#' @param weighted Optional. Weigh survival curves, e.g. for inverse-probability
+#'   weighting, before estating differences or ratios? If \code{TRUE}, the
+#'   \code{data} must contain a variable called \code{.weights}. Defaults to
+#'   \code{FALSE}.
 #'
 #' @references
 #' Com-Nougue C, Rodary C, Patte C. How to establish equivalence when data are
@@ -92,13 +96,18 @@ survdiff_ci <- function(
     approach = c("mover", "squareadd"),
     conf.level = 0.95,
     event_type = NULL,
-    id_variable = NULL
+    id_variable = NULL,
+    weighted = FALSE
 ) {
   .id <- NULL  # address seemingly global variable ".id" in survfit() call
+  .weights <- NULL  # same
   data$.id <- find_id(
     data = data,
     id_variable = id_variable
   )
+  if(weighted == FALSE) {
+    data$.weights <- 1
+  }
   zval <- stats::qnorm(1 - (1 - conf.level) / 2)
   estimand <- match.arg(estimand)
   type <- match.arg(type)
@@ -107,7 +116,8 @@ survdiff_ci <- function(
     survival::survfit(
       formula = formula,
       data = data,
-      id = .id
+      id = .id,
+      weights = .weights
     ),
     time = time,
     extend = TRUE)

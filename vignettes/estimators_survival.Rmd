@@ -102,10 +102,10 @@ tibble::tribble(
 
 `type` | Description | Options (`arguments = `)
 -----+-----------------+-------------
-`"cumincdiff"` | Difference in cumulative incidence (risk difference) from Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator, with confidence interval (default: 95%). Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | `timepoint`, `id`. Example: `list(timepoint = 2.5, id = "id_variable")` to calculate difference in 2.5-year risk and to set a variable identifying individuals  (for `survival::survfit()`, e.g., with `time` and `time2` set up; if none is set, each row is taken as one individual).
+`"cumincdiff"` | Difference in cumulative incidence (risk difference) from Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator, with confidence interval (default: 95%). Uses `rifttable::survdiff_ci()`. | `timepoint`, `id`. Example: `list(timepoint = 2.5, id = "id_variable")` to calculate difference in 2.5-year risk and to set a variable identifying individuals  (for `survival::survfit()`, e.g., with `time` and `time2` set up; if none is set, each row is taken as one individual).
 `"cumincratio"` | Ratio of cumulative incidence (risk ratio), with confidence interval (default: 95%), similar to `"cumincdiff"`. | `timepoint`, `id`
-`"hr"`    | Hazard ratio from Cox proportional hazards regression, with confidence interval (default: 95%). If competing events are present, hazard ratios are cause-specific for the event of interest. | `list(robust = TRUE)` for robust (sandwich) standard errors; `list(weights = "weight_variable", robust = TRUE)` for sampling (e.g., inverse-probability) weights and robust errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
-`"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%). Not estimated if competing risks are present. Cannot not handle confounders. Uses `rifttable::survdiff_ci()`. | See `"cumincdiff"`.
+`"hr"`    | Hazard ratio from Cox proportional hazards regression, with confidence interval (default: 95%). If competing events are present, hazard ratios are cause-specific for the event of interest. | `list(robust = TRUE)` for robust (sandwich) standard errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
+`"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%). Not estimated if competing risks are present. Uses `rifttable::survdiff_ci()`. | See `"cumincdiff"`.
 `"survratio"` | Ratio of survival from Kaplan-Meier estimator, with confidence interval (default: 95%), similar to `"survdiff"`. | See `"cumincdiff"`.
 
 
@@ -118,3 +118,8 @@ With competing events, the `event` variable will have additional levels. The `su
 It is necessary to specify the event of interest in the `design` if competing events are present. For example, if the `event` variable is a factor variable `status_competing`, with levels `"Censored"`, `"Outcome of interest"`, and `"Other-cause death"`, then specify `event = "status_competing@Outcome of interest"` in the table design.
 
 See the tables above for how competing events are handled. When no details are noted, the event of interest is recoded as the sole event and other events are considered censoring.
+
+
+# Weighted estimates
+
+The name of a weights variable, for example inverse-probability weights, can be provided via the column `weights` of the `design` table. Weights, if present, are used by all comparative estimators of survival as well as by `type = "cuminc"` and `type = "surv"`, and are ignored otherwise.

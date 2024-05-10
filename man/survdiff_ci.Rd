@@ -13,7 +13,8 @@ survdiff_ci(
   approach = c("mover", "squareadd"),
   conf.level = 0.95,
   event_type = NULL,
-  id_variable = NULL
+  id_variable = NULL,
+  weighted = FALSE
 )
 }
 \arguments{
@@ -49,6 +50,11 @@ competing events. Defaults to \code{NULL}.}
 \item{id_variable}{Optional. Identifiers for individual oberversations,
 required if data are clustered, or if competing events and time/time2
 notation are used concomitantly.}
+
+\item{weighted}{Optional. Weigh survival curves, e.g. for inverse-probability
+weighting, before estating differences or ratios? If \code{TRUE}, the
+\code{data} must contain a variable called \code{.weights}. Defaults to
+\code{FALSE}.}
 }
 \value{
 Tibble in \code{\link[broom]{tidy}} format:

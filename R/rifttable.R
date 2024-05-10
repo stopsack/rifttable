@@ -108,6 +108,11 @@
 #'        to obtain models with stratification by, e.g., \code{site}.
 #'        For Poisson models, can add \code{"+ offset(log(persontime))"}
 #'        to define, e.g., \code{persontime} as the offset.
+#'   * \code{weights} Optional. Variable with weights, for example inverse-
+#'        probability weights. Used by comparative survival estimators (e.g.,
+#'        \code{type = "hr"} and \code{type = "cumincdiff"}) as well as
+#'        \code{type = "cuminc"} and \code{type = "surv"}. They are ignored
+#'        by other estimators.
 #'   *  \code{type} The statistic requested (case-insensitive):
 #'
 #'      Comparative estimates with 95% confidence intervals:
@@ -139,24 +144,21 @@
 #'      * \code{"or"} Odds ratio from logistic regression.
 #'      * \code{"survdiff"} Difference in survival from Kaplan-Meier estimator.
 #'        Provide time horizon, e.g., \code{"survdiff 2.5"} to evaluate
-#'        differences in survival at 2.5 years. Cannot not handle confounders.
+#'        differences in survival at 2.5 years.
 #'        Uses \code{\link[rifttable]{survdiff_ci}}.
 #'      * \code{"cumincdiff"} Difference in cumulative incidence from the
 #'        Kaplan-Meier estimator or, if competing risks are present, its
 #'        generalized form, the Aalen-Johansen estimator. Provide time horizon,
 #'        e.g., \code{"cumincdiff 2.5"} to evaluate differences in cumulative
-#'        incidence at 2.5 years. Cannot not handle confounders.
-#'        Uses \code{\link[rifttable]{survdiff_ci}}.
+#'        incidence at 2.5 years. Uses \code{\link[rifttable]{survdiff_ci}}.
 #'      * \code{"survratio"} Ratio in survival from Kaplan-Meier estimator.
 #'        Provide time horizon, e.g., \code{"survdiff 2.5"} to evaluate
-#'        2.5-year relative risk. Cannot not handle confounders.
-#'        Uses \code{\link[rifttable]{survdiff_ci}}.
+#'        2.5-year relative risk. Uses \code{\link[rifttable]{survdiff_ci}}.
 #'      * \code{"cumincratio"} Ratio in cumulative incidence from the
 #'        Kaplan-Meier estimator or, if competing risks are present, its
 #'        generalized form, the Aalen-Johansen estimator. Provide time horizon,
 #'        e.g., \code{"cumincdiff 2.5"} to evaluate the 2.5-year risk
-#'        difference. Cannot not handle confounders.
-#'        Uses \code{\link[rifttable]{survdiff_ci}}.
+#'        difference. Uses \code{\link[rifttable]{survdiff_ci}}.
 #'
 #'      Absolute estimates per exposure category:
 #'
