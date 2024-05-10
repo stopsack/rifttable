@@ -34,6 +34,7 @@ estimate_survdiff <- function(
     time2,
     exposure,
     confounders,
+    weights,
     digits,
     risk_percent,
     risk_digits,
@@ -126,7 +127,8 @@ estimate_survdiff <- function(
       which_argument = "id",
       is_numeric = FALSE,
       default = NULL
-    )
+    ),
+    weighted = !is.na(weights)
   ) %>%
     dplyr::mutate(
       term = paste0(".exposure", .data$term)) %>%
