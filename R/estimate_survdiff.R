@@ -35,6 +35,7 @@ estimate_survdiff <- function(
     digits,
     risk_percent,
     risk_digits,
+    ratio_digits,
     is_trend,
     nmin,
     na_rm,
@@ -62,7 +63,15 @@ estimate_survdiff <- function(
     time2 = time2)
   digits <- find_rounding_digits(
     digits = digits,
-    default = risk_digits)
+    default = dplyr::if_else(
+      condition = stringr::str_detect(
+        string = type,
+        pattern = "ratio"
+      ),
+      true = ratio_digits,
+      false = risk_digits
+    )
+  )
   timepoint <- find_argument(
     arguments = arguments,
     which_argument = "timepoint",
