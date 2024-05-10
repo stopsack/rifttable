@@ -8,6 +8,8 @@
 #' @param is_trend If called on a continous (trend) variable
 #' @param type Estimand
 #' @param risk_digits Digits for risks
+#' @param ratio_digits Digits for ratios
+#' @param ratio_digits_decrease Fewer digits for elevated ratios
 #' @param nmin Suppress counts below
 #' @param exposure Name of exposure variable
 #' @param na_rm Remove observations with missing outcome data
@@ -36,6 +38,7 @@ estimate_survdiff <- function(
     risk_percent,
     risk_digits,
     ratio_digits,
+    ratio_digits_decrease,
     is_trend,
     nmin,
     na_rm,
@@ -87,6 +90,12 @@ estimate_survdiff <- function(
     pattern = "ratio")
   ) {
     risk_percent <- FALSE
+  }
+  if(stringr::str_detect(
+    string = type,
+    pattern = "diff")
+  ) {
+    ratio_digits_decrease <- NULL
   }
   survdiff_ci(
     formula = stats::as.formula(
@@ -142,5 +151,6 @@ estimate_survdiff <- function(
       to = to,
       reference_label = reference,
       percent = risk_percent,
-      ratio_digits_decrease = NULL)
+      ratio_digits_decrease = ratio_digits_decrease
+    )
 }
