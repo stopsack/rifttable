@@ -56,7 +56,9 @@ format_round <- function(x, digits, ratio_digits_decrease = NULL) {
           nsmall = digits,
           trim = TRUE,
           scientific = FALSE)
-      } else { x }
+      } else {
+        as.character(x)
+      }
     },
     x,
     digits)
