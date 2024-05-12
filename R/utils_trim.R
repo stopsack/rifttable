@@ -36,7 +36,7 @@ format_round <- function(x, digits, ratio_digits_decrease = NULL) {
     digits_decrease <- sapply(X = x, function(x) {
       if(!is.na(suppressWarnings(as.numeric(x)))) {
         selected_digit <- ratio_digits_decrease[
-          which(as.numeric(names(ratio_digits_decrease)) < x)]
+          which(as.numeric(names(ratio_digits_decrease)) <= x)]
         selected_digit[length(selected_digit)]
       } else { 0 }
     })
