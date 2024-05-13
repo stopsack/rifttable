@@ -37,7 +37,7 @@ Formatting includes:
 
 If this function is called within a document that is being knit to plain
 markdown, such as \code{format: gfm} in a Quarto document or
-\code{format: github_document} in an RMarkdown document, then a
+\code{format: github_document} in an RMarkdown document, then a plain
 markdown-formatted table (e.g., without footnotes) is returned via
 \code{\link[knitr]{kable}}.
 }
