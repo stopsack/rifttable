@@ -80,7 +80,9 @@ rifttable(
 This example uses the `design` of Example 1 above. So far, the tables produced when just running the code shown had an appearance like output in the R console. To obtain formatted tables in HTML and other output documents, pipe the output of `rifttable()` to a table formatting function such as
 
 * `knitr::kable()`: works well with all output formats, but supports only limited formatting. Add to the YAML header a statement `df_print: kable` to print all tables using kable.
-* `gt::gt()`: supports more advanced formatting. If using `rifttable::rt_gt()` as a wrapper for `gt::gt()`, indentations from the `label` of the table `design` are properly passed along, and tables are shown properly if the markdown is knitted to `github_document` (just a `.md`, not an `.html` or other formats).
+* `gt::gt()`: supports more advanced formatting but output is no longer human-readable. 
+
+The rifttable package provides the `rt_gt()` wrapper function. When knitting to HTML, PDF, or Word, it functions as a wrapper for `gt::gt()`, passing along indentations from the `label` of the table `design`. When knitting to a Markdown document (`.md`), such as `github_document` (in RMarkdown) or `gfm` (in Quarto), `rt_gt()` will automatically provide plain table output using the kable package.
 
 ```{r ex2a}
 rifttable(
