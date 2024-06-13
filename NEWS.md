@@ -1,3 +1,33 @@
+# rifttable 0.6.3
+
+* New functionality:
+  + Provide easier interface to code competing events by directly providing 
+    `event = "event_variable@Event_Type_One"` in the `design`. 
+    If multiple event types are present, estimate cumulative incidence and 
+    differences/ratios of cumulative incidence in a competing-event setting.
+  + Allow for clustered observations in survival data, e.g., multiple rows per 
+    person.
+  + Estimate ratios of survival and cumulative incidence, i.e., *x*-year risk 
+    ratios. Use MOVER estimation for confidence intervals of both ratios and
+    differences in survival and cumulative incidence by default.
+  + Support weights, e.g., inverse-probability weights, directly via a 
+    `weights` argument in the `design`. Weighted estimates are currently 
+    available for many survival estimators: `type = "cuminc"`, `"surv"`, their 
+    differences and ratios (e.g., `"cumincdiff"`), and `"hr"`. This is a 
+    breaking change for Cox models (`type = "hr"`), where providing `weights` in 
+    the `arguments` list now generates an error.
+* Bug fixes:
+  + Allow for `@` in factor levels for a `table1_design()`.
+  + `rt_gt()`: Output knitr-formatted tables for GitHub-flavored markdown also
+    in Quarto `.qmd`, similar to `.Rmd`.
+  + Better handling of edge cases, e.g., ratios of 0, when rounding estimates.
+* Expanded documentation
+  + Restructure site.
+  + Separate documentation of estimators by outcome type.
+  + New FAQs on confidence levels, reference levels, custom functions, and 
+    joint models.
+
+
 # rifttable 0.6.2
 
 * New functionality:
@@ -13,7 +43,7 @@
   + Consider missing `type` as `"blank"`.
   + Do not add empty rows/columns if `type2` has empty results for some cells or
     if only a `trend` variable and no `exposure` is given.
-  + Rounding works even result vector contains strings (e.g., no estimate).
+  + Rounding works even if result vector contains strings (e.g., no estimate).
   + More safeguards for all-`NA` `outcome` variables. More input checks.
   + Do not warn about non-`0`/`1` outcomes in log-linear models for ratios of
     continuous variables.

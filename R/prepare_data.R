@@ -8,6 +8,7 @@
 #' @param event String: Name of the event variable. Optional.
 #' @param time String: Name of the first time (entry) variable. Optional.
 #' @param time2 String: Name of the second time (exit) variable. Optional.
+#' @param weights String: Name of the weighting variable. Optional.
 #' @param type String: Name of estimator. Optional.
 #' @param effectmodifier String: Name of the effect modifier variable.
 #'   Optional.
@@ -23,6 +24,7 @@ prepare_data <- function(
     event = NA,
     time = NA,
     time2 = NA,
+    weights = NA,
     type = "",
     effectmodifier = NULL,
     effectmodifier_level = NULL) {
@@ -88,7 +90,12 @@ prepare_data <- function(
       if(!is.null(effectmodifier_level) &
          !(is.null(effectmodifier) |
            is.na(effectmodifier))) {
-        if(!(all(effectmodifier_level == ""))) {
+        if(
+          !all(
+            effectmodifier_level == "",
+            na.rm = TRUE
+          )
+        ) {
           data$.effectmod <- data[[effectmodifier]]
           data <- data %>%
             dplyr::filter(.data$.effectmod %in% effectmodifier_level)
@@ -118,8 +125,22 @@ prepare_data <- function(
       data$.outcome <- data[[outcome]]
     }
   }
+  event_type <- NULL
   if(!is.na(time) & !is.na(event)) {
     if(time != "" & event != "") {
+      if(stringr::str_detect(
+        string = event,
+        pattern = "@")
+      ) {
+        event_type <- stringr::str_split_i(
+          string = event,
+          pattern = "@",
+          i = 2)
+        event <- stringr::str_split_i(
+          string = event,
+          pattern = "@",
+          i = 1)
+      }
       if(event != outcome | is.na(outcome)) {
         if(!(event %in% names(data)))
           stop(
@@ -135,6 +156,71 @@ prepare_data <- function(
         data <- data %>%
           dplyr::mutate(.event = .data$.outcome)
       }
+      if(!is.null(event_type)) {
+        if(!any(event_type %in% unique(data$.event))) {
+          stop(paste0(
+            "For event variable '",
+            event,
+            "', the specified event type '",
+            event_type,
+            "' is not available in the data. Available are: ",
+            paste(
+              unique(data$.event),
+              collapse = " "
+            )
+          ))
+        }
+        if(!length(stats::na.omit(unique(data$.event))) > 2)
+          stop(paste0(
+            "For event variable '",
+            event,
+            "', the event type '",
+            event_type,
+            "' has been specified. However, the event variable does not ",
+            "appear to have more than two levels to encode competing events ",
+            "and censoring. Available levels are only: ",
+            paste(
+              unique(data$.event),
+              collapse = " "
+            )
+          ))
+        if(!is.factor(data$.event))
+          stop(paste0(
+            "The event variable '",
+            event,
+            "' with more than two levels to presumably encode competing ",
+            "events must be a factor. However, the current type was '",
+            class(data$.event),
+            "'."
+          ))
+      } else {
+        if(length(stats::na.omit(unique(data$.event))) > 2)
+          stop(paste0(
+            "The event variable '",
+            event,
+            "' has more than two non-missing levels, suggesting that ",
+            "competing events may be encoded, but no specific event type ",
+            "(variable level) has been requested via ",
+            "event = 'event_variable@level'. Available levels are: ",
+            paste(
+              unique(data$.event),
+              collapse = " "
+            )
+          ))
+      }
+      # Recode event variable for estimators that only handle one event type
+      data$.event_compete <- data$.event
+      if(!is.null(event_type)) {
+        data <- data %>%
+          dplyr::mutate(
+            .event = dplyr::if_else(
+              condition = .data$.event == event_type,
+              true = 1,
+              false = 0
+            )
+          )
+      }
+
       if(!(time %in% names(data)))
         stop(
           paste0(
@@ -204,8 +290,29 @@ prepare_data <- function(
     }
   }
 
+  if(!is.na(weights)) {
+    if(weights != "") {
+      if(!(weights %in% names(data)))
+        stop(
+          paste0(
+            "weights = '",
+            weights,
+            "': Variable is not valid for the dataset."))
+      data$.weights <- data[[weights]]
+      if(!is.numeric(data$.weights))
+        stop(
+          paste0(
+            "weights = '",
+            weights,
+            "': Variable is not numeric."))
+    }
+  }
+  if(!".weights" %in% colnames(data))
+    data$.weights <- 1
+
   list(
     data = data,
     pattern = pattern,
-    xlevels = xlevels)
+    xlevels = xlevels,
+    event_type = event_type)
 }

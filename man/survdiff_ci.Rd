@@ -9,7 +9,12 @@ survdiff_ci(
   data,
   time,
   estimand = c("survival", "cuminc"),
-  conf.level = 0.95
+  type = c("diff", "ratio"),
+  approach = c("mover", "squareadd"),
+  conf.level = 0.95,
+  event_type = NULL,
+  id_variable = NULL,
+  weighted = FALSE
 )
 }
 \arguments{
@@ -24,28 +29,56 @@ least 2 categories.}
 
 \item{estimand}{Optional. Estimate difference in survival (\code{"survival"})
 or cumulative incidence (\code{"cuminc"})? This parameter affects the
-sign of the differences. Defaults to \code{"survival"}.}
+sign of the differences. Only \code{"cuminc"} is available if competing
+events are present, i.e., \code{event_type} is not \code{NULL}.
+Defaults to \code{"survival"}.}
+
+\item{type}{Optional. Estimate differences (\code{"diff"}) or ratio
+(\code{"ratio"}) of survival or cumulative incidence? Defaults to
+\code{"diff"}.}
+
+\item{approach}{Optional. For estimating confidence limits of differences,
+use the MOVER approach based on upper and lower confidence limits of each
+group (\code{"mover"}), or square-and-add standard errors
+(\code{"squareadd"})? Defaults to \code{"mover"}.}
 
 \item{conf.level}{Optional. Confidence level. Defaults to \code{0.95}.}
+
+\item{event_type}{Optional. Event type (level) for event variable with
+competing events. Defaults to \code{NULL}.}
+
+\item{id_variable}{Optional. Identifiers for individual oberversations,
+required if data are clustered, or if competing events and time/time2
+notation are used concomitantly.}
+
+\item{weighted}{Optional. Weigh survival curves, e.g. for inverse-probability
+weighting, before estating differences or ratios? If \code{TRUE}, the
+\code{data} must contain a variable called \code{.weights}. Defaults to
+\code{FALSE}.}
 }
 \value{
 Tibble in \code{\link[broom]{tidy}} format:
 \itemize{
 \item \code{term} Name of the exposure stratum.
-\item \code{estimate} Difference in survival at \code{time}.
+\item \code{estimate} Difference or ratio.
 \item \code{std.error} Large-sample standard error of the difference in survival
 functions (see References). For each survival function, Greenwood
 standard errors with log transformation are used, the default of the
 survival package/\code{\link[survival]{survfit}}).
 \item \code{statistic} z statistic.
-\item \code{p.value}
+\item \code{p.value} From the z statistic.
 \item \code{conf.low} Lower confidence limit
 \item \code{conf.high} Upper confidence limit
 }
 }
 \description{
-This function estimates the unadjusted difference in survival at a given time
-point based on the difference between per-group Kaplan-Meier estimates.
+This function estimates the unadjusted difference or ratio in survival or
+cumulative incidence (risk) at a given time point based on the difference
+between per-group Kaplan-Meier estimates or, if competing events are prevent,
+Aalen-Johansen estimates of the cumulative incidence.
+
+For constructing confidence limits, the MOVER approach described by Zou and
+Donner (2008) is used, with estimation on the log scale for ratios.
 }
 \examples{
 # Load 'cancer' dataset from survival package (Used in all examples)
@@ -56,8 +89,10 @@ cancer <- cancer \%>\%
     sex = factor(
       sex,
       levels = 1:2,
-      labels = c("Male", "Female")),
-      status = status - 1)
+      labels = c("Male", "Female")
+    ),
+    status = status - 1
+  )
 
 survdiff_ci(
   formula = survival::Surv(time = time, event = status) ~ sex,
@@ -74,4 +109,8 @@ Stat Med 1993;12:1353–64. \url{https://doi.org/10.1002/sim.4780121407}.
 Altman DG, Andersen PK. Calculating the number needed to treat for trials
 where the outcome is time to an event. BMJ 1999;319:1492–5.
 \url{https://doi.org/10.1136/bmj.319.7223.14929}.
+
+Zou GY, Donner A. Construction of confidence limits about effect measures:
+A general approach. Statist Med 2008;27:1693–1702.
+\url{https://doi.org/10.1002/sim.3095}
 }

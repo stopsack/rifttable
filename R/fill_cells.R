@@ -7,6 +7,7 @@
 #' @param exposure Exposure variable
 #' @param stratum Effect modifier level
 #' @param confounders String of covariates
+#' @param weights Name of weights variable
 #' @param type Type of statistic quested from table_count
 #' @param trend Continuous (trend) exposure variable
 #' @param digits Number of digits to round an individual estimate to
@@ -39,6 +40,7 @@ fill_cells <- function(
     effect_modifier,
     stratum,
     confounders,
+    weights,
     type,
     trend,
     digits,
@@ -151,6 +153,7 @@ fill_cells <- function(
     event = event,
     time = time,
     time2 = time2,
+    weights = weights,
     type = type,
     effectmodifier = effect_modifier,
     effectmodifier_level = stratum)
@@ -195,7 +198,11 @@ fill_cells <- function(
     "survdiff" =,
     "survdiff_joint" =,
     "cumincdiff" =,
-    "cumincdiff_joint" = "survdiff",
+    "cumincdiff_joint" =,
+    "survratio" =,
+    "survratio_joint" =,
+    "cumincratio" =,
+    "cumincratio_joint" = "survdiff",
 
     "hr" =,
     "hr_joint" = "regress_cox",
@@ -247,6 +254,7 @@ fill_cells <- function(
       effectmodifier = effect_modifier,
       effectmodifier_level = stratum,
       confounders = confounders,
+      weights = weights,
       digits = digits,
       nmin = nmin,
       na_rm = na_rm,
@@ -263,6 +271,7 @@ fill_cells <- function(
       reference = reference,
       factor = factor,
       arguments = arguments,
+      event_type = data_prep$event_type,
       is_trend = FALSE))
 
   if(setequal(
@@ -288,6 +297,7 @@ fill_cells <- function(
         event = event,
         time = time,
         time2 = time2,
+        weights = weights,
         type = type,
         effectmodifier = effect_modifier,
         effectmodifier_level = stratum)
@@ -304,6 +314,7 @@ fill_cells <- function(
         effectmodifier = effect_modifier,
         effectmodifier_level = stratum,
         confounders = confounders,
+        weights = weights,
         digits = digits,
         nmin = nmin,
         na_rm = na_rm,
@@ -320,6 +331,7 @@ fill_cells <- function(
         reference = reference,
         factor = factor,
         arguments = arguments,
+        event_type = data_prep$event_type,
         is_trend = TRUE))
     if(setequal(
       res_cat,

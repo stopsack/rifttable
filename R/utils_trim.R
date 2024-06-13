@@ -14,17 +14,17 @@ format_round <- function(x, digits, ratio_digits_decrease = NULL) {
     if(!is.numeric(ratio_digits_decrease))
       stop(
         paste0(
-          "Values of 'ratio_digits_decrease' for rounding, if provided, must be ",
-          "numeric. '",
+          "Values of 'ratio_digits_decrease' for rounding, if provided, must ",
+          "be numeric. '",
           paste(ratio_digits_decrease, collapse = ", "),
           "' is not (all) numeric."))
     if(any(is.na(suppressWarnings(as.numeric(names(ratio_digits_decrease))))))
       stop(
         paste0(
-          "Names of 'ratio_digits_decrease' for rounding, if provided, must be ",
-          "numeric. '",
+          "Names of 'ratio_digits_decrease' for rounding, if provided, must ",
+          "be convertible into numbers. '",
           paste(names(ratio_digits_decrease), collapse = ", "),
-          "' is not (all) numeric."))
+          "' are not (all) numbers."))
     add_zero <- 0
     names(add_zero) <- "0"
     ratio_digits_decrease <- c(ratio_digits_decrease, add_zero)
@@ -36,7 +36,7 @@ format_round <- function(x, digits, ratio_digits_decrease = NULL) {
     digits_decrease <- sapply(X = x, function(x) {
       if(!is.na(suppressWarnings(as.numeric(x)))) {
         selected_digit <- ratio_digits_decrease[
-          which(as.numeric(names(ratio_digits_decrease)) < x)]
+          which(as.numeric(names(ratio_digits_decrease)) <= x)]
         selected_digit[length(selected_digit)]
       } else { 0 }
     })
@@ -56,7 +56,9 @@ format_round <- function(x, digits, ratio_digits_decrease = NULL) {
           nsmall = digits,
           trim = TRUE,
           scientific = FALSE)
-      } else { x }
+      } else {
+        as.character(x)
+      }
     },
     x,
     digits)

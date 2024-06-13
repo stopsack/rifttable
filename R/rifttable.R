@@ -82,8 +82,13 @@
 #'        \code{\link[survival]{Surv}}.
 #'   *  \code{event} The event variable for survival data.
 #'        Events are typically \code{1}, censored observations \code{0}.
-#'        Needed for, e.g., \code{type = "hr"} and \code{type = "rate"}
-#'        (i.e., whenever \code{outcome} is not used).
+#'        If competing events are present, censoring should be the
+#'        first-ordered level, e.g., of a factor, and the level corresponding
+#'        to the event of interest should be supplied as
+#'        \code{event = "event_variable@Recurrence"} if \code{"Recurrence"} is
+#'        the event of interest. The \code{event} variable is needed for, e.g.,
+#'        \code{type = "hr"} and \code{type = "rate"}, i.e., whenever
+#'        \code{outcome} is not used.
 #'   *  \code{trend} Optional. For regression models, a continuous
 #'        representation of the exposure, for which a slope per one unit
 #'        increase ("trend") will be estimated. Must be a numeric variable.
@@ -103,6 +108,11 @@
 #'        to obtain models with stratification by, e.g., \code{site}.
 #'        For Poisson models, can add \code{"+ offset(log(persontime))"}
 #'        to define, e.g., \code{persontime} as the offset.
+#'   * \code{weights} Optional. Variable with weights, for example inverse-
+#'        probability weights. Used by comparative survival estimators (e.g.,
+#'        \code{type = "hr"} and \code{type = "cumincdiff"}) as well as
+#'        \code{type = "cuminc"} and \code{type = "surv"}. They are ignored
+#'        by other estimators.
 #'   *  \code{type} The statistic requested (case-insensitive):
 #'
 #'      Comparative estimates with 95% confidence intervals:
@@ -134,13 +144,21 @@
 #'      * \code{"or"} Odds ratio from logistic regression.
 #'      * \code{"survdiff"} Difference in survival from Kaplan-Meier estimator.
 #'        Provide time horizon, e.g., \code{"survdiff 2.5"} to evaluate
-#'        differences in survival at 2.5 years. Cannot not handle confounders.
+#'        differences in survival at 2.5 years.
 #'        Uses \code{\link[rifttable]{survdiff_ci}}.
-#'      * \code{"cumincdiff"} Difference in cumulative incidence from
-#'        Kaplan-Meier estimator. Provide time horizon, e.g.,
-#'        \code{"cumincdiff 2.5"} to evaluate differences in cumulative
-#'        incidence at 2.5 years. Cannot not handle confounders.
-#'        Uses \code{\link[rifttable]{survdiff_ci}}.
+#'      * \code{"cumincdiff"} Difference in cumulative incidence from the
+#'        Kaplan-Meier estimator or, if competing risks are present, its
+#'        generalized form, the Aalen-Johansen estimator. Provide time horizon,
+#'        e.g., \code{"cumincdiff 2.5"} to evaluate differences in cumulative
+#'        incidence at 2.5 years. Uses \code{\link[rifttable]{survdiff_ci}}.
+#'      * \code{"survratio"} Ratio in survival from Kaplan-Meier estimator.
+#'        Provide time horizon, e.g., \code{"survdiff 2.5"} to evaluate
+#'        2.5-year relative risk. Uses \code{\link[rifttable]{survdiff_ci}}.
+#'      * \code{"cumincratio"} Ratio in cumulative incidence from the
+#'        Kaplan-Meier estimator or, if competing risks are present, its
+#'        generalized form, the Aalen-Johansen estimator. Provide time horizon,
+#'        e.g., \code{"cumincdiff 2.5"} to evaluate the 2.5-year risk
+#'        difference. Uses \code{\link[rifttable]{survdiff_ci}}.
 #'
 #'      Absolute estimates per exposure category:
 #'
@@ -160,14 +178,16 @@
 #'        (Wilson score interval for binomial proportions, see
 #'        \code{\link[rifttable]{scoreci}}).
 #'      * \code{"cuminc"} Cumulative incidence ("risk") from the Kaplan-Meier
-#'        estimator. Provide time point (e.g., 1.5-year cumulative incidence)
-#'        using \code{"cuminc 1.5"}. If no time point is provided, returns
-#'        cumulative incidence at end of follow-up. Change between display as
-#'        proportion or percent using the parameter \code{risk_percent}.
-#'      * \code{"cuminc (ci)"} Cumulative incidence ("risk") from the
-#'        Kaplan-Meier estimator with 95% confidence intervals (Greenwood
-#'        standard errors with log transformation, the
-#'        default of the survival package/\code{\link[survival]{survfit}}).
+#'        estimator or, if competing risks are present, its generalized form,
+#'        the Aalen-Johansen estimator. Provide time point (e.g., 1.5-year
+#'        cumulative incidence) using \code{"cuminc 1.5"}. If no time point is
+#'        provided, the cumulative incidence at end of follow-up is returned.
+#'        Change between display as proportion or percent using the parameter
+#'        \code{risk_percent}.
+#'      * \code{"cuminc (ci)"} Cumulative incidence ("risk"), as above,
+#'        with 95% confidence intervals (Greenwood standard errors with log
+#'        transformation, the default of the survival package/
+#'        \code{\link[survival]{survfit}}).
 #'        Provide time point as in \code{"cuminc"}.
 #'      * \code{"surv"} Survival from the Kaplan-Meier
 #'        estimator. Provide time point (e.g., 1.5-year survival)
@@ -203,6 +223,9 @@
 #'      * \code{"median (iqr)"} Median and interquartile range.
 #'      * \code{"range"} Range: Minimum to maximum value.
 #'      * \code{"blank"} or \code{""} An empty line.
+#'      * Custom: A custom function that must be available under the name
+#'        \code{estimate_my_function} in order to be callable as
+#'        \code{type = "my_function"}.
 #'
 #'      By default, regression models will be fit separately for each
 #'      stratum of the \code{effect_modifier}. Append \code{"_joint"}
@@ -238,6 +261,7 @@
 #'     Defaults to \code{NA}, i.e., to print all estimates.
 #'   * \code{na_rm}. Optional. Exclude observations with missing outcome.
 #'     Defaults to \code{FALSE}. Use with caution.
+#'   * \code{ci}. Optional. Confidence level. Defaults to \code{0.95}.
 #'
 #' Use \code{\link[tibble]{tibble}}, \code{\link[tibble]{tribble}}, and
 #' \code{\link[dplyr]{mutate}} to construct the \code{design} dataset,
@@ -450,6 +474,7 @@ rifttable <- function(
   if(!("outcome"     %in% names(design))) design$outcome     <- NA
   if(!("trend"       %in% names(design))) design$trend       <- NA
   if(!("confounders" %in% names(design))) design$confounders <- ""
+  if(!("weights"     %in% names(design))) design$weights     <- NA
   if(!("type2"       %in% names(design))) design$type2       <- ""
   if(!("digits"      %in% names(design))) design$digits      <- NA
   if(!("digits2"     %in% names(design))) design$digits2     <- NA
@@ -575,7 +600,8 @@ rifttable <- function(
       tidyr::separate(
         col = "combo",
         into = c("outcome", "var_level"),
-        sep = "@") %>%
+        sep = "@",
+        extra = "merge") %>%
       dplyr::distinct()
     data <- purrr::map2_dfc(
       .x = to_code$outcome,
@@ -612,6 +638,7 @@ rifttable <- function(
           .data$effect_modifier,
           .data$stratum,
           .data$confounders,
+          .data$weights,
           .data$type,
           .data$trend,
           .data$digits,
@@ -699,6 +726,7 @@ rifttable <- function(
             .data$effect_modifier,
             .data$stratum,
             .data$confounders,
+            .data$weights,
             .data$type2,  # !
             .data$trend,
             .data$digits2,  # !

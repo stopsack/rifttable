@@ -30,6 +30,12 @@ rt_tabstyle <- function(mytab) {
 #'   * No top border
 #'   * Bold column labels
 #'
+#' If this function is called within a document that is being knit to plain
+#' markdown, such as \code{format: gfm} in a Quarto document or
+#' \code{format: github_document} in an RMarkdown document, then a plain
+#' markdown-formatted table (e.g., without footnotes) is returned via
+#' \code{\link[knitr]{kable}}.
+#'
 #' @param df Data frame/tibble
 #' @param md Optional. If not \code{NULL}, then the given
 #'   columns will be printed with markdown formatting, e.g., \code{md = c(1, 3)}
@@ -61,23 +67,27 @@ rt_gt <- function(
     md = 1,
     indent = 10,
     remove_border = TRUE) {
-  if (!requireNamespace("gt", quietly = TRUE)) {
-    stop(
-      paste(
-        "The package \"gt\" must be installed to create formatted tables",
-        "via rifttable::rt_gt(). Use alternative packages for table",
-        "formatting or install \"gt\":\n   install.packages(\"gt\")"),
-      call. = FALSE)
-  }
-
   # RMarkdown "output: github_document" cannot handle HTML styles
-  if(any(stringr::str_detect(
-    string = c("", knitr::opts_knit$get("rmarkdown.pandoc.to")),
-    pattern = "gfm"))) {
+  # Likewise Quarto counterpart "output: gfm"
+  if(
+    any(
+      stringr::str_detect(
+        string = c("", knitr::opts_knit$get("rmarkdown.pandoc.to")),
+        pattern = "gfm|commonmark")
+    )
+  ) {
     res <- knitr::kable(df)
     attr(x = res, which = "mydata") <- df
     return(res)
   } else {
+    if (!requireNamespace("gt", quietly = TRUE)) {
+      stop(
+        paste(
+          "The package \"gt\" must be installed to create formatted tables",
+          "via rifttable::rt_gt(). Use alternative packages for table",
+          "formatting or install \"gt\":\n   install.packages(\"gt\")"),
+        call. = FALSE)
+    }
     df_gt <- df %>%
       gt::gt(id = "rifttable") %>%
       rt_tabstyle()

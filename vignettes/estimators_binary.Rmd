@@ -52,7 +52,7 @@ tibble::tribble(
 # Absolute estimates per exposure category
 
 `type` | Description | Options (`arguments = `)
--------+-------------+--------------
+-----+-----------------+------------
 `"cases/controls"` | Cases and non-cases (events and non-events); useful for case-control studies.
 `"outcomes"` | Outcome count.
 `"outcomes (risk)"` | A combination: Outcomes followed by risk in parentheses.
@@ -64,7 +64,7 @@ tibble::tribble(
 # Comparative estimates with confidence intervals
 
 `type` | Description | Options (`arguments = `)
--------+-------------+--------------
+-----+-----------------+------------
 `"irr"` | Incidence rate ratio for count outcomes from Poisson regression model, with confidence interval (default: 95%).
 `"or"` | Odds ratio from logistic regression, with confidence interval (default: 95%).
 `"rd"` | Risk difference (or prevalence difference) from risks::riskdiff(), with confidence interval (default: 95%). | `list(approach = "margstd_boot", bootrepeats = 2000)` to request model fitting via marginal standardization with 2000 bootstraps.

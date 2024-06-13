@@ -8,6 +8,8 @@
 #' @param is_trend If called on a continous (trend) variable
 #' @param type Estimand
 #' @param risk_digits Digits for risks
+#' @param ratio_digits Digits for ratios
+#' @param ratio_digits_decrease Fewer digits for elevated ratios
 #' @param nmin Suppress counts below
 #' @param exposure Name of exposure variable
 #' @param na_rm Remove observations with missing outcome data
@@ -19,6 +21,7 @@
 #' @param event Name of event variable
 #' @param time Name of time variable
 #' @param time2 Name of second time variable, if any
+#' @param event_type Level of event variable with competing risks, if any
 #' @param ...
 #'
 #' @return Tibble
@@ -31,9 +34,12 @@ estimate_survdiff <- function(
     time2,
     exposure,
     confounders,
+    weights,
     digits,
     risk_percent,
     risk_digits,
+    ratio_digits,
+    ratio_digits_decrease,
     is_trend,
     nmin,
     na_rm,
@@ -43,6 +49,7 @@ estimate_survdiff <- function(
     to,
     reference,
     arguments,
+    event_type,
     ...) {
   if(is_trend)
     return(tibble::tibble())
@@ -60,7 +67,15 @@ estimate_survdiff <- function(
     time2 = time2)
   digits <- find_rounding_digits(
     digits = digits,
-    default = risk_digits)
+    default = dplyr::if_else(
+      condition = stringr::str_detect(
+        string = type,
+        pattern = "ratio"
+      ),
+      true = ratio_digits,
+      false = risk_digits
+    )
+  )
   timepoint <- find_argument(
     arguments = arguments,
     which_argument = "timepoint",
@@ -71,7 +86,18 @@ estimate_survdiff <- function(
       paste0(
         "Must provide a time horizon for survival analysis of type '",
         type, "'. Example 'design': arguments = list(timepoint = 123)"))
-
+  if(stringr::str_detect(
+    string = type,
+    pattern = "ratio")
+  ) {
+    risk_percent <- FALSE
+  }
+  if(stringr::str_detect(
+    string = type,
+    pattern = "diff")
+  ) {
+    ratio_digits_decrease <- NULL
+  }
   survdiff_ci(
     formula = stats::as.formula(
       paste0(
@@ -79,16 +105,31 @@ estimate_survdiff <- function(
           is.na(time2),
           true = "survival::Surv(time = .time, ",
           false = "survival::Surv(time = .time_orig, time2 = .time2, "),
-        "event = .event) ~ .exposure")),
+        "event = .event_compete) ~ .exposure")),
     data = data,
     time = timepoint,
     estimand = dplyr::if_else(
       stringr::str_detect(
         string = type,
-        pattern = "survdiff"),
+        pattern = "surv"),
       true = "survival",
       false = "cuminc"),
-    conf.level = ci) %>%
+    type = dplyr::if_else(
+      stringr::str_detect(
+        string = type,
+        pattern = "diff"),
+      true = "diff",
+      false = "ratio"),
+    conf.level = ci,
+    event_type = event_type,
+    id_variable = find_argument(
+      arguments = arguments,
+      which_argument = "id",
+      is_numeric = FALSE,
+      default = NULL
+    ),
+    weighted = !is.na(weights)
+  ) %>%
     dplyr::mutate(
       term = paste0(".exposure", .data$term)) %>%
     format_regression_results(
@@ -102,10 +143,16 @@ estimate_survdiff <- function(
       digits = digits,
       pattern = pattern,
       xlevels = xlevels,
-      reference = 0,
+      reference = dplyr::if_else(
+        stringr::str_detect(
+          string = type,
+          pattern = "diff"),
+        true = 0,
+        false = 1),
       nmin = nmin,
       to = to,
       reference_label = reference,
       percent = risk_percent,
-      ratio_digits_decrease = NULL)
+      ratio_digits_decrease = ratio_digits_decrease
+    )
 }

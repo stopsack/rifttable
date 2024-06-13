@@ -71,10 +71,11 @@ estimate_regress_cox <- function(
     which_argument = "weights",
     is_numeric = FALSE,
     default = NULL)
-  if(!is.null(coxph_weights)) {
-    coxph_weights <- data %>%
-      dplyr::pull(dplyr::one_of(coxph_weights))
-  }
+  if(!is.null(coxph_weights))
+    stop(paste(
+      "Breaking change in rifttable 0.6.3: 'weights' for Cox models must now",
+      "be provided as part of the 'design', as for other estimators.",
+      "'weights' in the 'arguments' list are no longer supported."))
   coxph_robust <- find_argument(
     arguments = arguments,
     which_argument = "robust",
@@ -91,7 +92,7 @@ estimate_regress_cox <- function(
         "event = .event) ~ .exposure ",
         confounders)),
     data = data,
-    weights = coxph_weights,
+    weights = data$.weights,
     robust = coxph_robust) %>%
     broom::tidy(
       conf.int = TRUE,
