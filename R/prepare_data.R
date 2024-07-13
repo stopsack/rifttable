@@ -220,6 +220,19 @@ prepare_data <- function(
             )
           )
       }
+      if(any(is.na(data$.event)) |
+         any(is.na(data[[time]]))
+      ) {
+        warning(
+          paste0(
+            "The event variable '",
+            event,
+            "' and/or the time variable '",
+            time,
+            "' contain missing values, which may be unintended and lead to undesirable results."
+          )
+        )
+      }
 
       if(!(time %in% names(data)))
         stop(
@@ -265,6 +278,15 @@ prepare_data <- function(
                 "' must be continuous (numeric). Its current class is '",
                 class(data$.time2),
                 "'."))
+          if(any(is.na(data$.time2))) {
+            warning(
+              paste0(
+                "The second (exit) time variable '",
+                time2,
+                "' contains missing values, which is may be unintended and lead to undesirable results."
+              )
+            )
+          }
           data <- data %>%
             # for estimators that just sum the follow-up times:
             dplyr::mutate(.time = .data$.time2 - .data$.time_orig)
