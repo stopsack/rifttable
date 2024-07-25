@@ -36,13 +36,6 @@ prepare_data <- function(
     string = type,
     pattern = "_joint") &
     is_trend == FALSE) {  # trends must be stratum-specific
-    if(missing(effectmodifier) |
-       missing(effectmodifier_level))
-      stop(
-        paste0(
-          "Effect modifier and stratum must be specified for joint ",
-          "model ('",
-          type, "')."))
     if(is.na(effectmodifier) |
        is.null(effectmodifier) |
        is.null(effectmodifier_level))
