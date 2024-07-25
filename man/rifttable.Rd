@@ -45,23 +45,27 @@ default to \code{TRUE}.}
 
 \item{risk_digits}{Optional. Number of decimal digits to show for risks/
 cumulative incidence. Defaults to \code{2} for \code{risk_percent = FALSE}
-and to \code{0} for \code{risk_percent = TRUE}. Can override for each line
-in \code{type}.}
+and to \code{0} for \code{risk_percent = TRUE}. Alternatively,
+\code{digits} can be specified directly for each row of the \code{design}.}
 
 \item{diff_digits}{Optional. Number of decimal digits to show for
-rounding of means and mean difference estimates. Defaults to \code{2}.}
+rounding of means and mean difference estimates. Defaults to \code{2}.
+Alternatively, \code{digits} can be specified directly for each row of the
+\code{design}.}
 
 \item{ratio_digits}{Optional. Number of decimal digits to show for ratio
-estimates. Defaults to \code{2}. Can override for each line in \code{type}.}
+estimates. Defaults to \code{2}. Alternatively, \code{digits} can be
+specified directly for each row of the \code{design}.}
 
 \item{ratio_digits_decrease}{Optional. Lower limits of ratios above which
 fewer digits should be shown. Provide a named vector of the format,
-\code{c(`3` = -2, `10` = -2)} to reduce the number of rounding digits by
+\code{c(`3` = -1, `10` = -2)} to reduce the number of rounding digits by
 1 digit for ratios greater than 3 and by 2 digits for ratios greater than
 10 (the default). To disable, set to \code{NULL}.}
 
 \item{rate_digits}{Optional. Number of decimal digits to show for rates.
-Defaults to \code{1}. Can override for each line in \code{type}.}
+Defaults to \code{1}. Alternatively,  \code{digits} can be specified
+directly for each row of the \code{design}.}
 
 \item{to}{Optional. Separator between the lower and the upper bound
 of the 95\% confidence interval (and interquartile range for medians).
@@ -71,21 +75,22 @@ Defaults to \code{", "}.}
 label for the reference category.}
 
 \item{type2_layout}{Optional. If a second estimate is requested via
-\code{type2} in the \code{design} matrix, display it as in rows below
-(\code{"rows"}) or columns (\code{"columns"}) to the right. Defaults to
+\code{type2} in the \code{design} matrix, display it as rows below
+(\code{"rows"}) or as columns (\code{"columns"}) to the right. Defaults to
 \code{"rows"}.}
 
 \item{overall}{Optional. Defaults to \code{FALSE}. Add a first column with
 unstratified estimates to an exposure-stratified table? Elements will be
 shown only for absolute estimates (e.g., \code{type = "mean"}) and blank
-for comparatible estimates (e.g., mean difference via
+for comparative estimates (e.g., mean difference via
 \code{type = "diff"}).}
 
 \item{exposure_levels}{Optional. Defaults to \code{"noempty"}. Show only
-exposure levels that exist in the data or are \code{"NA"}
-(\code{"noempty"}); show only exposure levels that are neither \code{"NA"}
-nor empty (\code{"nona"}); or show all exposure levels (\code{"all"}),
-even if \code{"NA"} or a factor level that does not exist in the data.}
+exposure levels that exist in the data or are \code{NA}
+(\code{"noempty"}); show only exposure levels that are neither \code{NA}
+nor empty (\code{"nona"}); or show all exposure levels even if they are
+\code{NA} or a factor level that does not occur in the data
+(\code{"all"}).}
 }
 \value{
 Tibble. Get formatted output as a gt table by passing on to
