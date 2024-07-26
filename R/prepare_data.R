@@ -44,7 +44,8 @@ prepare_data <- function(
           "Effect modifier and stratum must be specified for joint ",
           "model ('",
           type, "')."))
-    if(any(effectmodifier_level == ""))
+    if(any(effectmodifier_level == "") |
+       any(is.na(effectmodifier_level)))
       stop(
         paste0(
           'An effect modifier stratum cannot be an empty string "" ',
