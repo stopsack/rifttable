@@ -140,7 +140,7 @@ survdiff_ci <- function(
   } else {
     if(estimand == "survival")
       stop(paste(
-        "type = 'survdiff' or 'survratio' may not be meaningful with ",
+        "type = 'survdiff' or 'survratio' may not be meaningful with",
         "competing events. Use: type = 'cumincdiff' or 'cumincratio'."))
     res <- tibble::tibble(
       term = res$strata,

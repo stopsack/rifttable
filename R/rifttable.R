@@ -718,7 +718,7 @@ rifttable <- function(
     # handle "type" and "type2" together
   } else {
     if(any(is.na(design$exposure)))
-      stop("If using 'type2', 'exposure' must be specified for each row of the 'design'.")
+      stop("If using 'type2', 'exposure' must be specified for each row of the 'design', and 'overall = TRUE' cannot be used.")
     res <- res %>%
       dplyr::mutate(
         result2 = purrr::pmap(

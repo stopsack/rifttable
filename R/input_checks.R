@@ -145,8 +145,14 @@ find_argument <- function(
                 which_argument,
                 " = '",
                 argum,
-                " is not among the accepted choices, which include: ",
-                acceptable))
+                "' is not among the accepted choices, which include: ",
+                paste(
+                  acceptable,
+                  sep = ", ",
+                  collapse = ", "
+                )
+              )
+            )
           }
         }
       }

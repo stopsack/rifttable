@@ -48,7 +48,7 @@ prepare_data <- function(
       stop(
         paste0(
           'An effect modifier stratum cannot be an empty string "" ',
-          'for a joint model ("',
+          'or missing (NA) for a joint model ("',
           type,
           '").'))
     pattern <- paste0(
