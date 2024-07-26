@@ -94,7 +94,7 @@ estimate_regress_continuous <- function(
     },
     irrrob =,
     irrrob_joint = {
-      if (!requireNamespace("sandwich", quietly = TRUE)) {
+      if (!is_package_installed("sandwich")) {
         stop(
           paste0(
             "The package \"sandwich\" must be installed to estimate robust ",
@@ -179,7 +179,7 @@ estimate_regress_continuous <- function(
     },
     quantreg_joint =,
     quantreg = {
-      if (!requireNamespace("quantreg", quietly = TRUE)) {
+      if (!is_package_installed("quantreg")) {
         stop(
           paste0(
             "The package \"quantreg\" must be installed to use type = '",

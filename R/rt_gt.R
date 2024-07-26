@@ -80,7 +80,7 @@ rt_gt <- function(
     attr(x = res, which = "mydata") <- df
     return(res)
   } else {
-    if (!requireNamespace("gt", quietly = TRUE)) {
+    if (!is_package_installed("gt")) {
       stop(
         paste(
           "The package \"gt\" must be installed to create formatted tables",
