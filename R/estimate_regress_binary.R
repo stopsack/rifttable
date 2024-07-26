@@ -132,7 +132,9 @@ estimate_regress_binary <- function(
           conf.int = TRUE,
           conf.level = ci,
           exponentiate = TRUE)
-    }) %>%
+    },
+    stop(paste0("Invalid estimator type = '", type, "'."))
+  ) %>%
     format_regression_results(
       data = data,
       suppress = "binary",

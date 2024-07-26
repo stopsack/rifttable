@@ -142,7 +142,9 @@ estimate_outcome_continuous <- function(
               digits = digits)))
       } else
         "--"
-    }) %>%
+    },
+    stop(paste0("Invalid estimator type = '", type, "'."))
+  ) %>%
     format_stratified_results(
       data = data,
       to = to,

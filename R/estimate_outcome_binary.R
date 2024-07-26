@@ -135,7 +135,9 @@ estimate_outcome_binary <- function(
             digits = digits),
           percent_symbol,
           ")"))
-    }) %>%
+    },
+    stop(paste0("Invalid estimator type = '", type, "'."))
+  ) %>%
     format_stratified_results(
       data = data,
       to = to,
