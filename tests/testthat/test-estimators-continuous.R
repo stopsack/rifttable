@@ -28,6 +28,7 @@ testthat::test_that(
       "Mean ratio",                          "",
       "  of arithmetic means",               "fold",
       "  of arithmetic means, empirical SE", "irrrob",
+      "  of arithmetic means, Poisson SE",   "irr",
       "  of geometric means",                "foldlog"
     ) %>%
       dplyr::mutate(
@@ -62,6 +63,7 @@ testthat::test_that(
       "Mean ratio",                         "",                 "",                 "",                    "",
       "  of arithmetic means",              "",                 "1 (reference)",    "1.005 (0.961, 1.051)","1.083 (1.028, 1.140)",
       "  of arithmetic means, empirical SE","",                 "1 (reference)",    "1.005 (0.959, 1.053)","1.083 (1.029, 1.139)",
+      "  of arithmetic means, Poisson SE",  "",                 "1 (reference)",    "1.005 (0.966, 1.045)", "1.083 (1.034, 1.134)",
       "  of geometric means",               "",                 "1 (reference)",    "1.007 (0.961, 1.055)","1.088 (1.029, 1.151)",
     )
 

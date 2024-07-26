@@ -299,3 +299,26 @@ test_that("Missing outcome or outcome of wrong type gets detected", {
       rifttable(data = df),
     "Outcome variable 'receptor' must be continuous")
 })
+
+test_that(
+  desc = "Logical exposure has 'all' levels shown",
+  code = {
+    expect_equal(
+      object = tibble::tibble(
+        exposure = "allempty_lgl",
+        outcome = "death",
+        type = "outcomes"
+      ) %>%
+        rifttable(
+          data = df,
+          exposure_levels = "all"
+        ),
+      expected = tibble::tibble(
+        allempty_lgl = "outcomes",
+        `FALSE` = "0",
+        `TRUE` = "0",
+        `NA` = "--"
+      )
+    )
+  }
+)
