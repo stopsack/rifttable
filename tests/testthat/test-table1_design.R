@@ -5,7 +5,8 @@ df <- breastcancer |>
     receptor = dplyr::if_else(dplyr::row_number() %in% 9:11, NA, receptor),
     death = dplyr::if_else(dplyr::row_number() %in% 99:101, NA, death),
     allempty = NA_integer_,
-    allempty_lgl = allempty == 1)
+    allempty_lgl = allempty == 1
+  )
 
 result <- table1_design(
   death,
@@ -22,7 +23,8 @@ test_that("Table 1 design dimensions are correct", {
 test_that("Table 1 design picks up missing values", {
   expect_true(all(
     c("death@_NA_", "receptor@_NA_", "allempty@_NA_", "allempty_lgl@_NA_") %in%
-      result$outcome))
+      result$outcome
+  ))
   expect_false(all(c("stage@_NA_", "continuous@_NA_") %in% result$outcome))
 })
 

@@ -299,9 +299,11 @@
 #'     sex = factor(
 #'       sex,
 #'       levels = 1:2,
-#'       labels = c("Male", "Female")),
+#'       labels = c("Male", "Female")
+#'     ),
 #'     time = time / 365.25,
-#'     status = status - 1)
+#'     status = status - 1
+#'   )
 #'
 #'
 #' # Example 1: Binary outcomes (use 'outcome' variable)
@@ -316,23 +318,28 @@
 #'     "Outcomes (Risk)",
 #'     "Outcomes/Total (Risk)",
 #'     "RR",
-#'     "RD")) %>%
+#'     "RD"
+#'   )
+#' ) %>%
 #'   dplyr::mutate(
 #'     type = label,
 #'     exposure = "sex",
-#'     outcome = "status")
+#'     outcome = "status"
+#'   )
 #'
 #' # Generate rifttable
 #' rifttable(
 #'   design = design1,
-#'   data = cancer)
+#'   data = cancer
+#' )
 #'
 #' # Use 'design' as columns (selecting RR and RD only)
 #' rifttable(
 #'   design = design1 %>%
 #'     dplyr::filter(label %in% c("RR", "RD")),
 #'   data = cancer,
-#'   layout = "cols")
+#'   layout = "cols"
+#' )
 #'
 #'
 #' # Example 2: Survival outcomes (use 'time' and 'event'),
@@ -358,44 +365,51 @@
 #'   "",                           NULL,     "",           "",
 #'   "**Joint model**, age-adj.",  NULL,     "",           "",
 #'   "  ECOG PS1",                 1,        "+ age",      "hr_joint",
-#'   "  ECOG PS2",                 2,        "+ age",      "hr_joint") %>%
+#'   "  ECOG PS2",                 2,        "+ age",      "hr_joint"
+#' ) %>%
 #'   # Elements that are the same for all rows:
 #'   dplyr::mutate(
 #'     exposure = "sex",
 #'     event = "status",
 #'     time = "time",
-#'     effect_modifier = "ph.ecog")
+#'     effect_modifier = "ph.ecog"
+#'   )
 #'
 #' # Generate rifttable
 #' rifttable(
 #'   design = design2,
 #'   data = cancer %>%
-#'     dplyr::filter(ph.ecog %in% 1:2))
+#'     dplyr::filter(ph.ecog %in% 1:2)
+#' )
 #'
 #'
 #' # Example 3: Get two estimates using 'type' and 'type2'
 #' design3 <- tibble::tribble(
 #'   ~label,     ~stratum, ~type,          ~type2,
 #'   "ECOG PS1", 1,        "events/total", "hr",
-#'   "ECOG PS2", 2,        "events/total", "hr") %>%
+#'   "ECOG PS2", 2,        "events/total", "hr"
+#' ) %>%
 #'   dplyr::mutate(
 #'     exposure = "sex",
 #'     event = "status",
 #'     time = "time",
 #'     confounders = "+ age",
-#'     effect_modifier = "ph.ecog")
+#'     effect_modifier = "ph.ecog"
+#'   )
 #'
 #' rifttable(
 #'   design = design3,
 #'   data = cancer %>%
-#'     dplyr::filter(ph.ecog %in% 1:2))
+#'     dplyr::filter(ph.ecog %in% 1:2)
+#' )
 #'
 #' rifttable(
 #'   design = design3,
 #'   data = cancer %>%
 #'     dplyr::filter(ph.ecog %in% 1:2),
 #'   layout = "cols",
-#'   type2_layout = "cols")
+#'   type2_layout = "cols"
+#' )
 #'
 #'
 #' # Example 4: Continuous outcomes (use 'outcome' variable);
@@ -413,23 +427,29 @@
 #'   "",                       NULL,     "",           NA,
 #'   "Joint model",            NULL,     "",           NA,
 #'   "  Male",                 "Male",   "diff_joint", NA,
-#'   "  Female",               "Female", "diff_joint", NA) %>%
+#'   "  Female",               "Female", "diff_joint", NA
+#' ) %>%
 #'   dplyr::mutate(
 #'     exposure = "ph.ecog_factor",
 #'     trend = "ph.ecog",
 #'     outcome = "age",
-#'     effect_modifier = "sex") %>%
+#'     effect_modifier = "sex"
+#'   ) %>%
 #'   rifttable(
 #'     data = cancer %>%
 #'       dplyr::filter(ph.ecog < 3) %>%
-#'       dplyr::mutate(ph.ecog_factor = factor(ph.ecog)))
+#'       dplyr::mutate(ph.ecog_factor = factor(ph.ecog))
+#'   )
 #'
 #'
 #' # Example 5: Get formatted output for Example 2 (see above)
 #' \dontrun{
-#' rifttable(design = design2,
-#'        data = cancer %>% dplyr::filter(ph.ecog %in% 1:2)) %>%
-#'   rt_gt(md = 1)  # get markdown formatting in first column ('label')
+#' rifttable(
+#'   design = design2,
+#'   data = cancer %>%
+#'     dplyr::filter(ph.ecog %in% 1:2)
+#' ) %>%
+#'   rt_gt(md = 1) # get markdown formatting in first column ('label')
 #' }
 #'
 #' @section Example Output (see Example 5):
@@ -443,7 +463,8 @@ rifttable <- function(
     risk_digits = dplyr::if_else(
       risk_percent == TRUE,
       true = 0,
-      false = 2),
+      false = 2
+    ),
     diff_digits = 2,
     ratio_digits = 2,
     ratio_digits_decrease = c(`2.995` = -1, `9.95` = -2),
@@ -452,24 +473,33 @@ rifttable <- function(
     reference = "(reference)",
     type2_layout = "rows",
     overall = FALSE,
-    exposure_levels = c("noempty", "nona", "all")) {
-  if(!is.data.frame(design))
+    exposure_levels = c("noempty", "nona", "all")
+) {
+  if (!is.data.frame(design)) {
     stop("No 'design' data frame/tibble was provided.")
-  if(missing(data))
-    if(!is.null(attr(x = design, which = "rt_data")))
+  }
+  if (missing(data)) {
+    if (!is.null(attr(x = design, which = "rt_data"))) {
       data <- attr(x = design, which = "rt_data")
-  if(!is.data.frame(data))
+    }
+  }
+  if (!is.data.frame(data)) {
     stop("No 'data' data frame/tibble was provided.")
-  if(missing(risk_percent) &
-     !is.null(attr(
-       x = design,
-       which = "rt_data")))
+  }
+  if (missing(risk_percent) &
+    !is.null(attr(
+      x = design,
+      which = "rt_data"
+    ))) {
     risk_percent <- TRUE
+  }
   exposure_levels <- match.arg(exposure_levels)[1]
 
-  if(!("type" %in% names(design))) {
-    stop(paste("The 'design' data frame must contain a 'type' column",
-               "specifying the requested statistics."))
+  if (!("type" %in% names(design))) {
+    stop(paste(
+      "The 'design' data frame must contain a 'type' column",
+      "specifying the requested statistics."
+    ))
   }
   if(!("label"       %in% names(design))) design$label       <- design$type
   if(!("exposure"    %in% names(design))) design$exposure    <- NA
@@ -488,7 +518,10 @@ rifttable <- function(
   if(!("na_rm"       %in% names(design))) design$na_rm       <- NA
   if(!("ci"          %in% names(design))) design$ci          <- NA
   if(!("arguments"   %in% names(design))) design$arguments   <- NA
-  if(!("effect_modifier" %in% names(design) & "stratum" %in% names(design))) {
+  if (
+    !("effect_modifier" %in% names(design) &
+      "stratum" %in% names(design))
+  ) {
     design <- design %>%
       dplyr::mutate(effect_modifier = NA, stratum = NA)
   }
@@ -498,24 +531,29 @@ rifttable <- function(
       type2 = dplyr::if_else(
         is.na(.data$type2),
         true = "",
-        false = .data$type2),
+        false = .data$type2
+      ),
       to = dplyr::if_else(
         is.na(.data$to),
         true = as.character(to_use),
-        false = as.character(.data$to)))
+        false = as.character(.data$to)
+      )
+    )
 
   exposure_nona <- stats::na.omit(design$exposure)
   exposure_nona <- exposure_nona[exposure_nona != ""]
-  if(length(exposure_nona > 0)) {
+  if (length(exposure_nona > 0)) {
     name <- attr(
       x = data %>%
         dplyr::pull(exposure_nona[1]),
-      which = "label")
-    if(is.null(name))
+      which = "label"
+    )
+    if (is.null(name)) {
       name <- exposure_nona[1]
+    }
 
-    if(overall == TRUE) {
-      if(layout == "rows") {
+    if (overall == TRUE) {
+      if (layout == "rows") {
         return(
           dplyr::bind_cols(
             rifttable(
@@ -534,7 +572,8 @@ rifttable <- function(
               to = to,
               reference = reference,
               overall = FALSE,
-              exposure_levels = exposure_levels),
+              exposure_levels = exposure_levels
+            ),
             rifttable(
               design = design,
               data = data,
@@ -550,8 +589,11 @@ rifttable <- function(
               to = to,
               reference = reference,
               overall = FALSE,
-              exposure_levels = exposure_levels) %>%
-              dplyr::select(-1, -dplyr::any_of("Overall"))))
+              exposure_levels = exposure_levels
+            ) %>%
+              dplyr::select(-1, -dplyr::any_of("Overall"))
+          )
+        )
       } else {
         res_strat <- rifttable(
           design = design,
@@ -568,7 +610,8 @@ rifttable <- function(
           to = to,
           reference = reference,
           overall = FALSE,
-          exposure_levels = exposure_levels)
+          exposure_levels = exposure_levels
+        )
         return(
           dplyr::bind_rows(
             rifttable(
@@ -587,9 +630,12 @@ rifttable <- function(
               to = to,
               reference = reference,
               overall = FALSE,
-              exposure_levels = exposure_levels) %>%
+              exposure_levels = exposure_levels
+            ) %>%
               dplyr::rename(!!names(res_strat)[1] := 1),
-            res_strat))
+            res_strat
+          )
+        )
       }
     }
   } else {
@@ -597,23 +643,26 @@ rifttable <- function(
   }
 
   # For Table 1s from table1_design()
-  if(any(
+  if (any(
     stringr::str_detect(string = design$outcome, "@"),
-    na.rm = TRUE)) {
+    na.rm = TRUE
+  )) {
     to_code <- tibble::tibble(
-      combo = stringr::str_subset(design$outcome, "@")) %>%
+      combo = stringr::str_subset(design$outcome, "@")
+    ) %>%
       tidyr::separate(
         col = "combo",
         into = c("outcome", "var_level"),
         sep = "@",
-        extra = "merge") %>%
+        extra = "merge"
+      ) %>%
       dplyr::distinct()
     data <- purrr::map2_dfc(
       .x = to_code$outcome,
       .y = to_code$var_level,
-      .f = ~{
+      .f = ~ {
         varname <- paste0(.x, "@", .y)
-        if(.y == "_NA_") {
+        if (.y == "_NA_") {
           data %>%
             dplyr::rename(variable = {{ .x }}) %>%
             dplyr::mutate(result = is.na(variable)) %>%
@@ -624,15 +673,16 @@ rifttable <- function(
             dplyr::mutate(result = variable == .y) %>%
             dplyr::select(!!varname := result)
         }
-      }) %>%
+      }
+    ) %>%
       dplyr::bind_cols(data)
   }
 
   res <- design %>%
     dplyr::mutate(
-      type   = stringr::str_to_lower(string = .data$type),
-      type2  = stringr::str_to_lower(string = .data$type2),
-      index  = dplyr::row_number(),
+      type = stringr::str_to_lower(string = .data$type),
+      type2 = stringr::str_to_lower(string = .data$type2),
+      index = dplyr::row_number(),
       result = purrr::pmap(
         .l = list(
           .data$event,
@@ -651,7 +701,8 @@ rifttable <- function(
           .data$na_rm,
           .data$ci,
           .data$to,
-          .data$arguments),
+          .data$arguments
+        ),
         .f = fill_cells,
         data = data,
         factor = factor,
@@ -662,63 +713,74 @@ rifttable <- function(
         ratio_digits_decrease = ratio_digits_decrease,
         rate_digits = rate_digits,
         reference = reference,
-        exposure_levels = exposure_levels))
+        exposure_levels = exposure_levels
+      )
+    )
 
   # simple reshaping if only "type" alone
-  if(all(design$type2 == "")) {
+  if (all(design$type2 == "")) {
     res <- res %>%
       dplyr::select(
         "index",
         "label",
-        "result") %>%
+        "result"
+      ) %>%
       tidyr::unnest(
         cols = "result",
-        keep_empty = TRUE)
-    if(".exposure" %in% names(res)) {
+        keep_empty = TRUE
+      )
+    if (".exposure" %in% names(res)) {
       res <- res %>%
         dplyr::mutate(
           .exposure = dplyr::if_else(
             is.na(.data$.exposure) & .data$res == "",
             true = stats::na.omit(.data$.exposure)[1],
-            false = .data$.exposure))
+            false = .data$.exposure
+          )
+        )
     } else {
       res$.exposure <- "Overall"
     }
-    if(layout == "rows") {
+    if (layout == "rows") {
       res <- res %>%
         tidyr::pivot_wider(
           names_from = ".exposure",
           values_from = "res",
-          values_fill = "") %>%
+          values_fill = ""
+        ) %>%
         dplyr::rename(!!name := "label") %>%
         dplyr::select(-"index") %>%
         dplyr::relocate(
           dplyr::any_of("Trend"),
-          .after = dplyr::last_col())
+          .after = dplyr::last_col()
+        )
       return(res)
     } else {
-      if(sum(duplicated(design$label)) > 0 |
-         "" %in% design$label) {
+      if (sum(duplicated(design$label)) > 0 |
+        "" %in% design$label) {
         res %>%
           tidyr::pivot_wider(
             names_from = c("index", "label"),
             values_from = "res",
-            values_fill = "")
+            values_fill = ""
+          )
       } else {
         res %>%
           dplyr::select(-"index") %>%
           tidyr::pivot_wider(
             names_from = "label",
             values_from = "res",
-            values_fill = "") %>%
+            values_fill = ""
+          ) %>%
           dplyr::rename(!!name := ".exposure")
       }
     }
 
     # handle "type" and "type2" together
   } else {
-    if(any(is.na(design$exposure)))
+    if (any(is.na(design$exposure))) {
       stop("If using 'type2', 'exposure' must be specified for each row of the 'design', and 'overall = TRUE' cannot be used.")
+    }
     res <- res %>%
       dplyr::mutate(
         result2 = purrr::pmap(
@@ -732,14 +794,15 @@ rifttable <- function(
             .data$stratum,
             .data$confounders,
             .data$weights,
-            .data$type2,  # !
+            .data$type2, # !
             .data$trend,
-            .data$digits2,  # !
+            .data$digits2, # !
             .data$nmin,
             .data$na_rm,
             .data$ci,
             .data$to,
-            .data$arguments),
+            .data$arguments
+          ),
           .f = fill_cells,
           data = data,
           factor = factor,
@@ -750,84 +813,103 @@ rifttable <- function(
           ratio_digits_decrease = ratio_digits_decrease,
           rate_digits = rate_digits,
           reference = reference,
-          exposure_levels = exposure_levels),
+          exposure_levels = exposure_levels
+        ),
         result = purrr::map2(
           .x = .data$result,
           .y = .data$result2,
-          .f = ~dplyr::full_join(
+          .f = ~ dplyr::full_join(
             .x,
             .y,
             by = ".exposure",
-            suffix = c(".1", ".2")))) %>%
+            suffix = c(".1", ".2")
+          )
+        )
+      ) %>%
       dplyr::select(
         "index",
         "label",
-        "result") %>%
+        "result"
+      ) %>%
       tidyr::unnest(cols = "result") %>%
       tidyr::pivot_longer(
         cols = c("res.1", "res.2"),
         names_to = "whichres",
-        values_to = "value") %>%
+        values_to = "value"
+      ) %>%
       dplyr::mutate(
         value = dplyr::if_else(
           is.na(.data$value),
           true = "",
-          false = .data$value))
-    if(layout == "rows") {
-      if(type2_layout == "rows") {
+          false = .data$value
+        )
+      )
+    if (layout == "rows") {
+      if (type2_layout == "rows") {
         res <- res %>%
           dplyr::filter(
             !(.data$whichres == "res.2" &
-                .data$value == "")) %>%
+              .data$value == "")
+          ) %>%
           tidyr::pivot_wider(
             names_from = ".exposure",
             values_from = "value",
-            values_fill = "") %>%
+            values_fill = ""
+          ) %>%
           dplyr::group_by(.data$index) %>%
           dplyr::mutate(
             label = dplyr::if_else(
               dplyr::row_number() == 1,
               true = .data$label,
-              false = "")) %>%
+              false = ""
+            )
+          ) %>%
           dplyr::ungroup() %>%
           dplyr::rename(!!name := "label") %>%
           dplyr::select(-"index", -"whichres") %>%
           dplyr::relocate(
             dplyr::any_of("Trend"),
-            .after = dplyr::last_col())
+            .after = dplyr::last_col()
+          )
       } else {
         res <- res %>%
           dplyr::mutate(
             .exposure = dplyr::if_else(
               .data$whichres == "res.1",
               true = paste0(.data$.exposure),
-              false = paste0(.data$.exposure,
-                             " "))) %>%
+              false = paste0(
+                .data$.exposure,
+                " "
+              )
+            )
+          ) %>%
           dplyr::select(-"whichres") %>%
           tidyr::pivot_wider(
             names_from = ".exposure",
             values_from = "value",
-            values_fill = "") %>%
+            values_fill = ""
+          ) %>%
           dplyr::rename(!!name := "label") %>%
           dplyr::select(-"index")
       }
       return(res)
-
     } else {
-      if(type2_layout == "rows") {
-        if(sum(duplicated(design$label)) > 0 | "" %in% design$label) {
+      if (type2_layout == "rows") {
+        if (sum(duplicated(design$label)) > 0 | "" %in% design$label) {
           res <- res %>%
             tidyr::pivot_wider(
               names_from = c("index", "label"),
               values_from = "value",
-              values_fill = "")
+              values_fill = ""
+            )
         } else {
           res <- res %>%
             dplyr::select(-"index") %>%
             tidyr::pivot_wider(
               names_from = "label",
               values_from = "value",
-              values_fill = "")
+              values_fill = ""
+            )
         }
         res %>%
           dplyr::group_by(.data$.exposure) %>%
@@ -835,7 +917,9 @@ rifttable <- function(
             .exposure = dplyr::if_else(
               .data$whichres == "res.1",
               true = paste0(.data$.exposure),
-              false = "")) %>%
+              false = ""
+            )
+          ) %>%
           dplyr::ungroup() %>%
           dplyr::select(-"whichres") %>%
           dplyr::rename(!!name := ".exposure")
@@ -843,21 +927,26 @@ rifttable <- function(
         res <- res %>%
           dplyr::filter(
             !(.data$whichres == "res.2" &
-                .data$value == "")) %>%
+              .data$value == "")
+          ) %>%
           dplyr::mutate(
             label = dplyr::if_else(
               .data$whichres == "res.1",
               true = .data$label,
               false = paste0(
                 .data$label,
-                " ")))
-        if(sum(duplicated(design$label)) > 0 | "" %in% design$label) {
+                " "
+              )
+            )
+          )
+        if (sum(duplicated(design$label)) > 0 | "" %in% design$label) {
           res %>%
             dplyr::select(-"whichres") %>%
             tidyr::pivot_wider(
               names_from = c("index", "label"),
               values_from = "value",
-              values_fill = "") %>%
+              values_fill = ""
+            ) %>%
             dplyr::rename(!!name := ".exposure")
         } else {
           res %>%
@@ -865,7 +954,8 @@ rifttable <- function(
             tidyr::pivot_wider(
               names_from = "label",
               values_from = "value",
-              values_fill = "") %>%
+              values_fill = ""
+            ) %>%
             dplyr::rename(!!name := ".exposure")
         }
       }

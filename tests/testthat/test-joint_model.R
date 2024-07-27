@@ -61,7 +61,8 @@ test_that(
       object = rifttable(
         design = design |>
           dplyr::select(-"stratum"),
-        data = breastcancer),
+        data = breastcancer
+      ),
       regexp = "stratum must be specified"
     )
 
@@ -69,7 +70,8 @@ test_that(
       object = rifttable(
         design = design |>
           dplyr::mutate(stratum = NULL),
-        data = breastcancer),
+        data = breastcancer
+      ),
       regexp = "stratum must be specified"
     )
 
@@ -77,7 +79,8 @@ test_that(
       object = rifttable(
         design = design |>
           dplyr::select(-"stratum"),
-        data = breastcancer),
+        data = breastcancer
+      ),
       regexp = "stratum must be specified"
     )
   }

@@ -29,9 +29,11 @@ cancer <- cancer %>%
     sex = factor(
       sex,
       levels = 1:2,
-      labels = c("Male", "Female")),
-    time = time / 365.25,  # transform to years
-    status = status - 1)
+      labels = c("Male", "Female")
+    ),
+    time = time / 365.25, # transform to years
+    status = status - 1
+  )
 
 tibble::tribble(
   ~label,                                  ~type,
@@ -63,15 +65,18 @@ tibble::tribble(
   "  1-year risk difference",              "cumincdiff",
   "  1-year survival ratio",               "survratio",
   "  1-year risk ratio",                   "cumincratio",
-  "  Hazard ratio (95% CI)",               "hr") %>%
+  "  Hazard ratio (95% CI)",               "hr"
+) %>%
   dplyr::mutate(
-    time = "time", 
-    event = "status", 
+    time = "time",
+    event = "status",
     exposure = "sex",
-    arguments = list(list(timepoint = 1))) %>%
+    arguments = list(list(timepoint = 1))
+  ) %>%
   rifttable(
-    data = cancer, 
-    overall = TRUE) %>%
+    data = cancer,
+    overall = TRUE
+  ) %>%
   rt_gt()
 ```
 

@@ -15,7 +15,7 @@ testthat::test_that(
             "Female"
           )
         ),
-        time = time / 365.25,  # transform to years
+        time = time / 365.25, # transform to years
         status = status - 1
       )
 

@@ -26,21 +26,26 @@ estimate_outcome_continuous <- function(
     to,
     is_trend,
     ...) {
-  if(is_trend)
+  if (is_trend) {
     return(tibble::tibble())
-  if(type != "total")
+  }
+  if (type != "total") {
     check_outcome(
       data = data,
       type = type,
       outcome = outcome,
-      outcome_type = "continuous")
+      outcome_type = "continuous"
+    )
+  }
   digits <- find_rounding_digits(
     digits = digits,
-    default = diff_digits)
+    default = diff_digits
+  )
   data <- data %>%
     dplyr::group_by(
       .data$.exposure,
-      .drop = FALSE)
+      .drop = FALSE
+    )
 
   switch(
     EXPR = type,
@@ -53,7 +58,9 @@ estimate_outcome_continuous <- function(
         dplyr::summarize(
           res = format_round(
             mean(.data$.outcome),
-            digits = digits))
+            digits = digits
+          )
+        )
     },
     "mean (sd)" = {
       data %>%
@@ -61,87 +68,109 @@ estimate_outcome_continuous <- function(
           res = paste0(
             format_round(
               mean(.data$.outcome),
-              digits = digits),
+              digits = digits
+            ),
             " (",
             format_round(
               stats::sd(.data$.outcome),
-              digits = digits),
-            ")"))
+              digits = digits
+            ),
+            ")"
+          )
+        )
     },
     "sd" = {
       data %>%
         dplyr::summarize(res = format_round(
           stats::sd(.data$.outcome),
-          digits = digits))
+          digits = digits
+        ))
     },
     "mean (ci)" = {
       data %>%
         dplyr::summarize(res = paste0(
           format_round(
             mean(.data$.outcome),
-            digits = digits),
+            digits = digits
+          ),
           " (",
           format_round(
             mean(.data$.outcome) -
               stats::qnorm(1 - (1 - ci) / 2) *
-              sqrt(stats::var(.data$.outcome) /
-                     sum(!is.na(.data$.outcome))),
-            digits = digits),
+                sqrt(stats::var(.data$.outcome) /
+                  sum(!is.na(.data$.outcome))),
+            digits = digits
+          ),
           to,
           format_round(
             mean(.data$.outcome) +
               stats::qnorm(1 - (1 - ci) / 2) *
-              sqrt(stats::var(.data$.outcome) /
-                     sum(!is.na(.data$.outcome))),
-            digits = digits),
-          ")"))
+                sqrt(stats::var(.data$.outcome) /
+                  sum(!is.na(.data$.outcome))),
+            digits = digits
+          ),
+          ")"
+        ))
     },
     "geomean" = {
       data %>%
         dplyr::summarize(
           res = format_round(
             exp(mean(log(.data$.outcome))),
-            digits = digits))
+            digits = digits
+          )
+        )
     },
     "median" = {
       data %>%
         dplyr::summarize(res = format_round(
           stats::median(.data$.outcome),
-          digits = digits))
+          digits = digits
+        ))
     },
     "median (iqr)" = {
       data %>%
         dplyr::summarize(res = paste0(
           format_round(
             stats::median(.data$.outcome),
-            digits = digits),
+            digits = digits
+          ),
           " (",
           format_round(
             stats::quantile(
               .data$.outcome,
-              probs = 0.25),
-            digits = digits),
+              probs = 0.25
+            ),
+            digits = digits
+          ),
           to,
           format_round(
             stats::quantile(
               .data$.outcome,
-              probs = 0.75),
-            digits = digits),
-          ")"))
+              probs = 0.75
+            ),
+            digits = digits
+          ),
+          ")"
+        ))
     },
-    "range"  = {
-      if(any(!is.na(data$.outcome))) {
+    "range" = {
+      if (any(!is.na(data$.outcome))) {
         data %>%
           dplyr::summarize(res = paste0(
             format_round(
               min(.data$.outcome),
-              digits = digits),
+              digits = digits
+            ),
             to,
             format_round(
               max(.data$.outcome),
-              digits = digits)))
-      } else
+              digits = digits
+            )
+          ))
+      } else {
         "--"
+      }
     },
     stop(paste0("Invalid estimator type = '", type, "'."))
   ) %>%
@@ -150,5 +179,6 @@ estimate_outcome_continuous <- function(
       to = to,
       nmin = nmin,
       suppress = "total",
-      is_trend = is_trend)
+      is_trend = is_trend
+    )
 }

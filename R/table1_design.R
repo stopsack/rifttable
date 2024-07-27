@@ -36,11 +36,14 @@
 #'     gear = factor(
 #'       gear,
 #'       levels = 3:5,
-#'       labels = c("Three", "Four", "Five")),
+#'       labels = c("Three", "Four", "Five")
+#'     ),
 #'     hp_categorical = dplyr::if_else(
 #'       hp > 200,
 #'       true = ">200 hp",
-#'       false = "<=200 hp"))
+#'       false = "<=200 hp"
+#'     )
+#'   )
 #' # Label some variables. Better alternative: labelled::set_variable_labels()
 #' attr(cars$hp, "label") <- "Horsepower"
 #' attr(cars$hp_categorical, "label") <- "Horsepower"
@@ -51,7 +54,8 @@
 #' design <- cars %>%
 #'   table1_design(
 #'     hp, hp_categorical, mpg, am,
-#'     by = gear)
+#'     by = gear
+#'   )
 #'
 #' # Use "design" to create a descriptive table.
 #' design %>%
@@ -65,85 +69,111 @@ table1_design <- function(
     na_always = FALSE,
     na_label = "Unknown",
     continuous_type = "median (iqr)",
-    binary_type = "outcomes (risk)") {
+    binary_type = "outcomes (risk)"
+) {
   olddata <- data
   data <- data %>%
     dplyr::select(!!!rlang::enquos(...))
-  if(ncol(data) == 0)
+  if (ncol(data) == 0) {
     data <- olddata
-  if(!missing(by)) {
-    if(deparse(substitute(by)) %in% names(data))
+  }
+  if (!missing(by)) {
+    if (deparse(substitute(by)) %in% names(data)) {
       data <- data %>%
         dplyr::select(!{{ by }})
+    }
   }
 
   label_list <- purrr::map(
     .x = data,
     .f = attr,
-    which = "label")
+    which = "label"
+  )
   design <- tibble::tibble(
     variable = names(label_list),
     var_label = as.character(label_list),
     type = purrr::map_chr(
       .x = data,
-      .f = class)) %>%
+      .f = class
+    )
+  ) %>%
     dplyr::mutate(
       levels = purrr::map(
         .x = .data$variable,
-        .f = ~sort(unique(na.exclude(data[[.x]])))))
-  if(empty_levels == TRUE) {
+        .f = ~ sort(unique(na.exclude(data[[.x]])))
+      )
+    )
+  if (empty_levels == TRUE) {
     design <- design %>%
       dplyr::mutate(
-        levels_f = purrr::map(.x = .data$variable,
-                              .f = ~levels(data[[.x]])),
+        levels_f = purrr::map(
+          .x = .data$variable,
+          .f = ~ levels(data[[.x]])
+        ),
         levels = dplyr::if_else(
           .data$type == "factor",
           true = .data$levels_f,
-          false = .data$levels))
+          false = .data$levels
+        )
+      )
   }
   design <- design %>%
     dplyr::mutate(
       has_na = purrr::map_lgl(
         .x = .data$variable,
-        ~anyNA(data[, .x])),
+        ~ anyNA(data[, .x])
+      ),
       variable_type = dplyr::case_when(
         .data$type %in% c(
-          "character", "factor", "ordered") ~
+          "character", "factor", "ordered"
+        ) ~
           "categorical",
         purrr::map_lgl(
-          .x = .data$levels,  # this is TRUE also for "logical" variable
-          .f = ~all(stats::na.omit(.x) %in% c(0, 1))) ~
+          .x = .data$levels, # this is TRUE also for "logical" variable
+          .f = ~ all(stats::na.omit(.x) %in% c(0, 1))
+        ) ~
           "binary",
         .data$type %in% c("numeric", "integer") ~
           "numeric",
         TRUE ~
-          "ERROR-undefined"),
+          "ERROR-undefined"
+      ),
       outcome = purrr::pmap(
         .l = list(
           .data$variable_type,
           .data$variable,
-          .data$levels),
-        .f = ~{
-          if(..1 == "categorical")
+          .data$levels
+        ),
+        .f = ~ {
+          if (..1 == "categorical") {
             c(
               "",
               paste(..2, ..3, sep = "@"),
-              paste0(..2, "@_NA_"))
-          else
+              paste0(..2, "@_NA_")
+            )
+          } else {
             c(..2, paste0(..2, "@_NA_"))
-        })) %>%
+          }
+        }
+      )
+    ) %>%
     tidyr::unnest_longer(col = "outcome") %>%
-    dplyr::filter(!(.data$has_na == FALSE &
-                      na_always == FALSE &
-                      stringr::str_detect(
-                        string = .data$outcome,
-                        pattern = "@_NA_$"))) %>%
+    dplyr::filter(
+      !(.data$has_na == FALSE &
+          na_always == FALSE &
+          stringr::str_detect(
+            string = .data$outcome,
+            pattern = "@_NA_$"
+          )
+      )
+    ) %>%
     dplyr::group_by(.data$variable) %>%
     dplyr::mutate(
       type = dplyr::case_when(
         stringr::str_detect(
           string = .data$outcome,
-          pattern = "@_NA_$") ~
+          pattern = "@_NA_$"
+        ) ~
           "outcomes",
         .data$variable_type == "categorical" &
           dplyr::row_number() == 1 ~
@@ -156,11 +186,13 @@ table1_design <- function(
         .data$variable_type == "numeric" ~
           continuous_type,
         TRUE ~
-          "ERROR"),
+          "ERROR"
+      ),
       label = dplyr::case_when(
         stringr::str_detect(
           string = .data$outcome,
-          pattern = "@_NA_$") ~
+          pattern = "@_NA_$"
+        ) ~
           paste0("  ", na_label),
         .data$variable_type == "categorical" &
           dplyr::row_number() == 1 &
@@ -176,35 +208,46 @@ table1_design <- function(
             "  ",
             stringr::str_remove(
               string = .data$outcome,
-              pattern = paste0("^", .data$variable, "@"))),
+              pattern = paste0("^", .data$variable, "@")
+            )
+          ),
         !(.data$var_label %in% c("", "NULL")) ~
           .data$var_label,
         .data$var_label %in% c("", "NULL") ~
-          .data$variable),
+          .data$variable
+      ),
       na_rm = .data$has_na &
         !stringr::str_detect(
           string = .data$outcome,
-          pattern = "@_NA_$") &
+          pattern = "@_NA_$"
+        ) &
         !(.data$variable_type == "categorical" &
-            dplyr::row_number() == 1)) %>%
+          dplyr::row_number() == 1)
+    ) %>%
     dplyr::ungroup() %>%
     dplyr::select("label", "outcome", "type", "na_rm")
   # Have "na_rm" column only in "design" if >= 1 variable has missing data
-  if(!any(design$na_rm)) {
+  if (!any(design$na_rm)) {
     design <- design %>%
       dplyr::select(-"na_rm")
   }
-  if(total == TRUE) {
+  if (total == TRUE) {
     design <- dplyr::bind_rows(
-      tibble::tibble(label = "N", outcome = "", type = "total"),
-      design)
+      tibble::tibble(
+        label = "N",
+        outcome = "",
+        type = "total"
+      ),
+      design
+    )
   }
-  if(!missing(by)) {
+  if (!missing(by)) {
     design$exposure <- stringr::str_remove_all(
       string = deparse(substitute(by)),
-      pattern = "[\"\']")
+      pattern = "[\"\']"
+    )
   }
-  if(length(rlang::enquos(...)) > 0) {
+  if (length(rlang::enquos(...)) > 0) {
     data_for_attr <- olddata %>%
       dplyr::select(!!!rlang::enquos(...), {{ by }})
   } else {
@@ -213,4 +256,3 @@ table1_design <- function(
   attr(x = design, which = "rt_data") <- data_for_attr
   return(design)
 }
-

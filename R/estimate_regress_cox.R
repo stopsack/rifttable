@@ -44,43 +44,54 @@ estimate_regress_cox <- function(
     reference,
     arguments,
     ...) {
-  if(is.na(exposure)) {  # no exposure variable given
-    if(is_trend)
+  if (is.na(exposure)) { # no exposure variable given
+    if (is_trend) {
       return(tibble::tibble())
-    else
+    } else {
       return(
         tibble::tibble(
           .exposure = "Overall",
-          res = ""))
+          res = ""
+        )
+      )
+    }
   }
-  if(length(unique(stats::na.omit(data$.exposure))) < 2)  # no contrasts estimable
+  if (length(unique(stats::na.omit(data$.exposure))) < 2) { # no contrasts estimable
     return(tibble::tibble(
       .exposure = unique(data$.exposure)[1],
-      res = ""))
+      res = ""
+    ))
+  }
   check_event_time(
     data = data,
     type = type,
     event = event,
     time = time,
-    time2 = time2)
+    time2 = time2
+  )
   digits <- find_rounding_digits(
     digits = digits,
-    default = ratio_digits)
+    default = ratio_digits
+  )
   coxph_weights <- find_argument(
     arguments = arguments,
     which_argument = "weights",
     is_numeric = FALSE,
-    default = NULL)
-  if(!is.null(coxph_weights))
+    default = NULL
+  )
+  if (!is.null(coxph_weights)) {
     stop(paste(
       "Breaking change in rifttable 0.6.3: 'weights' for Cox models must now",
       "be provided as part of the 'design', as for other estimators.",
-      "'weights' in the 'arguments' list are no longer supported."))
+      "'weights' in the 'arguments' list are no longer supported."
+    ))
+  }
   coxph_robust <- find_argument(
     arguments = arguments,
     which_argument = "robust",
     is_numeric = FALSE,
-    default = NULL)
+    default = NULL
+  )
 
   survival::coxph(
     formula = stats::as.formula(
@@ -88,16 +99,21 @@ estimate_regress_cox <- function(
         dplyr::if_else(
           is.na(time2),
           true = "survival::Surv(time = .time, ",
-          false = "survival::Surv(time = .time_orig, time2 = .time2, "),
+          false = "survival::Surv(time = .time_orig, time2 = .time2, "
+        ),
         "event = .event) ~ .exposure ",
-        confounders)),
+        confounders
+      )
+    ),
     data = data,
     weights = data$.weights,
-    robust = coxph_robust) %>%
+    robust = coxph_robust
+  ) %>%
     broom::tidy(
       conf.int = TRUE,
       conf.level = ci,
-      exponentiate = TRUE) %>%
+      exponentiate = TRUE
+    ) %>%
     format_regression_results(
       data = data,
       suppress = "event",
@@ -110,5 +126,6 @@ estimate_regress_cox <- function(
       reference = 1,
       nmin = nmin,
       to = to,
-      reference_label = reference)
+      reference_label = reference
+    )
 }

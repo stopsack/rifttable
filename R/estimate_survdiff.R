@@ -51,20 +51,24 @@ estimate_survdiff <- function(
     arguments,
     event_type,
     ...) {
-  if(is_trend)
+  if (is_trend) {
     return(tibble::tibble())
-  if(is.na(exposure)) {  # no exposure variable given
+  }
+  if (is.na(exposure)) { # no exposure variable given
     return(
       tibble::tibble(
         .exposure = "Overall",
-        res = ""))
+        res = ""
+      )
+    )
   }
   check_event_time(
     data = data,
     type = type,
     event = event,
     time = time,
-    time2 = time2)
+    time2 = time2
+  )
   digits <- find_rounding_digits(
     digits = digits,
     default = dplyr::if_else(
@@ -80,21 +84,27 @@ estimate_survdiff <- function(
     arguments = arguments,
     which_argument = "timepoint",
     is_numeric = TRUE,
-    default = NA)
-  if(is.na(timepoint))
+    default = NA
+  )
+  if (is.na(timepoint)) {
     stop(
       paste0(
         "Must provide a time horizon for survival analysis of type '",
-        type, "'. Example 'design': arguments = list(timepoint = 123)"))
-  if(stringr::str_detect(
+        type, "'. Example 'design': arguments = list(timepoint = 123)"
+      )
+    )
+  }
+  if (stringr::str_detect(
     string = type,
-    pattern = "ratio")
+    pattern = "ratio"
+  )
   ) {
     risk_percent <- FALSE
   }
-  if(stringr::str_detect(
+  if (stringr::str_detect(
     string = type,
-    pattern = "diff")
+    pattern = "diff"
+  )
   ) {
     ratio_digits_decrease <- NULL
   }
@@ -104,22 +114,29 @@ estimate_survdiff <- function(
         dplyr::if_else(
           is.na(time2),
           true = "survival::Surv(time = .time, ",
-          false = "survival::Surv(time = .time_orig, time2 = .time2, "),
-        "event = .event_compete) ~ .exposure")),
+          false = "survival::Surv(time = .time_orig, time2 = .time2, "
+        ),
+        "event = .event_compete) ~ .exposure"
+      )
+    ),
     data = data,
     time = timepoint,
     estimand = dplyr::if_else(
       stringr::str_detect(
         string = type,
-        pattern = "surv"),
+        pattern = "surv"
+      ),
       true = "survival",
-      false = "cuminc"),
+      false = "cuminc"
+    ),
     type = dplyr::if_else(
       stringr::str_detect(
         string = type,
-        pattern = "diff"),
+        pattern = "diff"
+      ),
       true = "diff",
-      false = "ratio"),
+      false = "ratio"
+    ),
     conf.level = ci,
     event_type = event_type,
     id_variable = find_argument(
@@ -131,7 +148,8 @@ estimate_survdiff <- function(
     weighted = !is.na(weights)
   ) %>%
     dplyr::mutate(
-      term = paste0(".exposure", .data$term)) %>%
+      term = paste0(".exposure", .data$term)
+    ) %>%
     format_regression_results(
       data = data,
       suppress = "event",
@@ -139,16 +157,19 @@ estimate_survdiff <- function(
       multiply = dplyr::if_else(
         risk_percent == TRUE,
         true = 100,
-        false = 1),
+        false = 1
+      ),
       digits = digits,
       pattern = pattern,
       xlevels = xlevels,
       reference = dplyr::if_else(
         stringr::str_detect(
           string = type,
-          pattern = "diff"),
+          pattern = "diff"
+        ),
         true = 0,
-        false = 1),
+        false = 1
+      ),
       nmin = nmin,
       to = to,
       reference_label = reference,

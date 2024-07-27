@@ -13,7 +13,7 @@ cancer <- cancer %>%
         "Female"
       )
     ),
-    time = time / 365.25,  # transform to years
+    time = time / 365.25, # transform to years
     status = factor(
       ph.ecog,
       levels = 0:2,
@@ -157,10 +157,10 @@ test_that(
     expect_error(
       object = tibble::tibble(
         type = "survdiff",
-          time = "time",
-          event = "status@Event of interest",
-          exposure = "sex"
-        ) %>%
+        time = "time",
+        event = "status@Event of interest",
+        exposure = "sex"
+      ) %>%
         rifttable(
           data = cancer,
           overall = TRUE

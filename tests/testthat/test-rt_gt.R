@@ -5,8 +5,9 @@ test_that(
       call =
         tibble::tibble(
           a = "  a",
-          b = 1) %>%
-        rt_gt()
+          b = 1
+        ) %>%
+          rt_gt()
     )
   }
 )

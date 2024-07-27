@@ -9,22 +9,32 @@
 #' @return Character
 #'
 #' @noRd
-format_round <- function(x, digits, ratio_digits_decrease = NULL) {
-  if(!is.null(ratio_digits_decrease)) {
-    if(!is.numeric(ratio_digits_decrease))
+format_round <- function(
+    x,
+    digits,
+    ratio_digits_decrease = NULL
+) {
+  if (!is.null(ratio_digits_decrease)) {
+    if (!is.numeric(ratio_digits_decrease)) {
       stop(
         paste0(
           "Values of 'ratio_digits_decrease' for rounding, if provided, must ",
           "be numeric. '",
           paste(ratio_digits_decrease, collapse = ", "),
-          "' is not (all) numeric."))
-    if(any(is.na(suppressWarnings(as.numeric(names(ratio_digits_decrease))))))
+          "' is not (all) numeric."
+        )
+      )
+    }
+    if (any(is.na(suppressWarnings(as.numeric(names(ratio_digits_decrease)))))) {
       stop(
         paste0(
           "Names of 'ratio_digits_decrease' for rounding, if provided, must ",
           "be convertible into numbers. '",
           paste(names(ratio_digits_decrease), collapse = ", "),
-          "' are not (all) numbers."))
+          "' are not (all) numbers."
+        )
+      )
+    }
     add_zero <- 0
     names(add_zero) <- "0"
     ratio_digits_decrease <- c(ratio_digits_decrease, add_zero)
@@ -32,15 +42,22 @@ format_round <- function(x, digits, ratio_digits_decrease = NULL) {
       as.character(
         sort(
           as.numeric(
-            names(ratio_digits_decrease))))]
+            names(ratio_digits_decrease)
+          )
+        )
+      )
+    ]
     digits_decrease <- sapply(X = x, function(x) {
-      if(!is.na(suppressWarnings(as.numeric(x)))) {
+      if (!is.na(suppressWarnings(as.numeric(x)))) {
         selected_digit <- ratio_digits_decrease[
-          which(as.numeric(names(ratio_digits_decrease)) <= x)]
+          which(as.numeric(names(ratio_digits_decrease)) <= x)
+        ]
         selected_digit[length(selected_digit)]
-      } else { 0 }
+      } else {
+        0
+      }
     })
-    if(!is.numeric(digits_decrease)) {
+    if (!is.numeric(digits_decrease)) {
       digits_decrease <- 0
     }
     digits <- pmax(digits + digits_decrease, 0)
@@ -48,18 +65,21 @@ format_round <- function(x, digits, ratio_digits_decrease = NULL) {
   mapply(
     FUN = function(x, digits) {
       x_numeric <- suppressWarnings(as.numeric(x))
-      if(!is.na(x_numeric)) {
+      if (!is.na(x_numeric)) {
         format(
           round(
             x_numeric,
-            digits = digits),
+            digits = digits
+          ),
           nsmall = digits,
           trim = TRUE,
-          scientific = FALSE)
+          scientific = FALSE
+        )
       } else {
         as.character(x)
       }
     },
     x,
-    digits)
+    digits
+  )
 }

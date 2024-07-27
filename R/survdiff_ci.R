@@ -84,7 +84,8 @@
 #' survdiff_ci(
 #'   formula = survival::Surv(time = time, event = status) ~ sex,
 #'   data = cancer,
-#'   time = 365.25)
+#'   time = 365.25
+#' )
 #' # Females have 19 percentage points higher one-year survival than males
 #' # (95% CI, 5 to 34 percentage points).
 survdiff_ci <- function(
@@ -97,15 +98,14 @@ survdiff_ci <- function(
     conf.level = 0.95,
     event_type = NULL,
     id_variable = NULL,
-    weighted = FALSE
-) {
-  .id <- NULL  # address seemingly global variable ".id" in survfit() call
-  .weights <- NULL  # same
+    weighted = FALSE) {
+  .id <- NULL # address seemingly global variable ".id" in survfit() call
+  .weights <- NULL # same
   data$.id <- find_id(
     data = data,
     id_variable = id_variable
   )
-  if(weighted == FALSE) {
+  if (weighted == FALSE) {
     data$.weights <- 1
   }
   zval <- stats::qnorm(1 - (1 - conf.level) / 2)
@@ -120,8 +120,9 @@ survdiff_ci <- function(
       weights = .weights
     ),
     time = time,
-    extend = TRUE)
-  if(is.null(event_type)) {
+    extend = TRUE
+  )
+  if (is.null(event_type)) {
     res <- tibble::tibble(
       term = res$strata,
       surv = res$surv,
@@ -129,7 +130,7 @@ survdiff_ci <- function(
       lci = res$lower,
       uci = res$upper
     )
-    if(estimand == "cuminc") {
+    if (estimand == "cuminc") {
       res <- res %>%
         dplyr::mutate(
           surv = 1 - .data$surv,
@@ -138,10 +139,12 @@ survdiff_ci <- function(
         )
     }
   } else {
-    if(estimand == "survival")
+    if (estimand == "survival") {
       stop(paste(
         "type = 'survdiff' or 'survratio' may not be meaningful with",
-        "competing events. Use: type = 'cumincdiff' or 'cumincratio'."))
+        "competing events. Use: type = 'cumincdiff' or 'cumincratio'."
+      ))
+    }
     res <- tibble::tibble(
       term = res$strata,
       surv = res$pstate[, which(res$states == event_type)],
@@ -150,12 +153,13 @@ survdiff_ci <- function(
       uci = res$upper[, which(res$states == event_type)]
     )
   }
-  if(type == "diff" & approach == "squareadd") {
+  if (type == "diff" & approach == "squareadd") {
     res <- res %>%
       dplyr::transmute(
         term = stringr::str_remove_all(
           string = .data$term,
-          pattern = "([:alnum:]|\\.|_)+="),
+          pattern = "([:alnum:]|\\.|_)+="
+        ),
         estimate = .data$surv - .data$surv[1],
         std.error = sqrt(.data$se^2 + .data$se[1]^2),
         statistic = .data$estimate / .data$std.error,
@@ -165,20 +169,23 @@ survdiff_ci <- function(
       ) %>%
       dplyr::slice(-1)
   }
-  if(type == "diff" & approach == "mover") {
+  if (type == "diff" & approach == "mover") {
     res <- res %>%
       dplyr::transmute(
         term = stringr::str_remove_all(
           string = .data$term,
-          pattern = "([:alnum:]|\\.|_)+="),
+          pattern = "([:alnum:]|\\.|_)+="
+        ),
         estimate = .data$surv - .data$surv[1],
         conf.low = .data$estimate -
-          sqrt((.data$surv - .data$lci)^2 +
-                 (.data$uci[1] - .data$surv[1])^2
+          sqrt(
+            (.data$surv - .data$lci)^2 +
+              (.data$uci[1] - .data$surv[1])^2
           ),
         conf.high = .data$estimate +
-          sqrt((.data$uci - .data$surv)^2 +
-                 (.data$surv[1] - .data$lci[1])^2
+          sqrt(
+            (.data$uci - .data$surv)^2 +
+              (.data$surv[1] - .data$lci[1])^2
           ),
         std.error = (.data$conf.high - .data$conf.low) / 2 / zval,
         statistic = .data$estimate / .data$std.error,
@@ -190,7 +197,7 @@ survdiff_ci <- function(
       ) %>%
       dplyr::slice(-1)
   }
-  if(type == "ratio") {
+  if (type == "ratio") {
     res <- res %>%
       dplyr::mutate(
         surv = log(.data$surv),
@@ -200,18 +207,21 @@ survdiff_ci <- function(
       dplyr::transmute(
         term = stringr::str_remove_all(
           string = .data$term,
-          pattern = "([:alnum:]|\\.|_)+="),
+          pattern = "([:alnum:]|\\.|_)+="
+        ),
         estimate = .data$surv - .data$surv[1],
         conf.low = exp(
           .data$estimate -
-            sqrt((.data$surv - .data$lci)^2 +
-                   (.data$uci[1] - .data$surv[1])^2
+            sqrt(
+              (.data$surv - .data$lci)^2 +
+                (.data$uci[1] - .data$surv[1])^2
             )
         ),
         conf.high = exp(
           .data$estimate +
-            sqrt((.data$uci - .data$surv)^2 +
-                   (.data$surv[1] - .data$lci[1])^2
+            sqrt(
+              (.data$uci - .data$surv)^2 +
+                (.data$surv[1] - .data$lci[1])^2
             )
         ),
         std.error = (log(.data$conf.high) - log(.data$conf.low)) / 2 / zval,

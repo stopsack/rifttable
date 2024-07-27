@@ -194,7 +194,6 @@ test_that(
       ),
       regexp = "must be numeric. 'a' is not numeric."
     )
-
   }
 )
 

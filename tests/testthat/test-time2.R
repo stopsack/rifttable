@@ -12,7 +12,7 @@ cancer <- cancer %>%
         "Female"
       )
     ),
-    time2 = time / 365.25,  # transform to years
+    time2 = time / 365.25, # transform to years
     time = 0.1,
     status = status - 1
   ) %>%

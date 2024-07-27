@@ -44,11 +44,12 @@ scoreci <- function(success, total, level = 0.95, return_midpoint = FALSE) {
     (1 + (zalpha**2) / total)
   midpoint <- (estimate + (zalpha**2) / (2 * total)) / (1 + (zalpha**2) / total)
 
-  conf.low  <- midpoint - bound
+  conf.low <- midpoint - bound
   conf.high <- midpoint + bound
 
-  if(return_midpoint)
+  if (return_midpoint) {
     data.frame(success, total, estimate, conf.low, conf.high, midpoint, level)
-  else
+  } else {
     data.frame(success, total, estimate, conf.low, conf.high, level)
+  }
 }
