@@ -28,8 +28,8 @@ prepare_data <- function(
     type = "",
     effectmodifier = NULL,
     effectmodifier_level = NULL) {
-  xlevels <- data %>%
-    dplyr::pull(.data$.exposure) %>%
+  xlevels <- data |>
+    dplyr::pull(.data$.exposure) |>
     levels()
   # Restrict to effect modifier, or generate joint exposure/effect modifier
   if (stringr::str_detect(
@@ -67,18 +67,18 @@ prepare_data <- function(
       "__[:digit:]{1,2}__"
     )
     data$.effectmod <- data[[effectmodifier]]
-    data <- data %>%
-      dplyr::filter(!is.na(.data$.effectmod)) %>%
+    data <- data |>
+      dplyr::filter(!is.na(.data$.effectmod)) |>
       dplyr::mutate(.effectmod = factor(.data$.effectmod))
     xlevels_indices <- 1:length(xlevels)
     names(xlevels_indices) <- xlevels
-    emlevels <- data %>%
-      dplyr::pull(.data$.effectmod) %>%
-      factor() %>%
+    emlevels <- data |>
+      dplyr::pull(.data$.effectmod) |>
+      factor() |>
       levels()
     emlevels_indices <- 1:length(emlevels)
     names(emlevels_indices) <- emlevels
-    data <- data %>%
+    data <- data |>
       dplyr::mutate(
         .exposure = paste(
           emlevels_indices[.data$.effectmod],
@@ -105,7 +105,7 @@ prepare_data <- function(
           )
         ) {
           data$.effectmod <- data[[effectmodifier]]
-          data <- data %>%
+          data <- data |>
             dplyr::filter(.data$.effectmod %in% effectmodifier_level)
           if (nrow(data) == 0) {
             warning(
@@ -174,7 +174,7 @@ prepare_data <- function(
         data$.event <- data[[event]]
       } else {
         # event and outcome can be the same variable
-        data <- data %>%
+        data <- data |>
           dplyr::mutate(.event = .data$.outcome)
       }
       if (!is.null(event_type)) {
@@ -235,7 +235,7 @@ prepare_data <- function(
       # Recode event variable for estimators that only handle one event type
       data$.event_compete <- data$.event
       if (!is.null(event_type)) {
-        data <- data %>%
+        data <- data |>
           dplyr::mutate(
             .event = dplyr::if_else(
               condition = .data$.event == event_type,
@@ -323,7 +323,7 @@ prepare_data <- function(
               )
             )
           }
-          data <- data %>%
+          data <- data |>
             # for estimators that just sum the follow-up times:
             dplyr::mutate(.time = .data$.time2 - .data$.time_orig)
           has_time2 <- TRUE
@@ -341,10 +341,10 @@ prepare_data <- function(
       !(type %in% c("", "blank"))
     ) {
       if (is.na(outcome) | outcome == "") {
-        data <- data %>%
+        data <- data |>
           tidyr::drop_na(dplyr::any_of(c(".event", ".time", ".time2")))
       } else {
-        data <- data %>%
+        data <- data |>
           tidyr::drop_na(".outcome")
       }
     }

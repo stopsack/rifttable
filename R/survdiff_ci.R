@@ -71,7 +71,7 @@
 #' # Load 'cancer' dataset from survival package (Used in all examples)
 #' data(cancer, package = "survival")
 #'
-#' cancer <- cancer %>%
+#' cancer <- cancer |>
 #'   dplyr::mutate(
 #'     sex = factor(
 #'       sex,
@@ -131,7 +131,7 @@ survdiff_ci <- function(
       uci = res$upper
     )
     if (estimand == "cuminc") {
-      res <- res %>%
+      res <- res |>
         dplyr::mutate(
           surv = 1 - .data$surv,
           lci = 1 - .data$lci,
@@ -154,7 +154,7 @@ survdiff_ci <- function(
     )
   }
   if (type == "diff" & approach == "squareadd") {
-    res <- res %>%
+    res <- res |>
       dplyr::transmute(
         term = stringr::str_remove_all(
           string = .data$term,
@@ -166,11 +166,11 @@ survdiff_ci <- function(
         p.value = 1 - stats::pnorm(abs(.data$statistic)),
         conf.low = .data$estimate - zval * .data$std.error,
         conf.high = .data$estimate + zval * .data$std.error
-      ) %>%
+      ) |>
       dplyr::slice(-1)
   }
   if (type == "diff" & approach == "mover") {
-    res <- res %>%
+    res <- res |>
       dplyr::transmute(
         term = stringr::str_remove_all(
           string = .data$term,
@@ -190,20 +190,20 @@ survdiff_ci <- function(
         std.error = (.data$conf.high - .data$conf.low) / 2 / zval,
         statistic = .data$estimate / .data$std.error,
         p.value = 1 - stats::pnorm(abs(.data$statistic))
-      ) %>%
+      ) |>
       dplyr::select(
         "term", "estimate", "std.error", "statistic", "p.value",
         "conf.low", "conf.high"
-      ) %>%
+      ) |>
       dplyr::slice(-1)
   }
   if (type == "ratio") {
-    res <- res %>%
+    res <- res |>
       dplyr::mutate(
         surv = log(.data$surv),
         lci = log(.data$lci),
         uci = log(.data$uci),
-      ) %>%
+      ) |>
       dplyr::transmute(
         term = stringr::str_remove_all(
           string = .data$term,
@@ -228,11 +228,11 @@ survdiff_ci <- function(
         statistic = .data$estimate / .data$std.error,
         p.value = 1 - stats::pnorm(abs(.data$statistic)),
         estimate = exp(.data$estimate)
-      ) %>%
+      ) |>
       dplyr::select(
         "term", "estimate", "std.error", "statistic", "p.value",
         "conf.low", "conf.high"
-      ) %>%
+      ) |>
       dplyr::slice(-1)
   }
   return(res)

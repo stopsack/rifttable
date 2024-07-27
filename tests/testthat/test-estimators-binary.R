@@ -19,11 +19,11 @@ testthat::test_that(
       "Risk ratio (95% CI)",       "rr",
       "Risk difference (95% CI)",  "rd",
       "Odds ratio (95% CI)",       "or"
-    ) %>%
+    ) |>
       dplyr::mutate(
         exposure = "stage",
         outcome = "death"
-      ) %>%
+      ) |>
       rifttable(
         data = breastcancer,
         overall = TRUE

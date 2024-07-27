@@ -26,7 +26,7 @@ test_that(
       expected = expected
     )
 
-    design <- design %>%
+    design <- design |>
       dplyr::mutate(type = "rr_joint")
 
     object <- rifttable(
@@ -44,15 +44,15 @@ test_that(
     )
 
     expect_error(
-      object = design %>%
-        dplyr::mutate(stratum = "") %>%
+      object = design |>
+        dplyr::mutate(stratum = "") |>
         rifttable(data = breastcancer),
       regexp = "stratum cannot be an empty string"
     )
 
     expect_error(
-      object = design %>%
-        dplyr::mutate(stratum = NA) %>%
+      object = design |>
+        dplyr::mutate(stratum = NA) |>
         rifttable(data = breastcancer),
       regexp = "or missing"
     )

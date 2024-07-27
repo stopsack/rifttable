@@ -3,21 +3,21 @@
 #' @param mytab gt object
 #' @noRd
 rt_tabstyle <- function(mytab) {
-  mytab %>%
+  mytab |>
     gt::tab_options(
       data_row.padding = gt::px(0),
       column_labels.border.top.style = "none",
       table.border.top.style = "none",
       table_body.border.top.style = "none",
       column_labels.font.weight = "bold"
-    ) %>%
+    ) |>
     gt::tab_style(
       style = gt::cell_text(
         align = "left",
         v_align = "top"
       ),
       locations = gt::cells_body()
-    ) %>%
+    ) |>
     gt::tab_style(
       style = gt::cell_text(
         align = "left",
@@ -60,8 +60,8 @@ rt_tabstyle <- function(mytab) {
 #' @examples
 #' \dontrun{
 #' data(mtcars)
-#' mtcars %>%
-#'   dplyr::slice(1:5) %>%
+#' mtcars |>
+#'   dplyr::slice(1:5) |>
 #'   rt_gt()
 #' }
 #'
@@ -96,8 +96,8 @@ rt_gt <- function(
         call. = FALSE
       )
     }
-    df_gt <- df %>%
-      gt::gt(id = "rifttable") %>%
+    df_gt <- df |>
+      gt::gt(id = "rifttable") |>
       rt_tabstyle()
     if (!is.null(indent[1])) {
       indent2 <- union(
@@ -107,7 +107,7 @@ rt_gt <- function(
         ),
         which(df[[1]] == "")
       )
-      df_gt <- df_gt %>%
+      df_gt <- df_gt |>
         gt::tab_style(
           style = gt::cell_text(indent = gt::px(indent[1])),
           locations = gt::cells_body(
@@ -116,7 +116,7 @@ rt_gt <- function(
           )
         )
       if (remove_border == TRUE & length(indent2) > 0) {
-        df_gt <- df_gt %>%
+        df_gt <- df_gt |>
           gt::tab_style(
             style = gt::cell_borders(sides = "top", weight = NULL),
             locations = gt::cells_body(
@@ -127,7 +127,7 @@ rt_gt <- function(
       }
     }
     if (!is.null(md)) {
-      df_gt <- df_gt %>%
+      df_gt <- df_gt |>
         gt::fmt_markdown(columns = md)
     }
     return(df_gt)

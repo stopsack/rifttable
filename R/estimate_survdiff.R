@@ -146,10 +146,10 @@ estimate_survdiff <- function(
       default = NULL
     ),
     weighted = !is.na(weights)
-  ) %>%
+  ) |>
     dplyr::mutate(
       term = paste0(".exposure", .data$term)
-    ) %>%
+    ) |>
     format_regression_results(
       data = data,
       suppress = "event",

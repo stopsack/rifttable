@@ -333,15 +333,17 @@ warnings need to be suppressed manually, if appropriate, using
 data(cancer, package = "survival")
 
 # The exposure (here, 'sex') must be categorical
-cancer <- cancer \%>\%
-  tibble::as_tibble() \%>\%
+cancer <- cancer |>
+  tibble::as_tibble() |>
   dplyr::mutate(
     sex = factor(
       sex,
       levels = 1:2,
-      labels = c("Male", "Female")),
+      labels = c("Male", "Female")
+    ),
     time = time / 365.25,
-    status = status - 1)
+    status = status - 1
+  )
 
 
 # Example 1: Binary outcomes (use 'outcome' variable)
@@ -356,23 +358,28 @@ design1 <- tibble::tibble(
     "Outcomes (Risk)",
     "Outcomes/Total (Risk)",
     "RR",
-    "RD")) \%>\%
+    "RD"
+  )
+) |>
   dplyr::mutate(
     type = label,
     exposure = "sex",
-    outcome = "status")
+    outcome = "status"
+  )
 
 # Generate rifttable
 rifttable(
   design = design1,
-  data = cancer)
+  data = cancer
+)
 
 # Use 'design' as columns (selecting RR and RD only)
 rifttable(
-  design = design1 \%>\%
+  design = design1 |>
     dplyr::filter(label \%in\% c("RR", "RD")),
   data = cancer,
-  layout = "cols")
+  layout = "cols"
+)
 
 
 # Example 2: Survival outcomes (use 'time' and 'event'),
@@ -398,44 +405,51 @@ design2 <- tibble::tribble(
   "",                           NULL,     "",           "",
   "**Joint model**, age-adj.",  NULL,     "",           "",
   "  ECOG PS1",                 1,        "+ age",      "hr_joint",
-  "  ECOG PS2",                 2,        "+ age",      "hr_joint") \%>\%
+  "  ECOG PS2",                 2,        "+ age",      "hr_joint"
+) |>
   # Elements that are the same for all rows:
   dplyr::mutate(
     exposure = "sex",
     event = "status",
     time = "time",
-    effect_modifier = "ph.ecog")
+    effect_modifier = "ph.ecog"
+  )
 
 # Generate rifttable
 rifttable(
   design = design2,
-  data = cancer \%>\%
-    dplyr::filter(ph.ecog \%in\% 1:2))
+  data = cancer |>
+    dplyr::filter(ph.ecog \%in\% 1:2)
+)
 
 
 # Example 3: Get two estimates using 'type' and 'type2'
 design3 <- tibble::tribble(
   ~label,     ~stratum, ~type,          ~type2,
   "ECOG PS1", 1,        "events/total", "hr",
-  "ECOG PS2", 2,        "events/total", "hr") \%>\%
+  "ECOG PS2", 2,        "events/total", "hr"
+) |>
   dplyr::mutate(
     exposure = "sex",
     event = "status",
     time = "time",
     confounders = "+ age",
-    effect_modifier = "ph.ecog")
+    effect_modifier = "ph.ecog"
+  )
 
 rifttable(
   design = design3,
-  data = cancer \%>\%
-    dplyr::filter(ph.ecog \%in\% 1:2))
+  data = cancer |>
+    dplyr::filter(ph.ecog \%in\% 1:2)
+)
 
 rifttable(
   design = design3,
-  data = cancer \%>\%
+  data = cancer |>
     dplyr::filter(ph.ecog \%in\% 1:2),
   layout = "cols",
-  type2_layout = "cols")
+  type2_layout = "cols"
+)
 
 
 # Example 4: Continuous outcomes (use 'outcome' variable);
@@ -453,23 +467,29 @@ tibble::tribble(
   "",                       NULL,     "",           NA,
   "Joint model",            NULL,     "",           NA,
   "  Male",                 "Male",   "diff_joint", NA,
-  "  Female",               "Female", "diff_joint", NA) \%>\%
+  "  Female",               "Female", "diff_joint", NA
+) |>
   dplyr::mutate(
     exposure = "ph.ecog_factor",
     trend = "ph.ecog",
     outcome = "age",
-    effect_modifier = "sex") \%>\%
+    effect_modifier = "sex"
+  ) |>
   rifttable(
-    data = cancer \%>\%
-      dplyr::filter(ph.ecog < 3) \%>\%
-      dplyr::mutate(ph.ecog_factor = factor(ph.ecog)))
+    data = cancer |>
+      dplyr::filter(ph.ecog < 3) |>
+      dplyr::mutate(ph.ecog_factor = factor(ph.ecog))
+  )
 
 
 # Example 5: Get formatted output for Example 2 (see above)
 \dontrun{
-rifttable(design = design2,
-       data = cancer \%>\% dplyr::filter(ph.ecog \%in\% 1:2)) \%>\%
-  rt_gt(md = 1)  # get markdown formatting in first column ('label')
+rifttable(
+  design = design2,
+  data = cancer |>
+    dplyr::filter(ph.ecog \%in\% 1:2)
+) |>
+  rt_gt(md = 1) # get markdown formatting in first column ('label')
 }
 
 }

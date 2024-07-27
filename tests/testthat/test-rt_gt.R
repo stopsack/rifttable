@@ -6,7 +6,7 @@ test_that(
         tibble::tibble(
           a = "  a",
           b = 1
-        ) %>%
+        ) |>
           rt_gt()
     )
   }

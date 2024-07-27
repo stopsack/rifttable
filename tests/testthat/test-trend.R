@@ -13,7 +13,7 @@ test_that(
     expect_equal(
       object = rifttable(
         design = design,
-        data = breastcancer %>%
+        data = breastcancer |>
           dplyr::mutate(
             stage_num = as.numeric(stage)
           )
@@ -42,7 +42,7 @@ test_that(
     expect_equal(
       object = rifttable(
         design = design,
-        data = breastcancer %>%
+        data = breastcancer |>
           dplyr::mutate(
             stage_num = as.numeric(stage),
             cont = death * 10
@@ -78,7 +78,7 @@ test_that(
 
     expect_error(
       object = rifttable(
-        design = design %>%
+        design = design |>
           dplyr::mutate(trend = "aaa"),
         data = breastcancer
       ),
@@ -147,7 +147,7 @@ test_that(
     expect_equal(
       object = rifttable(
         design = design,
-        data = breastcancer %>%
+        data = breastcancer |>
           dplyr::filter(receptor == "Low")
       ),
       expect = tibble::tribble(

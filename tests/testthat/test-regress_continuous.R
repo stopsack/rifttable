@@ -12,7 +12,7 @@ test_that("Ratio models for continuous outcomes work", {
     exposure = "receptor",
     outcome = "continuous",
     type = c("irrrob", "fold", "foldlog")
-  ) %>%
+  ) |>
     rifttable(data = df)
   expect_true(all(results$High == "1 (reference)"))
   expect_equal(results$Low[[1]], expected = "0.64 (0.52, 0.80)")

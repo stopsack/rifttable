@@ -72,7 +72,7 @@ estimate_event_time <- function(
       4
     )
   )
-  data <- data %>%
+  data <- data |>
     dplyr::group_by(
       .data$.exposure,
       .drop = FALSE
@@ -105,11 +105,11 @@ estimate_event_time <- function(
   switch(
     EXPR = type,
     "events" = {
-      data %>%
+      data |>
         dplyr::summarize(res = paste(sum(.data$.event)))
     },
     "time" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste(
             format_round(
@@ -120,7 +120,7 @@ estimate_event_time <- function(
         )
     },
     "events/time" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste(
             sum(.data$.event),
@@ -133,7 +133,7 @@ estimate_event_time <- function(
         )
     },
     "events/total" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste(
             sum(.data$.event),
@@ -143,7 +143,7 @@ estimate_event_time <- function(
         )
     },
     "rate" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = format_round(
             sum(.data$.event) *
@@ -154,7 +154,7 @@ estimate_event_time <- function(
         )
     },
     "rate (ci)" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste0(
             format_round(
@@ -188,7 +188,7 @@ estimate_event_time <- function(
         )
     },
     "events/time (rate)" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste0(
             sum(.data$.event),
@@ -215,7 +215,7 @@ estimate_event_time <- function(
           "type = 'medsurv': Note the presence of competing events."
         ))
       }
-      data %>%
+      data |>
         dplyr::summarize(
           res = {
             if (is.na(time2[1])) {
@@ -267,7 +267,7 @@ estimate_event_time <- function(
     },
     "medfu" = ,
     "medfu (iqr)" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = {
             if (is.na(time2[1])) {
@@ -316,7 +316,7 @@ estimate_event_time <- function(
         )
     },
     "maxfu" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste(
             format_round(
@@ -341,7 +341,7 @@ estimate_event_time <- function(
           "Use type = 'cuminc'."
         ))
       }
-      data %>%
+      data |>
         dplyr::summarize(
           res = {
             if (is.na(time2[1])) {
@@ -394,27 +394,27 @@ estimate_event_time <- function(
             }
 
             if (is.null(event_type)) {
-              est <- fit %>%
-                purrr::pluck("surv") %>%
+              est <- fit |>
+                purrr::pluck("surv") |>
                 dplyr::last()
-              ci_first <- fit %>%
-                purrr::pluck(first_limit) %>%
+              ci_first <- fit |>
+                purrr::pluck(first_limit) |>
                 dplyr::last()
-              ci_second <- fit %>%
-                purrr::pluck(second_limit) %>%
+              ci_second <- fit |>
+                purrr::pluck(second_limit) |>
                 dplyr::last()
             } else {
               est <- utils::tail(
                 fit$pstate[, which(fit$states == event_type)],
                 n = 1
               )
-              ci_first <- fit %>%
+              ci_first <- fit |>
                 purrr::pluck(first_limit)
               ci_first <- utils::tail(
                 ci_first[, which(fit$states == event_type)],
                 n = 1
               )
-              ci_second <- fit %>%
+              ci_second <- fit |>
                 purrr::pluck(second_limit)
               ci_second <- utils::tail(
                 ci_second[, which(fit$states == event_type)],
@@ -462,7 +462,7 @@ estimate_event_time <- function(
         )
     },
     stop(paste0("Invalid estimator type = '", type, "'."))
-  ) %>%
+  ) |>
     format_stratified_results(
       data = data,
       to = to,

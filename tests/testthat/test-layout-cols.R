@@ -3,7 +3,7 @@ test_that("layout as columns works", {
 
   design <- tibble::tibble(
     type = c("outcomes/total", "risk"),
-  ) %>%
+  ) |>
     dplyr::mutate(
       exposure = "stage",
       outcome = "death"
@@ -27,8 +27,8 @@ test_that("layout as columns works", {
     expected = expected
   )
 
-  object <- design %>%
-    dplyr::mutate(label = "") %>%
+  object <- design |>
+    dplyr::mutate(label = "") |>
     rifttable(
       data = breastcancer,
       layout = "cols",

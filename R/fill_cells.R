@@ -59,13 +59,13 @@ fill_cells <- function(
     rate_digits,
     exposure_levels) {
   if (is.na(exposure) | exposure == "") {
-    data <- data %>%
+    data <- data |>
       dplyr::mutate(.exposure = "Overall")
   } else {
     data$.exposure <- data[[exposure]]
 
     # Check that exposure is categorical
-    if (!(class(data %>% dplyr::pull(.data$.exposure))[1] %in%
+    if (!(class(data |> dplyr::pull(.data$.exposure))[1] %in%
       c("factor", "character", "logical"))) {
       warning(
         paste0(
@@ -91,7 +91,7 @@ fill_cells <- function(
     } # if factor, drops empty levels
 
     if (exposure_levels == "nona") {
-      data <- data %>%
+      data <- data |>
         dplyr::filter(!is.na(.data$.exposure))
     }
   }
@@ -108,11 +108,11 @@ fill_cells <- function(
           )
         )
       }
-      data <- data %>%
+      data <- data |>
         dplyr::rename(.trend = dplyr::one_of(trend))
       if (
         !is.numeric(
-          data %>%
+          data |>
             dplyr::pull(.data$.trend)
         )) {
         stop(
@@ -136,8 +136,8 @@ fill_cells <- function(
     if (is.na(trend) | trend == "") {
       return(
         tibble::tibble(
-          .exposure = data %>%
-            dplyr::pull(.data$.exposure) %>%
+          .exposure = data |>
+            dplyr::pull(.data$.exposure) |>
             levels(),
           res = ""
         )
@@ -146,8 +146,8 @@ fill_cells <- function(
     return(
       tibble::tibble(
         .exposure = c(
-          data %>%
-            dplyr::pull(.data$.exposure) %>%
+          data |>
+            dplyr::pull(.data$.exposure) |>
             levels(),
           "Trend"
         ),
@@ -320,8 +320,8 @@ fill_cells <- function(
   if (is.na(trend) | trend == "") {
     return(res_cat)
   } else {
-    data_prep <- data %>%
-      dplyr::mutate(.exposure = .data$.trend) %>%
+    data_prep <- data |>
+      dplyr::mutate(.exposure = .data$.trend) |>
       prepare_data(
         is_trend = TRUE,
         na_rm = na_rm,
@@ -380,7 +380,7 @@ fill_cells <- function(
       return(
         dplyr::bind_rows(
           res_cat,
-          res_trend %>%
+          res_trend |>
             dplyr::mutate(
               dplyr::across(
                 .cols = dplyr::any_of(".exposure"),

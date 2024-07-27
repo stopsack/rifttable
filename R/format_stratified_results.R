@@ -16,8 +16,8 @@ format_stratified_results <- function(
     suppress,
     nmin,
     is_trend) {
-  results %>%
-    dplyr::ungroup() %>%
+  results |>
+    dplyr::ungroup() |>
     dplyr::left_join(
       counts_per_stratum(
         data = data,
@@ -25,7 +25,7 @@ format_stratified_results <- function(
         is_trend
       ),
       by = ".exposure"
-    ) %>%
+    ) |>
     dplyr::mutate(
       res = dplyr::if_else(
         stringr::str_remove(
@@ -71,6 +71,6 @@ format_stratified_results <- function(
         TRUE ~
           .data$res
       )
-    ) %>%
+    ) |>
     dplyr::select(-".per_stratum")
 }

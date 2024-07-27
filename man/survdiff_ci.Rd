@@ -84,7 +84,7 @@ Donner (2008) is used, with estimation on the log scale for ratios.
 # Load 'cancer' dataset from survival package (Used in all examples)
 data(cancer, package = "survival")
 
-cancer <- cancer \%>\%
+cancer <- cancer |>
   dplyr::mutate(
     sex = factor(
       sex,
@@ -97,7 +97,8 @@ cancer <- cancer \%>\%
 survdiff_ci(
   formula = survival::Surv(time = time, event = status) ~ sex,
   data = cancer,
-  time = 365.25)
+  time = 365.25
+)
 # Females have 19 percentage points higher one-year survival than males
 # (95\% CI, 5 to 34 percentage points).
 }

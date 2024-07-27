@@ -6,7 +6,7 @@ test_that(
     design <- tibble::tibble(
       type = c("outcomes", "total"),
       type2 = c("risk", "risk (ci)")
-    ) %>%
+    ) |>
       dplyr::mutate(
         exposure = "stage",
         outcome = "death"
@@ -52,7 +52,7 @@ test_that(
       data = breastcancer,
       layout = "cols",
       type2_layout = "cols",
-    ) %>%
+    ) |>
       dplyr::mutate(Stage = as.character(Stage))
     expected <- tibble::tribble(
       ~Stage,      ~outcomes, ~`outcomes `, ~total,  ~`total `,
@@ -82,8 +82,8 @@ test_that(
     )
 
     # Blanks in the label
-    object <- design %>%
-      dplyr::mutate(label = c("label", "")) %>%
+    object <- design |>
+      dplyr::mutate(label = c("label", "")) |>
       rifttable(
         data = breastcancer,
         layout = "cols"
@@ -102,13 +102,13 @@ test_that(
       expected = expected
     )
 
-    object <- design %>%
-      dplyr::mutate(label = c("label", "")) %>%
+    object <- design |>
+      dplyr::mutate(label = c("label", "")) |>
       rifttable(
         data = breastcancer,
         layout = "cols",
         type2_layout = "cols"
-      ) %>%
+      ) |>
       dplyr::mutate(Stage = as.character(Stage))
     expected <- tibble::tribble(
       ~Stage,      ~`1_label`, ~`1_label `, ~`2_`,  ~`2_ `,
@@ -122,8 +122,8 @@ test_that(
     )
 
     expect_error(
-      object = design %>%
-        dplyr::mutate(exposure = NA) %>%
+      object = design |>
+        dplyr::mutate(exposure = NA) |>
         rifttable(data = breastcancer),
       regexp = "'exposure' must be specified for each row"
     )

@@ -18,7 +18,7 @@ find_id <- function(data, id_variable) {
       )
     }
     return(
-      data %>%
+      data |>
         dplyr::pull(
           dplyr::one_of(id_variable)
         )

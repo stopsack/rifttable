@@ -1,7 +1,7 @@
 data(cancer, package = "survival")
 
-cancer <- cancer %>%
-  tibble::as_tibble() %>%
+cancer <- cancer |>
+  tibble::as_tibble() |>
   dplyr::mutate(
     # The exposure (here, 'sex') must be categorical (a factor)
     sex = factor(
@@ -15,7 +15,7 @@ cancer <- cancer %>%
     time2 = time / 365.25, # transform to years
     time = 0.1,
     status = status - 1
-  ) %>%
+  ) |>
   dplyr::filter(time2 > time)
 
 testthat::test_that(
@@ -52,14 +52,14 @@ testthat::test_that(
       "  1-year survival ratio",               "survratio",
       "  1-year risk ratio",                   "cumincratio",
       "  Hazard ratio (95% CI)",               "hr"
-    ) %>%
+    ) |>
       dplyr::mutate(
         time = "time",
         time2 = "time2",
         event = "status",
         exposure = "sex",
         arguments = list(list(timepoint = 1))
-      ) %>%
+      ) |>
       rifttable(
         data = cancer,
         overall = TRUE
@@ -116,7 +116,7 @@ testthat::test_that(
           time2 = "time2",
           event = "status"
         ),
-        data = cancer %>%
+        data = cancer |>
           dplyr::mutate(
             time2 = dplyr::if_else(
               dplyr::row_number() < 5,
@@ -238,7 +238,7 @@ testthat::test_that(
             )
           )
         ),
-        data = cancer %>%
+        data = cancer |>
           dplyr::mutate(
             idvar = rep(
               1:50,
@@ -305,7 +305,7 @@ testthat::test_that(
           event = "status",
           exposure = "sex"
         ),
-        data = cancer %>%
+        data = cancer |>
           dplyr::filter(sex == "Male")
       ),
       expected = tibble::tibble(

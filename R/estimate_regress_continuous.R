@@ -98,7 +98,7 @@ estimate_regress_continuous <- function(
           )
         ),
         data = data
-      ) %>%
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
@@ -128,11 +128,11 @@ estimate_regress_continuous <- function(
         family = stats::poisson(link = "log"),
         data = data
       ))
-      fit %>%
+      fit |>
         broom::tidy(
           conf.int = FALSE,
           exponentiate = FALSE
-        ) %>%
+        ) |>
         dplyr::mutate(
           std.error = sqrt(diag(sandwich::vcovHC(
             fit,
@@ -145,7 +145,7 @@ estimate_regress_continuous <- function(
           conf.high = .data$estimate +
             stats::qnorm(1 - (1 - ci) / 2) *
               .data$std.error
-        ) %>%
+        ) |>
         dplyr::mutate_at(
           .vars = c(
             "estimate",
@@ -166,7 +166,7 @@ estimate_regress_continuous <- function(
         ),
         family = stats::poisson(link = "log"),
         data = data
-      ) %>%
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
@@ -184,7 +184,7 @@ estimate_regress_continuous <- function(
         ),
         family = stats::gaussian(link = "log"),
         data = data
-      ) %>%
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
@@ -201,11 +201,11 @@ estimate_regress_continuous <- function(
           )
         ),
         data = data
-      ) %>%
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci
-        ) %>%
+        ) |>
         dplyr::mutate_at(
           .vars = c(
             "estimate",
@@ -237,13 +237,13 @@ estimate_regress_continuous <- function(
         tau = tau,
         method = "fn",
         data = data
-      ) %>%
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci
         )
     }
-  ) %>%
+  ) |>
     format_regression_results(
       data = data,
       suppress = "total",

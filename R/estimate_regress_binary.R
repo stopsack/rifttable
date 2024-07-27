@@ -111,7 +111,7 @@ estimate_regress_binary <- function(
         ),
         data = data,
         approach = approach
-      ) %>%
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
@@ -130,7 +130,7 @@ estimate_regress_binary <- function(
         ),
         data = data,
         approach = approach
-      ) %>%
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
@@ -149,7 +149,7 @@ estimate_regress_binary <- function(
         ),
         family = stats::binomial(link = "logit"),
         data = data
-      ) %>%
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
@@ -157,7 +157,7 @@ estimate_regress_binary <- function(
         )
     },
     stop(paste0("Invalid estimator type = '", type, "'."))
-  ) %>%
+  ) |>
     format_regression_results(
       data = data,
       suppress = "binary",

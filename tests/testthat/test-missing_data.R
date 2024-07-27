@@ -366,7 +366,7 @@ test_that(
         exposure = "allempty_lgl",
         outcome = "death",
         type = "outcomes"
-      ) %>%
+      ) |>
         rifttable(
           data = df,
           exposure_levels = "all"

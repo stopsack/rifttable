@@ -1,8 +1,8 @@
 data(cancer, package = "survival")
 
-cancer <- cancer %>%
-  tibble::as_tibble() %>%
-  dplyr::filter(ph.ecog < 3) %>%
+cancer <- cancer |>
+  tibble::as_tibble() |>
+  dplyr::filter(ph.ecog < 3) |>
   dplyr::mutate(
     # The exposure (here, 'sex') must be categorical (a factor)
     sex = factor(
@@ -55,13 +55,13 @@ test_that(
      # "  1-year survival ratio",               "survratio",
       "  1-year risk ratio",                   "cumincratio",
       "  Hazard ratio (95% CI)",               "hr"
-    ) %>%
+    ) |>
       dplyr::mutate(
         time = "time",
         event = "status@Event of interest",
         exposure = "sex",
         arguments = list(list(timepoint = 1))
-      ) %>%
+      ) |>
       rifttable(
         data = cancer,
         overall = TRUE
@@ -111,7 +111,7 @@ test_that(
         time = "time",
         event = "status@Event of interest",
         exposure = "sex"
-      ) %>%
+      ) |>
         rifttable(
           data = cancer,
           overall = TRUE
@@ -125,7 +125,7 @@ test_that(
         time = "time",
         event = "status@Event of interest",
         exposure = "sex"
-      ) %>%
+      ) |>
         rifttable(data = cancer),
       regexp = "Note the presence of competing events"
     )
@@ -135,13 +135,13 @@ test_that(
         ~label,                                  ~type,
         "1-year survival difference",          "survdiff",
         "1-year survival ratio",               "survratio"
-      ) %>%
+      ) |>
         dplyr::mutate(
           time = "time",
           event = "status@Event of interest",
           exposure = "sex",
           arguments = list(list(timepoint = 1))
-        ) %>%
+        ) |>
         rifttable(
           data = cancer,
           overall = TRUE
@@ -160,7 +160,7 @@ test_that(
         time = "time",
         event = "status@Event of interest",
         exposure = "sex"
-      ) %>%
+      ) |>
         rifttable(
           data = cancer,
           overall = TRUE
@@ -179,7 +179,7 @@ test_that(
         time = "time",
         event = "status@Nonsense",
         exposure = "sex"
-      ) %>%
+      ) |>
         rifttable(
           data = cancer,
           overall = TRUE
@@ -198,7 +198,7 @@ test_that(
         time = "time",
         event = "sex@Male",
         exposure = "status"
-      ) %>%
+      ) |>
         rifttable(
           data = cancer,
           overall = TRUE
@@ -217,9 +217,9 @@ test_that(
         time = "time",
         event = "status",
         exposure = "sex"
-      ) %>%
+      ) |>
         rifttable(
-          data = cancer %>%
+          data = cancer |>
             dplyr::filter(!is.na(ph.ecog)),
           overall = TRUE
         ),
@@ -237,9 +237,9 @@ test_that(
         time = "time",
         event = "pat.karno@50",
         exposure = "sex"
-      ) %>%
+      ) |>
         rifttable(
-          data = cancer %>%
+          data = cancer |>
             dplyr::filter(!is.na(pat.karno)),
           overall = TRUE
         ),

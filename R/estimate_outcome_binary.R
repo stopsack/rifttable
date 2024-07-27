@@ -41,7 +41,7 @@ estimate_outcome_binary <- function(
     digits = digits,
     default = risk_digits
   )
-  data <- data %>%
+  data <- data |>
     dplyr::group_by(
       .data$.exposure,
       .drop = FALSE
@@ -60,11 +60,11 @@ estimate_outcome_binary <- function(
   switch(
     EXPR = type,
     "outcomes" = {
-      data %>%
+      data |>
         dplyr::summarize(res = paste(sum(.data$.outcome)))
     },
     "outcomes/total" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste(
             sum(.data$.outcome),
@@ -74,7 +74,7 @@ estimate_outcome_binary <- function(
         )
     },
     "cases/controls" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste(
             sum(.data$.outcome),
@@ -84,7 +84,7 @@ estimate_outcome_binary <- function(
         )
     },
     "risk" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste0(
             format_round(
@@ -98,7 +98,7 @@ estimate_outcome_binary <- function(
         )
     },
     "risk (ci)" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste0(
             format_round(
@@ -133,7 +133,7 @@ estimate_outcome_binary <- function(
         )
     },
     "outcomes (risk)" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste0(
             sum(.data$.outcome),
@@ -150,7 +150,7 @@ estimate_outcome_binary <- function(
         )
     },
     "outcomes/total (risk)" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste0(
             sum(.data$.outcome),
@@ -169,7 +169,7 @@ estimate_outcome_binary <- function(
         )
     },
     stop(paste0("Invalid estimator type = '", type, "'."))
-  ) %>%
+  ) |>
     format_stratified_results(
       data = data,
       to = to,

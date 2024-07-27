@@ -35,7 +35,7 @@ test_that(
     with_mocked_bindings(
       is_package_installed = function(package) FALSE,
       expect_error(
-        object = tibble::tibble(a = 1) %>%
+        object = tibble::tibble(a = 1) |>
           rt_gt(),
         regexp = "package \"gt\" must be installed"
       )

@@ -41,7 +41,7 @@ estimate_outcome_continuous <- function(
     digits = digits,
     default = diff_digits
   )
-  data <- data %>%
+  data <- data |>
     dplyr::group_by(
       .data$.exposure,
       .drop = FALSE
@@ -50,11 +50,11 @@ estimate_outcome_continuous <- function(
   switch(
     EXPR = type,
     "total" = {
-      data %>%
+      data |>
         dplyr::summarize(res = paste(dplyr::n()))
     },
     "mean" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = format_round(
             mean(.data$.outcome),
@@ -63,7 +63,7 @@ estimate_outcome_continuous <- function(
         )
     },
     "mean (sd)" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = paste0(
             format_round(
@@ -80,14 +80,14 @@ estimate_outcome_continuous <- function(
         )
     },
     "sd" = {
-      data %>%
+      data |>
         dplyr::summarize(res = format_round(
           stats::sd(.data$.outcome),
           digits = digits
         ))
     },
     "mean (ci)" = {
-      data %>%
+      data |>
         dplyr::summarize(res = paste0(
           format_round(
             mean(.data$.outcome),
@@ -113,7 +113,7 @@ estimate_outcome_continuous <- function(
         ))
     },
     "geomean" = {
-      data %>%
+      data |>
         dplyr::summarize(
           res = format_round(
             exp(mean(log(.data$.outcome))),
@@ -122,14 +122,14 @@ estimate_outcome_continuous <- function(
         )
     },
     "median" = {
-      data %>%
+      data |>
         dplyr::summarize(res = format_round(
           stats::median(.data$.outcome),
           digits = digits
         ))
     },
     "median (iqr)" = {
-      data %>%
+      data |>
         dplyr::summarize(res = paste0(
           format_round(
             stats::median(.data$.outcome),
@@ -156,7 +156,7 @@ estimate_outcome_continuous <- function(
     },
     "range" = {
       if (any(!is.na(data$.outcome))) {
-        data %>%
+        data |>
           dplyr::summarize(res = paste0(
             format_round(
               min(.data$.outcome),
@@ -173,7 +173,7 @@ estimate_outcome_continuous <- function(
       }
     },
     stop(paste0("Invalid estimator type = '", type, "'."))
-  ) %>%
+  ) |>
     format_stratified_results(
       data = data,
       to = to,

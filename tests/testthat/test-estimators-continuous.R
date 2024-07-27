@@ -3,8 +3,8 @@ testthat::test_that(
   code = {
     data(cancer, package = "survival")
 
-    cancer <- cancer %>%
-      dplyr::filter(ph.ecog < 3) %>%
+    cancer <- cancer |>
+      dplyr::filter(ph.ecog < 3) |>
       dplyr::mutate(ph.ecog = factor(ph.ecog))
     attr(cancer$ph.ecog, which = "label") <- "ECOG performance status"
 
@@ -30,11 +30,11 @@ testthat::test_that(
       "  of arithmetic means, empirical SE", "irrrob",
       "  of arithmetic means, Poisson SE",   "irr",
       "  of geometric means",                "foldlog"
-    ) %>%
+    ) |>
       dplyr::mutate(
         exposure = "ph.ecog",
         outcome = "age"
-      ) %>%
+      ) |>
       rifttable(
         data = cancer,
         diff_digits = 1,

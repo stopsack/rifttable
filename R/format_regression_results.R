@@ -35,17 +35,17 @@ format_regression_results <- function(
     reference_label,
     percent = FALSE,
     conflimit_check = FALSE) { # only needed for RR/RD models
-  fit <- fit %>%
+  fit <- fit |>
     dplyr::select(
       "term",
       "estimate",
       "conf.low",
       "conf.high"
-    ) %>%
+    ) |>
     dplyr::mutate(
       nonconverg = (.data$conf.low == 0 &
         .data$conf.high == Inf)
-    ) %>%
+    ) |>
     dplyr::mutate_at(
       .vars = c(
         "estimate",
@@ -57,13 +57,13 @@ format_regression_results <- function(
         digits = digits,
         ratio_digits_decrease = ratio_digits_decrease
       )
-    ) %>%
+    ) |>
     dplyr::full_join(
       counts_per_stratum(
         data = data,
         suppress = suppress,
         is_trend
-      ) %>%
+      ) |>
         dplyr::mutate(
           .exposure = paste0(
             ".exposure",
@@ -71,13 +71,13 @@ format_regression_results <- function(
           )
         ),
       by = c(term = ".exposure")
-    ) %>%
+    ) |>
     dplyr::filter(
       stringr::str_detect(
         string = .data$term,
         pattern = pattern
       )
-    ) %>%
+    ) |>
     dplyr::mutate(
       .exposure = stringr::str_remove(
         string = .data$term,
@@ -86,18 +86,18 @@ format_regression_results <- function(
     )
 
   if (is_trend == TRUE) {
-    fit <- fit %>%
-      dplyr::slice(1) %>%
+    fit <- fit |>
+      dplyr::slice(1) |>
       dplyr::mutate(.exposure = "Trend")
   } else {
-    fit <- fit %>%
+    fit <- fit |>
       dplyr::left_join(
         x = tibble::tibble(.exposure = xlevels),
         by = ".exposure"
       )
   }
 
-  fit %>%
+  fit |>
     dplyr::mutate(
       res = dplyr::case_when(
         .data$nonconverg == TRUE |
@@ -135,6 +135,6 @@ format_regression_results <- function(
         true = paste0("-- (<", nmin, ")"),
         false = .data$res
       )
-    ) %>%
+    ) |>
     dplyr::select(".exposure", "res")
 }

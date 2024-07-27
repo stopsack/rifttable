@@ -35,7 +35,7 @@ test_that(
 
     design <- tibble::tibble(
       stratum = c("Stage I", "Stage II")
-    ) %>%
+    ) |>
       dplyr::mutate(
         type = "risk",
         exposure = "receptor",
@@ -46,7 +46,7 @@ test_that(
     expect_warning(
       object = rifttable(
         design = design,
-        data = breastcancer %>%
+        data = breastcancer |>
           dplyr::filter(stage != "Stage I")
       ),
       regexp = "Stratum 'Stage I' is empty"
@@ -54,7 +54,7 @@ test_that(
 
     expect_error(
       object = rifttable(
-        design = design %>%
+        design = design |>
           dplyr::mutate(outcome = "d"),
         data = breastcancer
       ),
@@ -63,7 +63,7 @@ test_that(
 
     expect_error(
       object = rifttable(
-        design = design %>%
+        design = design |>
           dplyr::mutate(weights = "w"),
         data = breastcancer
       ),
@@ -72,7 +72,7 @@ test_that(
 
     expect_error(
       object = rifttable(
-        design = design %>%
+        design = design |>
           dplyr::mutate(weights = "stage"),
         data = breastcancer
       ),
@@ -81,7 +81,7 @@ test_that(
 
     expect_warning(
       object = rifttable(
-        design = design %>%
+        design = design |>
           dplyr::mutate(exposure = "row"),
         data = breastcancer |>
           dplyr::mutate(row = dplyr::row_number())
@@ -91,7 +91,7 @@ test_that(
 
     expect_error(
       object = rifttable(
-        design = design %>%
+        design = design |>
           dplyr::mutate(type = "nonsense"),
         data = breastcancer
       ),
@@ -100,7 +100,7 @@ test_that(
 
     expect_error(
       object = rifttable(
-        design = design %>%
+        design = design |>
           dplyr::mutate(type = "regress_binary"),
         data = breastcancer
       ),
@@ -119,7 +119,7 @@ testthat::test_that(
           time = "death",
           event = "death"
         ),
-        data = breastcancer %>%
+        data = breastcancer |>
           dplyr::mutate(
             death = dplyr::if_else(
               dplyr::row_number() < 5,

@@ -108,12 +108,12 @@ estimate_regress_cox <- function(
     data = data,
     weights = data$.weights,
     robust = coxph_robust
-  ) %>%
+  ) |>
     broom::tidy(
       conf.int = TRUE,
       conf.level = ci,
       exponentiate = TRUE
-    ) %>%
+    ) |>
     format_regression_results(
       data = data,
       suppress = "event",

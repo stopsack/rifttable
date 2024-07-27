@@ -31,7 +31,7 @@
 #'
 #' @examples
 #' # Data preparation
-#' cars <- tibble::as_tibble(mtcars) %>%
+#' cars <- tibble::as_tibble(mtcars) |>
 #'   dplyr::mutate(
 #'     gear = factor(
 #'       gear,
@@ -51,14 +51,14 @@
 #' attr(cars$gear, "label") <- "Gears"
 #'
 #' # Generate table "design"
-#' design <- cars %>%
+#' design <- cars |>
 #'   table1_design(
 #'     hp, hp_categorical, mpg, am,
 #'     by = gear
 #'   )
 #'
 #' # Use "design" to create a descriptive table.
-#' design %>%
+#' design |>
 #'   rifttable(diff_digits = 0)
 table1_design <- function(
     data,
@@ -72,14 +72,14 @@ table1_design <- function(
     binary_type = "outcomes (risk)"
 ) {
   olddata <- data
-  data <- data %>%
+  data <- data |>
     dplyr::select(!!!rlang::enquos(...))
   if (ncol(data) == 0) {
     data <- olddata
   }
   if (!missing(by)) {
     if (deparse(substitute(by)) %in% names(data)) {
-      data <- data %>%
+      data <- data |>
         dplyr::select(!{{ by }})
     }
   }
@@ -96,7 +96,7 @@ table1_design <- function(
       .x = data,
       .f = class
     )
-  ) %>%
+  ) |>
     dplyr::mutate(
       levels = purrr::map(
         .x = .data$variable,
@@ -104,7 +104,7 @@ table1_design <- function(
       )
     )
   if (empty_levels == TRUE) {
-    design <- design %>%
+    design <- design |>
       dplyr::mutate(
         levels_f = purrr::map(
           .x = .data$variable,
@@ -117,7 +117,7 @@ table1_design <- function(
         )
       )
   }
-  design <- design %>%
+  design <- design |>
     dplyr::mutate(
       has_na = purrr::map_lgl(
         .x = .data$variable,
@@ -156,8 +156,8 @@ table1_design <- function(
           }
         }
       )
-    ) %>%
-    tidyr::unnest_longer(col = "outcome") %>%
+    ) |>
+    tidyr::unnest_longer(col = "outcome") |>
     dplyr::filter(
       !(.data$has_na == FALSE &
           na_always == FALSE &
@@ -166,8 +166,8 @@ table1_design <- function(
             pattern = "@_NA_$"
           )
       )
-    ) %>%
-    dplyr::group_by(.data$variable) %>%
+    ) |>
+    dplyr::group_by(.data$variable) |>
     dplyr::mutate(
       type = dplyr::case_when(
         stringr::str_detect(
@@ -223,12 +223,12 @@ table1_design <- function(
         ) &
         !(.data$variable_type == "categorical" &
           dplyr::row_number() == 1)
-    ) %>%
-    dplyr::ungroup() %>%
+    ) |>
+    dplyr::ungroup() |>
     dplyr::select("label", "outcome", "type", "na_rm")
   # Have "na_rm" column only in "design" if >= 1 variable has missing data
   if (!any(design$na_rm)) {
-    design <- design %>%
+    design <- design |>
       dplyr::select(-"na_rm")
   }
   if (total == TRUE) {
@@ -248,7 +248,7 @@ table1_design <- function(
     )
   }
   if (length(rlang::enquos(...)) > 0) {
-    data_for_attr <- olddata %>%
+    data_for_attr <- olddata |>
       dplyr::select(!!!rlang::enquos(...), {{ by }})
   } else {
     data_for_attr <- olddata
