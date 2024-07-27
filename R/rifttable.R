@@ -661,18 +661,18 @@ rifttable <- function(
     data <- purrr::map2_dfc(
       .x = to_code$outcome,
       .y = to_code$var_level,
-      .f = ~ {
-        varname <- paste0(.x, "@", .y)
-        if (.y == "_NA_") {
+      .f = \(x, y) {
+        varname <- paste0(x, "@", y)
+        if (y == "_NA_") {
           data |>
-            dplyr::rename(variable = {{ .x }}) |>
-            dplyr::mutate(result = is.na(variable)) |>
-            dplyr::select(!!varname := result)
+            dplyr::rename(variable = {{ x }}) |>
+            dplyr::mutate(result = is.na(.data$variable)) |>
+            dplyr::select(!!varname := .data$result)
         } else {
           data |>
-            dplyr::rename(variable = {{ .x }}) |>
-            dplyr::mutate(result = variable == .y) |>
-            dplyr::select(!!varname := result)
+            dplyr::rename(variable = {{ x }}) |>
+            dplyr::mutate(result = .data$variable == y) |>
+            dplyr::select(!!varname := .data$result)
         }
       }
     ) |>
@@ -819,9 +819,9 @@ rifttable <- function(
         result = purrr::map2(
           .x = .data$result,
           .y = .data$result2,
-          .f = ~ dplyr::full_join(
-            .x,
-            .y,
+          .f = \(x, y) dplyr::full_join(
+            x,
+            y,
             by = ".exposure",
             suffix = c(".1", ".2")
           )

@@ -100,7 +100,7 @@ table1_design <- function(
     dplyr::mutate(
       levels = purrr::map(
         .x = .data$variable,
-        .f = ~ sort(unique(na.exclude(data[[.x]])))
+        .f = \(x) sort(unique(stats::na.exclude(data[[x]])))
       )
     )
   if (empty_levels == TRUE) {
@@ -108,7 +108,7 @@ table1_design <- function(
       dplyr::mutate(
         levels_f = purrr::map(
           .x = .data$variable,
-          .f = ~ levels(data[[.x]])
+          .f = \(x) levels(data[[x]])
         ),
         levels = dplyr::if_else(
           .data$type == "factor",
@@ -121,7 +121,7 @@ table1_design <- function(
     dplyr::mutate(
       has_na = purrr::map_lgl(
         .x = .data$variable,
-        ~ anyNA(data[, .x])
+        .f = \(x) anyNA(data[, x])
       ),
       variable_type = dplyr::case_when(
         .data$type %in% c(
@@ -130,7 +130,7 @@ table1_design <- function(
           "categorical",
         purrr::map_lgl(
           .x = .data$levels, # this is TRUE also for "logical" variable
-          .f = ~ all(stats::na.omit(.x) %in% c(0, 1))
+          .f = \(x) all(stats::na.omit(x) %in% c(0, 1))
         ) ~
           "binary",
         .data$type %in% c("numeric", "integer") ~
@@ -144,15 +144,15 @@ table1_design <- function(
           .data$variable,
           .data$levels
         ),
-        .f = ~ {
-          if (..1 == "categorical") {
+        .f = \(variable_type, variable, levels) {
+          if (variable_type == "categorical") {
             c(
               "",
-              paste(..2, ..3, sep = "@"),
-              paste0(..2, "@_NA_")
+              paste(variable, levels, sep = "@"),
+              paste0(variable, "@_NA_")
             )
           } else {
-            c(..2, paste0(..2, "@_NA_"))
+            c(variable, paste0(variable, "@_NA_"))
           }
         }
       )

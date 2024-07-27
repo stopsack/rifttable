@@ -52,8 +52,8 @@ format_regression_results <- function(
         "conf.low",
         "conf.high"
       ),
-      .funs = ~ format_round(
-        . * multiply,
+      .funs = \(x) format_round(
+        x * multiply,
         digits = digits,
         ratio_digits_decrease = ratio_digits_decrease
       )
