@@ -667,12 +667,12 @@ rifttable <- function(
           data |>
             dplyr::rename(variable = {{ x }}) |>
             dplyr::mutate(result = is.na(.data$variable)) |>
-            dplyr::select(!!varname := .data$result)
+            dplyr::select(!!varname := "result")
         } else {
           data |>
             dplyr::rename(variable = {{ x }}) |>
             dplyr::mutate(result = .data$variable == y) |>
-            dplyr::select(!!varname := .data$result)
+            dplyr::select(!!varname := "result")
         }
       }
     ) |>
