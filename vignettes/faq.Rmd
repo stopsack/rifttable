@@ -249,7 +249,7 @@ bind_rows(
 
 # How do I change how results are rounded?
 
-By default, difference measures are being rounded to 2 decimal digits (`0.01`), such as `type = "diff"`, the mean difference, or `type = "quantreg"`, the median difference. The same goes for risk measures, such as `type = "risk"`, unless shown as percentage points. Ratio measures are also shown with 2 decimal digits, such as `type = "hr"`, the hazard ratio, or `type = "fold"`, a ratio of arithmetric means. 
+By default, difference measures are being rounded to 2 decimal digits (`0.01`), such as `type = "diff"`, the mean difference, or `type = "quantreg"`, the median difference. The same goes for risk measures, such as `type = "risk"`, unless shown as percentage points. Ratio measures are also shown with 2 decimal digits, such as `type = "hr"`, the hazard ratio, or `type = "fold"`, a ratio of arithmetic means. 
 
 Rounding can be changed by setting the `rifttable()` arguments `diff_digits`, `risk_digits`, and `ratio_digits` globally for the entire table. 
 
