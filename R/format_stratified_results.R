@@ -27,6 +27,7 @@ format_stratified_results <- function(
       by = ".exposure"
     ) |>
     dplyr::mutate(
+      .exposure = as.character(.data$.exposure),
       res = dplyr::if_else(
         stringr::str_remove(
           string = .data$res,

@@ -52,8 +52,7 @@ test_that(
       data = breastcancer,
       layout = "cols",
       type2_layout = "cols",
-    ) |>
-      dplyr::mutate(Stage = as.character(Stage))
+    )
     expected <- tibble::tribble(
       ~Stage,      ~outcomes, ~`outcomes `, ~total,  ~`total `,
       "Stage I",   "7",       "0.10",       "67",    "0.10 (0.05, 0.20)",
@@ -108,8 +107,7 @@ test_that(
         data = breastcancer,
         layout = "cols",
         type2_layout = "cols"
-      ) |>
-      dplyr::mutate(Stage = as.character(Stage))
+      )
     expected <- tibble::tribble(
       ~Stage,      ~`1_label`, ~`1_label `, ~`2_`,  ~`2_ `,
       "Stage I",   "7",        "0.10",       "67",   "0.10 (0.05, 0.20)",
