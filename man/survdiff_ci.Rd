@@ -52,7 +52,7 @@ required if data are clustered, or if competing events and time/time2
 notation are used concomitantly.}
 
 \item{weighted}{Optional. Weigh survival curves, e.g. for inverse-probability
-weighting, before estating differences or ratios? If \code{TRUE}, the
+weighting, before estimating differences or ratios? If \code{TRUE}, the
 \code{data} must contain a variable called \code{.weights}. Defaults to
 \code{FALSE}.}
 }
@@ -74,7 +74,7 @@ survival package/\code{\link[survival]{survfit}}).
 \description{
 This function estimates the unadjusted difference or ratio in survival or
 cumulative incidence (risk) at a given time point based on the difference
-between per-group Kaplan-Meier estimates or, if competing events are prevent,
+between per-group Kaplan-Meier estimates or, if competing events are present,
 Aalen-Johansen estimates of the cumulative incidence.
 
 For constructing confidence limits, the MOVER approach described by Zou and
