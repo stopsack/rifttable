@@ -26,7 +26,8 @@
 #' @param approach Optional. For estimating confidence limits of differences,
 #'   use the MOVER approach based on upper and lower confidence limits of each
 #'   group (\code{"mover"}), or square-and-add standard errors
-#'   (\code{"squareadd"})? Defaults to \code{"mover"}.
+#'   (\code{"squareadd"})? Defaults to \code{"mover"}. (For confidence limits of
+#'   ratios, this argument is ignored and MOVER is used.)
 #' @param conf.level Optional. Confidence level. Defaults to \code{0.95}.
 #' @param event_type Optional. Event type (level) for event variable with
 #'   competing events. Defaults to \code{NULL}.

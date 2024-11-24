@@ -40,7 +40,8 @@ Defaults to \code{"survival"}.}
 \item{approach}{Optional. For estimating confidence limits of differences,
 use the MOVER approach based on upper and lower confidence limits of each
 group (\code{"mover"}), or square-and-add standard errors
-(\code{"squareadd"})? Defaults to \code{"mover"}.}
+(\code{"squareadd"})? Defaults to \code{"mover"}. (For confidence limits of
+ratios, this argument is ignored and MOVER is used.)}
 
 \item{conf.level}{Optional. Confidence level. Defaults to \code{0.95}.}
 
