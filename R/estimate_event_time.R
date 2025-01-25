@@ -92,15 +92,6 @@ estimate_event_time <- function(
     which_argument = "timepoint",
     is_numeric = TRUE
   ) # default: NA
-  data$.id <- find_id(
-    data = data,
-    id_variable = find_argument(
-      arguments = arguments,
-      which_argument = "id",
-      is_numeric = FALSE,
-      default = NULL
-    )
-  )
 
   switch(
     EXPR = type,

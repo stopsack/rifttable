@@ -7,23 +7,24 @@
 #' @noRd
 find_id <- function(data, id_variable) {
   if (!is.null(id_variable)) {
-    if (!id_variable %in% names(data)) {
-      stop(
-        paste0(
-          "arguments = list(id = '",
-          id_variable,
-          "') is not an ID variable that ",
-          "is valid for this data set."
+    if(id_variable != "") {
+      if (!id_variable %in% names(data)) {
+        stop(
+          paste0(
+            "id = '",
+            id_variable,
+            "' is not an ID variable that ",
+            "is valid for this data set."
+          )
         )
+      }
+      return(
+        data |>
+          dplyr::pull(
+            dplyr::one_of(id_variable)
+          )
       )
     }
-    return(
-      data |>
-        dplyr::pull(
-          dplyr::one_of(id_variable)
-        )
-    )
-  } else {
-    return(1:nrow(data))
   }
+  return(1:nrow(data))
 }

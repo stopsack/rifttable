@@ -211,9 +211,9 @@ testthat::test_that(
           time = "time",
           event = "status",
           exposure = "sex",
-          arguments = list(list(id = "nonsense"))
         ),
-        data = cancer
+        data = cancer,
+        id = "nonsense"
       ),
       regexp = "is not an ID variable that is valid"
     )
@@ -230,13 +230,7 @@ testthat::test_that(
           time = "time",
           time2 = "time2",
           event = "status",
-          arguments = list(
-            list(timepoint = 1),
-            list(
-              id = "idvar",
-              timepoint = 1
-            )
-          )
+          arguments = list(list(timepoint = 1))
         ),
         data = cancer |>
           dplyr::mutate(
@@ -244,11 +238,12 @@ testthat::test_that(
               1:50,
               length.out = nrow(cancer)
             )
-          )
+          ),
+        id = "idvar"
       ),
       expected = tibble::tibble(
-        Summary = c("surv (ci)", "surv (ci)"),
-        Overall = c("0.43 (0.36, 0.51)", "0.43 (0.37, 0.50)")
+        Summary = "surv (ci)",
+        Overall = "0.43 (0.37, 0.50)"
       )
     )
   }

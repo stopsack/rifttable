@@ -102,10 +102,13 @@ survdiff_ci <- function(
     weighted = FALSE) {
   .id <- NULL # address seemingly global variable ".id" in survfit() call
   .weights <- NULL # same
-  data$.id <- find_id(
-    data = data,
-    id_variable = id_variable
-  )
+  # If this function is called outside rifttable(), which would create .id
+  if(!(".id" %in% names(data))) {
+    data$.id <- find_id(
+      data = data,
+      id_variable = id_variable
+    )
+  }
   if (weighted == FALSE) {
     data$.weights <- 1
   }
