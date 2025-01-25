@@ -494,6 +494,9 @@ rifttable <- function(
   if (!is.data.frame(data)) {
     stop("No 'data' data frame/tibble was provided.")
   }
+  if (nrow(data) < 1) {
+    stop("The data set is empty.")
+  }
   if (missing(risk_percent) &
     !is.null(attr(
       x = design,
@@ -502,7 +505,6 @@ rifttable <- function(
     risk_percent <- TRUE
   }
   exposure_levels <- match.arg(exposure_levels)[1]
-
   if (!("type" %in% names(design))) {
     stop(paste(
       "The 'design' data frame must contain a 'type' column",

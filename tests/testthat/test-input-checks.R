@@ -17,8 +17,16 @@ test_that(
       regexp = "No 'data' data frame"
     )
 
+    expect_error(
+      object = rifttable(
+        design = tibble::tibble(),
+        data = tibble::tibble()
+      ),
+      regexp = "The data set is empty"
+    )
+
     design <- tibble::tibble()
-    attr(x = design, which = "rt_data") <- tibble::tibble()
+    attr(x = design, which = "rt_data") <- tibble::tibble(a = 1)
     expect_error(
       object = rifttable(
         design = design
@@ -180,7 +188,7 @@ test_that(
           type = "total",
           digits = 11
         ),
-        data = tibble::tibble()
+        data = tibble::tibble(x = 1)
       ),
       regexp = "must be an integer number from 0 to 10"
     )
@@ -190,7 +198,7 @@ test_that(
           type = "total",
           digits = "a"
         ),
-        data = tibble::tibble()
+        data = tibble::tibble(x = 1)
       ),
       regexp = "must be numeric. 'a' is not numeric."
     )
