@@ -86,6 +86,10 @@ estimate_regress_cox <- function(
       "'weights' in the 'arguments' list are no longer supported."
     ))
   }
+  # as in survfit.formula: if weights are not all integer, use robust variance
+  if(any(data$.weights %% 1 != 0, na.rm = TRUE)) {
+    coxph_robust <- TRUE
+  }
   coxph_robust <- find_argument(
     arguments = arguments,
     which_argument = "robust",
@@ -107,7 +111,8 @@ estimate_regress_cox <- function(
     ),
     data = data,
     weights = data$.weights,
-    robust = coxph_robust
+    robust = coxph_robust,
+    id = data$.id
   ) |>
     broom::tidy(
       conf.int = TRUE,
