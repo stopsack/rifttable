@@ -122,7 +122,8 @@
 #'        probability weights. Used by comparative survival estimators (e.g.,
 #'        \code{type = "hr"} and \code{type = "cumincdiff"}) as well as
 #'        \code{type = "cuminc"} and \code{type = "surv"}. They are ignored
-#'        by other estimators.
+#'        by other estimators. The spelling \code{weight} is also accepted as a
+#'        fallback.
 #'   *  \code{type} The statistic requested (case-insensitive):
 #'
 #'      Comparative estimates with 95% confidence intervals:
@@ -520,7 +521,6 @@ rifttable <- function(
   if(!("outcome"     %in% names(design))) design$outcome     <- NA
   if(!("trend"       %in% names(design))) design$trend       <- NA
   if(!("confounders" %in% names(design))) design$confounders <- ""
-  if(!("weights"     %in% names(design))) design$weights     <- NA
   if(!("type2"       %in% names(design))) design$type2       <- ""
   if(!("digits"      %in% names(design))) design$digits      <- NA
   if(!("digits2"     %in% names(design))) design$digits2     <- NA
@@ -529,6 +529,13 @@ rifttable <- function(
   if(!("na_rm"       %in% names(design))) design$na_rm       <- NA
   if(!("ci"          %in% names(design))) design$ci          <- NA
   if(!("arguments"   %in% names(design))) design$arguments   <- NA
+  if(!("weights"     %in% names(design))) {
+    if("weight" %in% names(design)) {
+      design$weights <- design$weight
+    } else {
+      design$weights     <- NA
+    }
+  }
   if (
     !("effect_modifier" %in% names(design) &
       "stratum" %in% names(design))

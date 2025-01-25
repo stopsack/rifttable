@@ -167,7 +167,8 @@ to define, e.g., \code{persontime} as the offset.
 probability weights. Used by comparative survival estimators (e.g.,
 \code{type = "hr"} and \code{type = "cumincdiff"}) as well as
 \code{type = "cuminc"} and \code{type = "surv"}. They are ignored
-by other estimators.
+by other estimators. The spelling \code{weight} is also accepted as a
+fallback.
 \item \code{type} The statistic requested (case-insensitive):
 
 Comparative estimates with 95\% confidence intervals:
