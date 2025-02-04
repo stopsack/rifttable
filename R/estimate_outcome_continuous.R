@@ -53,6 +53,15 @@ estimate_outcome_continuous <- function(
       data |>
         dplyr::summarize(res = paste(dplyr::n()))
     },
+    "sum" = {
+      data |>
+        dplyr::summarize(
+          res = format_round(
+            sum(.data$.outcome),
+            digits = digits
+          )
+        )
+    },
     "mean" = {
       data |>
         dplyr::summarize(

@@ -191,6 +191,7 @@ fill_cells <- function(
     "outcomes/total (risk)" = "outcome_binary",
 
     "total" = ,
+    "sum" = ,
     "mean" = ,
     "mean (sd)" = ,
     "sd" = ,

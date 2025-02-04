@@ -31,6 +31,7 @@ tribble(
   ~label,                                       ~type,
   "**Absolute estimates**",                     "",
   "Observations",                               "total",
+  "Sum",                                        "sum",
   "Range",                                      "range",
   "Mean",                                       "",
   "  Mean (i.e., arithmetic mean)",             "mean",
@@ -67,6 +68,8 @@ tribble(
 
 `type` | Description | Options (`arguments = `)
 -------+-------------+--------------
+`"total"` | Count of observations.
+`"sum"` | Sum.
 `"range"` | Range: Minimum to maximum value.
 `"mean"` | Mean (arithmetic mean).
 `"mean (ci)"` | Mean and CI (default: 95%).

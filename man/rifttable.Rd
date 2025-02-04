@@ -279,6 +279,7 @@ survival for censoring.
 \item \code{"median"} Median.
 \item \code{"median (iqr)"} Median and interquartile range.
 \item \code{"range"} Range: Minimum to maximum value.
+\item \code{"sum"} Sum.
 \item \code{"blank"} or \code{""} An empty line.
 \item Custom: A custom function that must be available under the name
 \code{estimate_my_function} in order to be callable as
