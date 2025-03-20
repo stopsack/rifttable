@@ -85,7 +85,7 @@ tibble::tribble(
 
 `type` | Description | Options (`arguments = `)
 -----+-----------------+---------
-`"cuminc"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator. If no time point is provided, returns cumulative incidence at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `timepoint`, `id`. Example: `list(timepoint = 2.5, id = "id_variable")` to show 2.5-year risk and to set a variable identifying individuals  (for `survival::survfit()`, e.g., with `time` and `time2` set up; if none is set, each row is taken as one individual).
+`"cuminc"` | Cumulative incidence ("risk") from the Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator. If no time point is provided, returns cumulative incidence at end of follow-up. Change between display as proportion or percent using the parameter `risk_percent` of `rifttable()`. | `timepoint`, `id`. Example: `list(timepoint = 2.5)` to show 2.5-year risk.
 `"cuminc (ci)"` | Cumulative incidence ("risk"), as above, with confidence intervals (default: 95%; Greenwood standard errors with log transformation, the default of the survival package/`survival::survfit()`). | See `"cuminc"`.
 `"events"` | Event count.
 `"events/time"` | Events slash person-time.
@@ -107,9 +107,9 @@ tibble::tribble(
 
 `type` | Description | Options (`arguments = `)
 -----+-----------------+-------------
-`"cumincdiff"` | Difference in cumulative incidence (risk difference) from Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator, with confidence interval (default: 95%). Uses `rifttable::survdiff_ci()`. | `timepoint`, `id`. Example: `list(timepoint = 2.5, id = "id_variable")` to calculate difference in 2.5-year risk and to set a variable identifying individuals  (for `survival::survfit()`, e.g., with `time` and `time2` set up; if none is set, each row is taken as one individual).
-`"cumincratio"` | Ratio of cumulative incidence (risk ratio), with confidence interval (default: 95%), similar to `"cumincdiff"`. | `timepoint`, `id`
-`"hr"`    | Hazard ratio from Cox proportional hazards regression, with confidence interval (default: 95%). If competing events are present, hazard ratios are cause-specific for the event of interest. | `list(robust = TRUE)` for robust (sandwich) standard errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering.
+`"cumincdiff"` | Difference in cumulative incidence (risk difference) from Kaplan-Meier estimator or, if competing risks are present, its generalized form, the Aalen-Johansen estimator, with confidence interval (default: 95%). Uses `rifttable::survdiff_ci()`. | `timepoint`. Example: `list(timepoint = 2.5)` to calculate difference in 2.5-year risk.
+`"cumincratio"` | Ratio of cumulative incidence (risk ratio), with confidence interval (default: 95%), similar to `"cumincdiff"`. | `timepoint`
+`"hr"`    | Hazard ratio from Cox proportional hazards regression, with confidence interval (default: 95%). If competing events are present, hazard ratios are cause-specific for the event of interest. | `list(robust = TRUE)` for robust (sandwich) standard errors. Use `"+ cluster(id_variable)"` in `confounders` to obtain clustering specifically for Cox models, or use the `id` argument of the main `rifttable()` call.
 `"survdiff"` | Difference in survival from Kaplan-Meier estimator, with confidence interval (default: 95%). Not estimated if competing risks are present. Uses `rifttable::survdiff_ci()`. | See `"cumincdiff"`.
 `"survratio"` | Ratio of survival from Kaplan-Meier estimator, with confidence interval (default: 95%), similar to `"survdiff"`. | See `"cumincdiff"`.
 
@@ -128,3 +128,8 @@ See the tables above for how competing events are handled. When no details are n
 # Weighted estimates
 
 The name of a weights variable, for example inverse-probability weights, can be provided via the column `weights` of the `design` table. Weights, if present, are used by all comparative estimators of survival as well as by `type = "cuminc"` and `type = "surv"`, and are ignored otherwise.
+
+
+# Clustering and robust variance
+
+An `id` variable identifying individuals in the `data` must be provided when `time` and `time2` are used in the setting of competing events, or when non-integer weights are present. If no `id` variable is provided, each row is taken as one individual. Robust variance will then automatically be calculated by estimators of survival/cumulative incidence and Cox models.
