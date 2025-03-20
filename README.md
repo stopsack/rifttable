@@ -57,7 +57,7 @@ example_design <- tibble::tribble(
   "High hormone receptor",      "",                      "",
   "– Deaths/N (Risk)",          "outcomes/total (risk)", "High",
   "– Risk difference (95% CI)", "rd",                    "High"
-) %>%
+) |> 
   dplyr::mutate(
     exposure = "stage",
     outcome = "death",
@@ -72,20 +72,20 @@ rifttable(
 
 <div class="kable-table">
 
-| Stage                      | Stage I       | Stage II           | Stage III         |
-|:---------------------------|:--------------|:-------------------|:------------------|
-| Overall                    |               |                    |                   |
-| – Deaths/N                 | 7/67          | 26/96              | 21/29             |
-| – Risk                     | 0.10          | 0.27               | 0.72              |
-| – Risk ratio (95% CI)      | 1 (reference) | 2.59 (1.20, 5.6)   | 6.9 (3.3, 14)     |
-| – Risk difference (95% CI) | 0 (reference) | 0.17 (0.05, 0.28)  | 0.62 (0.44, 0.80) |
-|                            |               |                    |                   |
-| Low hormone receptor       |               |                    |                   |
-| – Deaths/N (Risk)          | 2/12 (0.17)   | 9/22 (0.41)        | 12/14 (0.86)      |
+| Stage | Stage I | Stage II | Stage III |
+|:---|:---|:---|:---|
+| Overall |  |  |  |
+| – Deaths/N | 7/67 | 26/96 | 21/29 |
+| – Risk | 0.10 | 0.27 | 0.72 |
+| – Risk ratio (95% CI) | 1 (reference) | 2.59 (1.20, 5.6) | 6.9 (3.3, 14) |
+| – Risk difference (95% CI) | 0 (reference) | 0.17 (0.05, 0.28) | 0.62 (0.44, 0.80) |
+|  |  |  |  |
+| Low hormone receptor |  |  |  |
+| – Deaths/N (Risk) | 2/12 (0.17) | 9/22 (0.41) | 12/14 (0.86) |
 | – Risk difference (95% CI) | 0 (reference) | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) |
-| High hormone receptor      |               |                    |                   |
-| – Deaths/N (Risk)          | 5/55 (0.09)   | 17/74 (0.23)       | 9/15 (0.60)       |
-| – Risk difference (95% CI) | 0 (reference) | 0.14 (0.02, 0.26)  | 0.51 (0.25, 0.77) |
+| High hormone receptor |  |  |  |
+| – Deaths/N (Risk) | 5/55 (0.09) | 17/74 (0.23) | 9/15 (0.60) |
+| – Risk difference (95% CI) | 0 (reference) | 0.14 (0.02, 0.26) | 0.51 (0.25, 0.77) |
 
 </div>
 
