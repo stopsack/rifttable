@@ -1,7 +1,7 @@
 # rifttable 0.7.0
 
 * Breaking changes:
-  + Require base R pipe `|>` and thus R 4.1.
+  + Require base R pipe `|>` and thus R >= 4.1.
   + Make the `id` variable identifying clustered observations within the same
     individual a global `rifttable()` option for the entire data set, not only 
     for specific estimators.
