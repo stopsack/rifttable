@@ -4,7 +4,7 @@
   + Require base R pipe `|>` and thus R 4.1.
   + Make the `id` variable identifying clustered observations within the same
     individual a global `rifttable()` option for the entire data set, not only 
-    for specific functions like Cox models.
+    for specific estimators.
 * New functionality:
   + Expand input checks to missing values in time/event variables, to missing 
     effect modifiers for joint models and their levels, to nonexistent custom 
@@ -13,7 +13,7 @@
 * Internal and bug fixes:
   + Cover entire package by unit tests.
   + Return exposure consistently as a `character`.
-  + Let the `design` accept `weights` in addition to `weight`.
+  + Let the `design` accept `weight` in addition to `weights`.
   + Require [{risks}](https://stopsack.github.io/risks/) >= 0.4.3.
   + Use modern tidyselect, anonymous functions, and code style.
 
