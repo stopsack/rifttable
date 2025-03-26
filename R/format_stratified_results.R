@@ -16,45 +16,62 @@ format_stratified_results <- function(
     suppress,
     nmin,
     is_trend) {
-  results %>%
-    dplyr::ungroup() %>%
+  results |>
+    dplyr::ungroup() |>
     dplyr::left_join(
       counts_per_stratum(
         data = data,
         suppress = suppress,
-        is_trend),
-      by = ".exposure") %>%
+        is_trend
+      ),
+      by = ".exposure"
+    ) |>
     dplyr::mutate(
+      .exposure = as.character(.data$.exposure),
       res = dplyr::if_else(
         stringr::str_remove(
           string = .data$res,
-          pattern = "%") %in%
-          c("NaN", "NA", "NaN (NA)",
+          pattern = "%"
+        ) %in%
+          c(
+            "NaN", "NA", "NaN (NA)",
             paste0("NA (NA", to, "NA)"),
-            paste0("NaN (NaN", to, "NaN)")),
+            paste0("NaN (NaN", to, "NaN)")
+          ),
         true = "--",
-        false = as.character(.data$res)),
+        false = as.character(.data$res)
+      ),
       res = dplyr::case_when(
         stringr::str_detect(
           string = .data$res,
-          pattern = stringr::fixed("(NaN)")) ~
+          pattern = stringr::fixed("(NaN)")
+        ) ~
           paste0(
             stringr::str_remove(
               string = .data$res,
-              pattern = stringr::fixed("(NaN)")),
-            "(--)"),
+              pattern = stringr::fixed("(NaN)")
+            ),
+            "(--)"
+          ),
         stringr::str_detect(
           string = .data$res,
-          pattern = stringr::fixed("(NaN%)")) ~
+          pattern = stringr::fixed("(NaN%)")
+        ) ~
           paste0(
             stringr::str_remove(
               string = .data$res,
-              pattern = stringr::fixed("(NaN%)")),
-            "(--)"),
-        TRUE ~ .data$res),
+              pattern = stringr::fixed("(NaN%)")
+            ),
+            "(--)"
+          ),
+        TRUE ~ .data$res
+      ),
       res = dplyr::case_when(
         .data$.per_stratum < nmin ~
           paste0("-- (<", nmin, ")"),
-        TRUE ~ .data$res)) %>%
+        TRUE ~
+          .data$res
+      )
+    ) |>
     dplyr::select(-".per_stratum")
 }

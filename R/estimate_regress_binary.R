@@ -44,95 +44,120 @@ estimate_regress_binary <- function(
     reference,
     arguments,
     ...) {
-  if(is.na(exposure)) {  # no exposure variable given
-    if(is_trend)
+  if (is.na(exposure)) { # no exposure variable given
+    if (is_trend) {
       return(tibble::tibble())
-    else
+    } else {
       return(
         tibble::tibble(
           .exposure = "Overall",
-          res = ""))
+          res = ""
+        )
+      )
+    }
   }
-  if(length(unique(stats::na.omit(data$.exposure))) < 2)  # no contrasts estimable
+  if (length(unique(stats::na.omit(data$.exposure))) < 2) { # no contrasts estimable
     return(tibble::tibble(
       .exposure = unique(data$.exposure)[1],
-      res = ""))
+      res = ""
+    ))
+  }
   check_outcome(
     data = data,
     type = type,
     outcome = outcome,
-    outcome_type = "binary")
+    outcome_type = "binary"
+  )
   digits <- find_rounding_digits(
     digits = digits,
     default = dplyr::if_else(
       type %in% c("rd", "rd_joint"),
       true = risk_digits,
-      false = ratio_digits))
-  if(type %in% c("rd", "rd_joint")) {
+      false = ratio_digits
+    )
+  )
+  if (type %in% c("rd", "rd_joint")) {
     ratio_digits_decrease <- NULL
   }
   bootrepeats <- find_argument(
     arguments = arguments,
     which_argument = "bootrepeats",
     is_numeric = TRUE,
-    default = 1000)
-  if(type %in% c("rd", "rd_joint"))
+    default = 1000
+  )
+  if (type %in% c("rd", "rd_joint")) {
     acceptable_approaches <- as.character(as.list(args(risks::riskdiff))$approach)
-  else
+  } else {
     acceptable_approaches <- as.character(as.list(args(risks::riskratio))$approach)
+  }
   approach <- find_argument(
     arguments = arguments,
     which_argument = "approach",
     is_numeric = FALSE,
     acceptable = acceptable_approaches[!(acceptable_approaches %in% c("c", "all"))],
-    default = "auto")
+    default = "auto"
+  )
 
   switch(
     EXPR = type,
-    rr_joint =,
+    rr_joint = ,
     rr = {
       risks::riskratio(
         formula = stats::as.formula(
           paste(
             ".outcome ~ .exposure",
-            confounders)),
+            confounders
+          )
+        ),
         data = data,
-        approach = approach) %>%
+        approach = approach
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
           exponentiate = TRUE,
-          bootrepeats = bootrepeats)
+          bootrepeats = bootrepeats
+        )
     },
-    rd_joint =,
+    rd_joint = ,
     rd = {
       risks::riskdiff(
         formula = stats::as.formula(
           paste(
             ".outcome ~ .exposure",
-            confounders)),
+            confounders
+          )
+        ),
         data = data,
-        approach = approach) %>%
+        approach = approach
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
           exponentiate = FALSE,
-          bootrepeats = bootrepeats)
+          bootrepeats = bootrepeats
+        )
     },
-    or_joint =,
+    or_joint = ,
     or = {
       stats::glm(
         formula = stats::as.formula(
           paste(
             ".outcome ~ .exposure",
-            confounders)),
+            confounders
+          )
+        ),
         family = stats::binomial(link = "logit"),
-        data = data) %>%
+        data = data
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
-          exponentiate = TRUE)
-    }) %>%
+          exponentiate = TRUE
+        )
+    },
+    stop(paste0("Invalid estimator type = '", type, "'."))
+  ) |>
     format_regression_results(
       data = data,
       suppress = "binary",
@@ -140,7 +165,8 @@ estimate_regress_binary <- function(
       multiply = dplyr::if_else(
         risk_percent == TRUE & type %in% c("rd", "rd_joint"),
         true = 100,
-        false = 1),
+        false = 1
+      ),
       digits = digits,
       ratio_digits_decrease = ratio_digits_decrease,
       pattern = pattern,
@@ -148,10 +174,12 @@ estimate_regress_binary <- function(
       reference = dplyr::if_else(
         type %in% c("rd", "rd_joint"),
         true = 0,
-        false = 1),
+        false = 1
+      ),
       nmin = nmin,
       to = to,
       reference_label = reference,
       percent = risk_percent & type %in% c("rd", "rd_joint"),
-      conflimit_check = type %in% c("rr", "rd", "rd_joint", "rr_joint"))
+      conflimit_check = type %in% c("rr", "rd", "rd_joint", "rr_joint")
+    )
 }

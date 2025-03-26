@@ -22,8 +22,8 @@ The example uses the `cancer` data from the survival package. To compare patient
 library(dplyr)
 library(rifttable)
 data(cancer, package = "survival")
-cancer <- cancer %>%
-  filter(ph.ecog < 3) %>%
+cancer <- cancer |>
+  filter(ph.ecog < 3) |>
   mutate(ph.ecog = factor(ph.ecog))
 attr(cancer$ph.ecog, which = "label") <- "ECOG performance status"
 
@@ -31,8 +31,9 @@ tribble(
   ~label,                                       ~type,
   "**Absolute estimates**",                     "",
   "Observations",                               "total",
+  "Sum",                                        "sum",
   "Range",                                      "range",
-  "Mean",                                       "", 
+  "Mean",                                       "",
   "  Mean (i.e., arithmetic mean)",             "mean",
   "  Mean (95% CI)",                            "mean (ci)",
   "  Mean (standard deviation)",                "mean (sd)",
@@ -46,17 +47,20 @@ tribble(
   "Mean ratio",                                 "",
   "  of arithmetic means",                      "fold",
   "  of arithmetic means, empirical SE",        "irrrob",
-  "  of geometric means",                       "foldlog") %>%
+  "  of geometric means",                       "foldlog"
+) |>
   mutate(
     exposure = "ph.ecog",
-    outcome = "age") %>%
+    outcome = "age"
+  ) |>
   rifttable(
-    data = cancer, 
-    diff_digits = 1,  # Suppress unnecessary precision in most estimates
+    data = cancer,
+    diff_digits = 1, # Suppress unnecessary precision in most estimates
     # Show extraneous digits to highlight (minor) differences in ratio  models:
     ratio_digits = 3,
-    overall = TRUE) %>%  
-  rt_gt()  # obtain formatted output
+    overall = TRUE
+  ) |>
+  rt_gt() # obtain formatted output
 ```
 
 
@@ -64,6 +68,8 @@ tribble(
 
 `type` | Description | Options (`arguments = `)
 -------+-------------+--------------
+`"total"` | Count of observations.
+`"sum"` | Sum.
 `"range"` | Range: Minimum to maximum value.
 `"mean"` | Mean (arithmetic mean).
 `"mean (ci)"` | Mean and CI (default: 95%).

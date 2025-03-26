@@ -44,161 +44,206 @@ estimate_regress_continuous <- function(
     reference,
     arguments,
     ...) {
-  if(is.na(exposure)) {  # no exposure variable given
-    if(is_trend)
+  if (is.na(exposure)) { # no exposure variable given
+    if (is_trend) {
       return(tibble::tibble())
-    else
+    } else {
       return(
         tibble::tibble(
           .exposure = "Overall",
-          res = ""))
+          res = ""
+        )
+      )
+    }
   }
-  if(length(unique(stats::na.omit(data$.exposure))) < 2)  # no contrasts estimable
+  if (length(unique(stats::na.omit(data$.exposure))) < 2) { # no contrasts estimable
     return(tibble::tibble(
       .exposure = unique(data$.exposure)[1],
-      res = ""))
+      res = ""
+    ))
+  }
   check_outcome(
     data = data,
     type = type,
     outcome = outcome,
-    outcome_type = "continuous")
+    outcome_type = "continuous"
+  )
   digits <- find_rounding_digits(
     digits = digits,
     default = dplyr::if_else(
       type %in% c("diff", "diff_joint", "quantreg", "quantreg_joint"),
       true = diff_digits,
-      false = ratio_digits))
-  if(type %in% c("diff", "diff_joint", "quantreg", "quantreg_joint")) {
+      false = ratio_digits
+    )
+  )
+  if (type %in% c("diff", "diff_joint", "quantreg", "quantreg_joint")) {
     ratio_digits_decrease <- NULL
   }
   tau <- find_argument(
     arguments = arguments,
     which_argument = "tau",
     is_numeric = TRUE,
-    default = 0.5)
+    default = 0.5
+  )
 
   switch(
     EXPR = type,
-    diff_joint =,
+    diff_joint = ,
     diff = {
       stats::lm(
         formula = stats::as.formula(
           paste(
             ".outcome ~ .exposure",
-            confounders)),
-        data = data) %>%
+            confounders
+          )
+        ),
+        data = data
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
-          exponentiate = FALSE)
+          exponentiate = FALSE
+        )
     },
-    irrrob =,
+    irrrob = ,
     irrrob_joint = {
-      if (!requireNamespace("sandwich", quietly = TRUE)) {
+      if (!is_package_installed("sandwich")) {
         stop(
           paste0(
             "The package \"sandwich\" must be installed to estimate robust ",
             "standard errors for type = '",
             type,
-            "'.\nInstall with:  install.packages(\"sandwich\")"),
-          call. = FALSE)
+            "'.\nInstall with:  install.packages(\"sandwich\")"
+          ),
+          call. = FALSE
+        )
       }
       fit <- suppressWarnings(stats::glm(
         formula = stats::as.formula(
           paste(
             ".outcome ~ .exposure",
-            confounders)),
+            confounders
+          )
+        ),
         family = stats::poisson(link = "log"),
-        data = data))
-      fit %>%
+        data = data
+      ))
+      fit |>
         broom::tidy(
           conf.int = FALSE,
-          exponentiate = FALSE) %>%
+          exponentiate = FALSE
+        ) |>
         dplyr::mutate(
           std.error = sqrt(diag(sandwich::vcovHC(
             fit,
-            type = "HC0"))),
+            type = "HC0"
+          ))),
           statistic = .data$estimate / .data$std.error,
           conf.low = .data$estimate -
             stats::qnorm(1 - (1 - ci) / 2) *
-            .data$std.error,
+              .data$std.error,
           conf.high = .data$estimate +
             stats::qnorm(1 - (1 - ci) / 2) *
-            .data$std.error) %>%
+              .data$std.error
+        ) |>
         dplyr::mutate_at(
           .vars = c(
             "estimate",
             "conf.low",
-            "conf.high"),
-          .funs = exp)
+            "conf.high"
+          ),
+          .funs = exp
+        )
     },
-    irr_joint =,
+    irr_joint = ,
     irr = {
       stats::glm(
         formula = stats::as.formula(
           paste(
             ".outcome ~ .exposure",
-            confounders)),
+            confounders
+          )
+        ),
         family = stats::poisson(link = "log"),
-        data = data) %>%
+        data = data
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
-          exponentiate = TRUE)
+          exponentiate = TRUE
+        )
     },
-    fold_joint =,
+    fold_joint = ,
     fold = {
       stats::glm(
         formula = stats::as.formula(
           paste(
             ".outcome ~ .exposure",
-            confounders)),
+            confounders
+          )
+        ),
         family = stats::gaussian(link = "log"),
-        data = data) %>%
+        data = data
+      ) |>
         broom::tidy(
           conf.int = TRUE,
           conf.level = ci,
-          exponentiate = TRUE)
+          exponentiate = TRUE
+        )
     },
-    foldlog_joint =,
+    foldlog_joint = ,
     foldlog = {
-      stats::lm(formula = stats::as.formula(
-        paste(
-          "log(.outcome) ~ .exposure",
-          confounders)),
-        data = data) %>%
+      stats::lm(
+        formula = stats::as.formula(
+          paste(
+            "log(.outcome) ~ .exposure",
+            confounders
+          )
+        ),
+        data = data
+      ) |>
         broom::tidy(
           conf.int = TRUE,
-          conf.level = ci) %>%
+          conf.level = ci
+        ) |>
         dplyr::mutate_at(
           .vars = c(
             "estimate",
             "conf.low",
-            "conf.high"),
-          .funs = exp)
+            "conf.high"
+          ),
+          .funs = exp
+        )
     },
-    quantreg_joint =,
+    quantreg_joint = ,
     quantreg = {
-      if (!requireNamespace("quantreg", quietly = TRUE)) {
+      if (!is_package_installed("quantreg")) {
         stop(
           paste0(
             "The package \"quantreg\" must be installed to use type = '",
             type,
-            "'.\nInstall with:  install.packages(\"quantreg\")"),
-          call. = FALSE)
+            "'.\nInstall with:  install.packages(\"quantreg\")"
+          ),
+          call. = FALSE
+        )
       }
       quantreg::rq(
         formula = stats::as.formula(
           paste(
             ".outcome ~ .exposure",
-            confounders)),
+            confounders
+          )
+        ),
         tau = tau,
         method = "fn",
-        data = data) %>%
+        data = data
+      ) |>
         broom::tidy(
           conf.int = TRUE,
-          conf.level = ci)
-    }) %>%
+          conf.level = ci
+        )
+    }
+  ) |>
     format_regression_results(
       data = data,
       suppress = "total",
@@ -211,8 +256,10 @@ estimate_regress_continuous <- function(
       reference = dplyr::if_else(
         type %in% c("diff", "diff_joint", "quantreg", "quantreg_joint"),
         true = 0,
-        false = 1),
+        false = 1
+      ),
       nmin = nmin,
       to = to,
-      reference_label = reference)
+      reference_label = reference
+    )
 }

@@ -28,16 +28,18 @@ library(rifttable)
 This example uses the `cancer` dataset from the survival package.
 
 ```{r data, message = FALSE}
-library(dplyr)  # for data handling
+library(dplyr) # for data handling
 data(cancer, package = "survival")
-cancer <- cancer %>%
-  tibble::as_tibble() %>%
+cancer <- cancer |>
+  tibble::as_tibble() |>
   dplyr::mutate(
     sex = factor(
       sex,
       levels = 1:2,
-      labels = c("Male", "Female")),
-    ph.ecog = factor(ph.ecog))
+      labels = c("Male", "Female")
+    ),
+    ph.ecog = factor(ph.ecog)
+  )
 ```
 
 
@@ -46,10 +48,11 @@ cancer <- cancer %>%
 rifttable's `table1_design()` generates the `design` table that can then be passed on to `rifttable()`.
 
 ```{r design}
-design <- cancer %>%
+design <- cancer |>
   table1_design(
-    age, ph.ecog, ph.karno, pat.karno,  # leave empty to include all variables
-    by = sex)
+    age, ph.ecog, ph.karno, pat.karno, # leave empty to include all variables
+    by = sex
+  )
 
 # Print the design for illustration purposes
 design
@@ -59,9 +62,9 @@ design
 # Obtain Table 1
 
 ```{r rifttable}
-design %>%
-  rifttable() %>%
-  rt_gt()  # obtain formatted output
+design |>
+  rifttable() |>
+  rt_gt() # obtain formatted output
 ```
 
 Of note, the dataset is passed along silently together with the `design`. However, the same design can be applied to different data, if it contains the same variable names, *e.g.*, `rifttable(design = design, data = otherdata)`.
@@ -73,30 +76,35 @@ Label variables, set custom rounding, change estimands, and add "Overall" column
 
 ```{r custom}
 # Alternative: set_variable_labels() from the {labelled} package
-attr(cancer$age, "label") <- "Age, years"  # At diagnosis? Unclear (Loprinzi 94)
+attr(cancer$age, "label") <- "Age, years" # At diagnosis? Unclear (Loprinzi 94)
 attr(cancer$ph.ecog, "label") <- "Physician-rated ECOG score"
 attr(cancer$ph.karno, "label") <- "Physician-rated Karnofsky score"
 attr(cancer$pat.karno, "label") <- "Patient-rated Karnofsky score"
 attr(cancer$sex, "label") <- "Sex"
 
-design <- cancer %>%
+design <- cancer |>
   table1_design(
-    age, ph.ecog, ph.karno, pat.karno, 
-    by = sex, 
-    continuous_type = "mean (sd)") %>%  # default: "median (iqr)"
-  mutate(  # rounding specifically for the "age" variable
+    age, ph.ecog, ph.karno, pat.karno,
+    by = sex,
+    continuous_type = "mean (sd)"
+  ) |> # default: "median (iqr)"
+  mutate( # rounding specifically for the "age" variable
     digits = if_else(
       outcome == "age",
       true = 1,
-      false = NA))
+      false = NA
+    )
+  )
 
-design %>%
+design |>
   rifttable(
-    diff_digits = 0,  # rounding for continuous variables other than age
-    overall = TRUE) %>%  # add unstratified "overall" column
-  rt_gt() %>%  # obtain formatted output
+    diff_digits = 0, # rounding for continuous variables other than age
+    overall = TRUE
+  ) |> # add unstratified "overall" column
+  rt_gt() |> # obtain formatted output
   gt::tab_footnote(
-    footnote = "Data shown are count (percent) or mean (standard deviation).")
+    footnote = "Data shown are count (percent) or mean (standard deviation)."
+  )
 ```
 
 # Add more statistics per variable
@@ -104,29 +112,36 @@ design %>%
 For the age variable, do not just display mean and standard deviation, but also the range. To this end, edit the `design` just like a regular dataset.
 
 ```{r morestats}
-design_new <- design %>%
-  mutate(  # create three rows, not one, for "age"
+design_new <- design |>
+  mutate( # create three rows, not one, for "age"
     copy = if_else(
-      outcome == "age", 
-      true = 3, 
-      false = 1)) %>%
-  tidyr::uncount(copy, .id = "copy") %>%
-  mutate(  # set new labels and types for the three rows on age
+      outcome == "age",
+      true = 3,
+      false = 1
+    )
+  ) |>
+  tidyr::uncount(copy, .id = "copy") |>
+  mutate( # set new labels and types for the three rows on age
     label = case_when(
       outcome == "age" & copy == 2 ~ "  Mean (SD)",
       outcome == "age" & copy == 3 ~ "  Range",
-      TRUE ~ label),
+      TRUE ~ label
+    ),
     type = case_when(
       outcome == "age" & copy == 1 ~ "",
       outcome == "age" & copy == 2 ~ "mean (sd)",
       outcome == "age" & copy == 3 ~ "range",
-      TRUE ~ type))
+      TRUE ~ type
+    )
+  )
 design_new
-design_new %>%
+design_new |>
   rifttable(
     diff_digits = 0,
-    overall = TRUE) %>%
-  rt_gt() %>%
+    overall = TRUE
+  ) |>
+  rt_gt() |>
   gt::tab_footnote(
-    footnote = "Data shown are count (percent), unless indicated otherwise.")
+    footnote = "Data shown are count (percent), unless indicated otherwise."
+  )
 ```

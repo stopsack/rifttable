@@ -40,7 +40,8 @@ Defaults to \code{"survival"}.}
 \item{approach}{Optional. For estimating confidence limits of differences,
 use the MOVER approach based on upper and lower confidence limits of each
 group (\code{"mover"}), or square-and-add standard errors
-(\code{"squareadd"})? Defaults to \code{"mover"}.}
+(\code{"squareadd"})? Defaults to \code{"mover"}. (For confidence limits of
+ratios, this argument is ignored and MOVER is used.)}
 
 \item{conf.level}{Optional. Confidence level. Defaults to \code{0.95}.}
 
@@ -52,7 +53,7 @@ required if data are clustered, or if competing events and time/time2
 notation are used concomitantly.}
 
 \item{weighted}{Optional. Weigh survival curves, e.g. for inverse-probability
-weighting, before estating differences or ratios? If \code{TRUE}, the
+weighting, before estimating differences or ratios? If \code{TRUE}, the
 \code{data} must contain a variable called \code{.weights}. Defaults to
 \code{FALSE}.}
 }
@@ -74,7 +75,7 @@ survival package/\code{\link[survival]{survfit}}).
 \description{
 This function estimates the unadjusted difference or ratio in survival or
 cumulative incidence (risk) at a given time point based on the difference
-between per-group Kaplan-Meier estimates or, if competing events are prevent,
+between per-group Kaplan-Meier estimates or, if competing events are present,
 Aalen-Johansen estimates of the cumulative incidence.
 
 For constructing confidence limits, the MOVER approach described by Zou and
@@ -84,7 +85,7 @@ Donner (2008) is used, with estimation on the log scale for ratios.
 # Load 'cancer' dataset from survival package (Used in all examples)
 data(cancer, package = "survival")
 
-cancer <- cancer \%>\%
+cancer <- cancer |>
   dplyr::mutate(
     sex = factor(
       sex,
@@ -97,7 +98,8 @@ cancer <- cancer \%>\%
 survdiff_ci(
   formula = survival::Surv(time = time, event = status) ~ sex,
   data = cancer,
-  time = 365.25)
+  time = 365.25
+)
 # Females have 19 percentage points higher one-year survival than males
 # (95\% CI, 5 to 34 percentage points).
 }

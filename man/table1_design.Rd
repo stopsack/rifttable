@@ -57,16 +57,19 @@ This function generates a \code{design} table from which
 }
 \examples{
 # Data preparation
-cars <- tibble::as_tibble(mtcars) \%>\%
+cars <- tibble::as_tibble(mtcars) |>
   dplyr::mutate(
     gear = factor(
       gear,
       levels = 3:5,
-      labels = c("Three", "Four", "Five")),
+      labels = c("Three", "Four", "Five")
+    ),
     hp_categorical = dplyr::if_else(
       hp > 200,
       true = ">200 hp",
-      false = "<=200 hp"))
+      false = "<=200 hp"
+    )
+  )
 # Label some variables. Better alternative: labelled::set_variable_labels()
 attr(cars$hp, "label") <- "Horsepower"
 attr(cars$hp_categorical, "label") <- "Horsepower"
@@ -74,12 +77,13 @@ attr(cars$am, "label") <- "Automatic transmission"
 attr(cars$gear, "label") <- "Gears"
 
 # Generate table "design"
-design <- cars \%>\%
+design <- cars |>
   table1_design(
     hp, hp_categorical, mpg, am,
-    by = gear)
+    by = gear
+  )
 
 # Use "design" to create a descriptive table.
-design \%>\%
+design |>
   rifttable(diff_digits = 0)
 }

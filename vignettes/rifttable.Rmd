@@ -30,16 +30,18 @@ The `cancer` dataset from survival package is used here:
 ```{r data2}
 data(cancer, package = "survival")
 
-cancer <- cancer %>%
-  tibble::as_tibble() %>%
+cancer <- cancer |>
+  tibble::as_tibble() |>
   dplyr::mutate(
     # The exposure (here, 'sex') must be categorical
     sex = factor(
       sex,
       levels = 1:2,
-      labels = c("Male", "Female")),
+      labels = c("Male", "Female")
+    ),
     time = time / 365.25,
-    status = status - 1)
+    status = status - 1
+  )
 
 cancer
 ```
@@ -60,19 +62,23 @@ design1 <- tibble::tibble(
     "Outcomes (Risk)",
     "Outcomes/Total (Risk)",
     "RR",
-    "RD")) %>%
+    "RD"
+  )
+) |>
   dplyr::mutate(
     type = label,
     exposure = "sex",
-    outcome = "status")
+    outcome = "status"
+  )
 ```
 
 Generate rifttable:
 
 ```{r ex1b}
 rifttable(
-  design = design1, 
-  data = cancer)
+  design = design1,
+  data = cancer
+)
 ```
 
 # Example 2: Formatted output
@@ -86,8 +92,9 @@ The rifttable package provides the `rt_gt()` wrapper function. When knitting to 
 
 ```{r ex2a}
 rifttable(
-  design = design1, 
-  data = cancer) %>% 
+  design = design1,
+  data = cancer
+) |>
   rt_gt()
 ```
 
@@ -98,13 +105,15 @@ To use the `design` as columns instead of rows, showing only three `type`s:
 
 ```{r ex3}
 rifttable(
-  design = design1 %>%
+  design = design1 |>
     dplyr::filter(label %in% c(
       "Outcomes/Total (Risk)",
-      "RR", 
-      "RD")),
+      "RR",
+      "RD"
+    )),
   data = cancer,
-  layout = "cols") %>% 
+  layout = "cols"
+) |>
   rt_gt()
 ```
 
@@ -135,13 +144,15 @@ design2 <- tibble::tribble(
   "",                           NULL,     "",           "",
   "**Joint model**, age-adj.",  NULL,     "",           "",
   "  ECOG PS1",                 1,        "+ age",      "hr_joint",
-  "  ECOG PS2",                 2,        "+ age",      "hr_joint") %>%
+  "  ECOG PS2",                 2,        "+ age",      "hr_joint"
+) |>
   # Elements that are the same for all rows:
   dplyr::mutate(
     exposure = "sex",
     event = "status",
     time = "time",
-    effect_modifier = "ph.ecog")
+    effect_modifier = "ph.ecog"
+  )
 ```
 
 Generate rifttable:
@@ -149,8 +160,9 @@ Generate rifttable:
 ```{r ex4b}
 rifttable(
   design = design2,
-  data = cancer %>% 
-    dplyr::filter(ph.ecog %in% 1:2)) %>% 
+  data = cancer |>
+    dplyr::filter(ph.ecog %in% 1:2)
+) |>
   rt_gt(md = 1)
 ```
 
@@ -161,18 +173,21 @@ rifttable(
 design3 <- tibble::tribble(
   ~label,     ~stratum, ~type,          ~type2,
   "ECOG PS1", 1,        "events/total", "hr",
-  "ECOG PS2", 2,        "events/total", "hr") %>%
+  "ECOG PS2", 2,        "events/total", "hr"
+) |>
   dplyr::mutate(
     exposure = "sex",
     event = "status",
     time = "time",
     confounders = "+ age",
-    effect_modifier = "ph.ecog")
+    effect_modifier = "ph.ecog"
+  )
 
 rifttable(
   design = design3,
-  data = cancer %>% 
-    dplyr::filter(ph.ecog %in% 1:2)) %>% 
+  data = cancer |>
+    dplyr::filter(ph.ecog %in% 1:2)
+) |>
   rt_gt()
 ```
 
@@ -181,10 +196,11 @@ With estimate `type` as columns:
 ```{r ex5b}
 rifttable(
   design = design3,
-  data = cancer %>% 
+  data = cancer |>
     dplyr::filter(ph.ecog %in% 1:2),
-  layout = "cols", 
-  type2_layout = "cols") %>% 
+  layout = "cols",
+  type2_layout = "cols"
+) |>
   rt_gt()
 ```
 
@@ -206,15 +222,18 @@ tibble::tribble(
   "",                       NULL,     "",           NA,
   "Joint model",            NULL,     "",           NA,
   "  Male",                 "Male",   "diff_joint", NA,
-  "  Female",               "Female", "diff_joint", NA) %>%
+  "  Female",               "Female", "diff_joint", NA
+) |>
   dplyr::mutate(
     exposure = "ph.ecog_factor",
     trend = "ph.ecog",
     outcome = "age",
-    effect_modifier = "sex") %>%
+    effect_modifier = "sex"
+  ) |>
   rifttable(
-    data = cancer %>%
-      dplyr::filter(ph.ecog < 3) %>%
-      dplyr::mutate(ph.ecog_factor = factor(ph.ecog))) %>% 
+    data = cancer |>
+      dplyr::filter(ph.ecog < 3) |>
+      dplyr::mutate(ph.ecog_factor = factor(ph.ecog))
+  ) |>
   rt_gt()
 ```

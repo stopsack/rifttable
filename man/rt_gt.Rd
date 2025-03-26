@@ -49,8 +49,8 @@ markdown-formatted table (e.g., without footnotes) is returned via
 \examples{
 \dontrun{
 data(mtcars)
-mtcars \%>\%
-  dplyr::slice(1:5) \%>\%
+mtcars |>
+  dplyr::slice(1:5) |>
   rt_gt()
 }
 

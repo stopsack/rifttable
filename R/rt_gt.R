@@ -3,23 +3,28 @@
 #' @param mytab gt object
 #' @noRd
 rt_tabstyle <- function(mytab) {
-  mytab %>%
+  mytab |>
     gt::tab_options(
       data_row.padding = gt::px(0),
       column_labels.border.top.style = "none",
       table.border.top.style = "none",
       table_body.border.top.style = "none",
-      column_labels.font.weight = "bold") %>%
+      column_labels.font.weight = "bold"
+    ) |>
     gt::tab_style(
       style = gt::cell_text(
         align = "left",
-        v_align = "top"),
-      locations = gt::cells_body()) %>%
+        v_align = "top"
+      ),
+      locations = gt::cells_body()
+    ) |>
     gt::tab_style(
       style = gt::cell_text(
         align = "left",
-        v_align = "bottom"),
-      locations = gt::cells_column_labels())
+        v_align = "bottom"
+      ),
+      locations = gt::cells_column_labels()
+    )
 }
 
 #' Turn tibble into gt Table with Custom Formatting
@@ -55,8 +60,8 @@ rt_tabstyle <- function(mytab) {
 #' @examples
 #' \dontrun{
 #' data(mtcars)
-#' mtcars %>%
-#'   dplyr::slice(1:5) %>%
+#' mtcars |>
+#'   dplyr::slice(1:5) |>
 #'   rt_gt()
 #' }
 #'
@@ -69,49 +74,60 @@ rt_gt <- function(
     remove_border = TRUE) {
   # RMarkdown "output: github_document" cannot handle HTML styles
   # Likewise Quarto counterpart "output: gfm"
-  if(
+  if (
     any(
       stringr::str_detect(
         string = c("", knitr::opts_knit$get("rmarkdown.pandoc.to")),
-        pattern = "gfm|commonmark")
+        pattern = "gfm|commonmark"
+      )
     )
   ) {
     res <- knitr::kable(df)
     attr(x = res, which = "mydata") <- df
     return(res)
   } else {
-    if (!requireNamespace("gt", quietly = TRUE)) {
+    if (!is_package_installed("gt")) {
       stop(
         paste(
           "The package \"gt\" must be installed to create formatted tables",
           "via rifttable::rt_gt(). Use alternative packages for table",
-          "formatting or install \"gt\":\n   install.packages(\"gt\")"),
-        call. = FALSE)
+          "formatting or install \"gt\":\n   install.packages(\"gt\")"
+        ),
+        call. = FALSE
+      )
     }
-    df_gt <- df %>%
-      gt::gt(id = "rifttable") %>%
+    df_gt <- df |>
+      gt::gt(id = "rifttable") |>
       rt_tabstyle()
-    if(!is.null(indent[1])) {
+    if (!is.null(indent[1])) {
       indent2 <- union(
         stringr::str_which(
           string = df[[1]],
-          pattern = "^[:blank:]{2,}"),
-        which(df[[1]] == ""))
-      df_gt <- df_gt %>%
+          pattern = "^[:blank:]{2,}"
+        ),
+        which(df[[1]] == "")
+      )
+      df_gt <- df_gt |>
         gt::tab_style(
           style = gt::cell_text(indent = gt::px(indent[1])),
-          locations = gt::cells_body(columns = 1,
-                                     rows = indent2))
-      if(remove_border == TRUE & length(indent2) > 0) {
-        df_gt <- df_gt %>%
+          locations = gt::cells_body(
+            columns = 1,
+            rows = indent2
+          )
+        )
+      if (remove_border == TRUE & length(indent2) > 0) {
+        df_gt <- df_gt |>
           gt::tab_style(
             style = gt::cell_borders(sides = "top", weight = NULL),
-            locations = gt::cells_body(columns = gt::everything(),
-                                       rows = indent2))
+            locations = gt::cells_body(
+              columns = gt::everything(),
+              rows = indent2
+            )
+          )
       }
     }
-    if(!is.null(md)) {
-      df_gt <- df_gt %>%
+    if (!is.null(md)) {
+      df_gt <- df_gt |>
         gt::fmt_markdown(columns = md)
     }
     return(df_gt)

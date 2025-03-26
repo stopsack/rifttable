@@ -22,33 +22,36 @@ Most subsequent examples build on this simple rifttable:
 
 ```{r basic, message = FALSE}
 library(rifttable)
-library(dplyr)  # for data management, e.g., mutate()
-library(tibble)  # for constructing a tibble, e.g. via tribble()
+library(dplyr) # for data management, e.g., mutate()
+library(tibble) # for constructing a tibble, e.g. via tribble()
 data(breastcancer, package = "risks")
 
 design <- tribble(
-  ~label,                       ~type,                   ~stratum,         
-  "**Overall**",                "",                      "",               
-  "  Deaths/N",                 "outcomes/total",        c("Low", "High"), 
-  "  Risk",                     "risk",                  c("Low", "High"), 
-  "  Risk ratio (95% CI)",      "rr",                    c("Low", "High"), 
-  "  Risk difference (95% CI)", "rd",                    c("Low", "High"), 
-  "",                           "",                      "",               
-  "**Low hormone receptor**",   "",                      "",               
-  "  Deaths/N (Risk)",          "outcomes/total (risk)", "Low",           
-  "  Risk difference (95% CI)", "rd",                    "Low",           
-  "**High hormone receptor**",  "",                      "",               
+  ~label,                       ~type,                   ~stratum,
+  "**Overall**",                "",                      "",
+  "  Deaths/N",                 "outcomes/total",        c("Low", "High"),
+  "  Risk",                     "risk",                  c("Low", "High"),
+  "  Risk ratio (95% CI)",      "rr",                    c("Low", "High"),
+  "  Risk difference (95% CI)", "rd",                    c("Low", "High"),
+  "",                           "",                      "",
+  "**Low hormone receptor**",   "",                      "",
+  "  Deaths/N (Risk)",          "outcomes/total (risk)", "Low",
+  "  Risk difference (95% CI)", "rd",                    "Low",
+  "**High hormone receptor**",  "",                      "",
   "  Deaths/N (Risk)",          "outcomes/total (risk)", "High",
-  "  Risk difference (95% CI)", "rd",                    "High") %>%
+  "  Risk difference (95% CI)", "rd",                    "High"
+) |>
   mutate(
     exposure = "stage",
     outcome = "death",
-    effect_modifier = "receptor")
+    effect_modifier = "receptor"
+  )
 
 rifttable(
   design = design,
-  data = breastcancer) %>%
-  rt_gt()  # obtain formatted output
+  data = breastcancer
+) |>
+  rt_gt() # obtain formatted output
 ```
 
 
@@ -73,65 +76,76 @@ The `design` can be constructed in many different ways. All lead to the same tab
 1. **A dataset (tibble) defined using `tribble()`**
 
     ```{r}
-    design1 <- tribble(
-      ~label,   ~exposure, ~outcome, ~type,
-      "N",      "stage",   "death",  "total",
-      "Deaths", "stage",   "death",  "outcomes")
-    design1
-    rifttable(
-      design = design1,
-      data = breastcancer) %>%
-      rt_gt()
+design1 <- tribble(
+  ~label,   ~exposure, ~outcome, ~type,
+  "N",      "stage",   "death",  "total",
+  "Deaths", "stage",   "death",  "outcomes"
+)
+design1
+rifttable(
+  design = design1,
+  data = breastcancer
+) |>
+  rt_gt()
     ```
 
 2. **A dataset (tibble) defined using `tibble()`**
 
     ```{r}
-    design2 <- tibble(
-        label = c("N", "Deaths"),
-        exposure = "stage",
-        outcome = "death", 
-        type = c("total", "outcomes"))
-    design2
-    rifttable(
-      design = design2,
-      data = breastcancer) %>%
-      rt_gt()
+design2 <- tibble(
+  label = c("N", "Deaths"),
+  exposure = "stage",
+  outcome = "death",
+  type = c("total", "outcomes")
+)
+design2
+rifttable(
+  design = design2,
+  data = breastcancer
+) |>
+  rt_gt()
     ```
 
 3. **Concatenating tibbles, then editing with `mutate()`**
 
     ```{r}
-    design3 <- bind_rows(
-      tibble(  # row 1
-        label = "N",
-        type = "total"),
-      tibble(  # row 2
-        label = "Deaths",
-        type = "outcomes")) %>%
-      mutate(  # elements that are the same for all rows
-        exposure = "stage",
-        outcome = "death")
-    design3
-    rifttable(
-      design = design3,
-      data = breastcancer) %>%
-      rt_gt()
+design3 <- bind_rows(
+  tibble( # row 1
+    label = "N",
+    type = "total"
+  ),
+  tibble( # row 2
+    label = "Deaths",
+    type = "outcomes"
+  )
+) |>
+  mutate( # elements that are the same for all rows
+    exposure = "stage",
+    outcome = "death"
+  )
+design3
+rifttable(
+  design = design3,
+  data = breastcancer
+) |>
+  rt_gt()
     ```
 
 
 4. **For descriptive tables: Use `table1_design()`**
 
     ```{r}
-    design4 <- breastcancer %>%
-      table1_design(
-        death,  # the total count will automatically be included
-        by = stage)
-    design4
-    rifttable(
-      design = design4,
-      data = breastcancer) %>%
-      rt_gt()
+design4 <- breastcancer |>
+  table1_design(
+    death, # the total count will automatically be included
+    by = stage
+  )
+design4
+rifttable(
+  design = design4,
+  data = breastcancer
+) |>
+  rt_gt()
     ```
     
     See a separate overview about [a descriptive Table 1](table1.html).
@@ -161,9 +175,10 @@ Inferential estimators showing comparisons between exposure categories will be b
 ```{r overall}
 rifttable(
   design = design,
-  data = breastcancer, 
-  overall = TRUE) %>%
-  rt_gt()  # obtain formatted output
+  data = breastcancer,
+  overall = TRUE
+) |>
+  rt_gt() # obtain formatted output
 ```
 
 
@@ -176,11 +191,12 @@ stage that is one category higher.
 
 ```{r trend}
 rifttable(
-  design = design %>%
+  design = design |>
     mutate(trend = "stage_numeric"),
-  data = breastcancer %>%
-    mutate(stage_numeric = as.numeric(stage))) %>%
-  rt_gt()  # obtain formatted output
+  data = breastcancer |>
+    mutate(stage_numeric = as.numeric(stage))
+) |>
+  rt_gt() # obtain formatted output
 ```
 
 
@@ -197,59 +213,67 @@ the same column.
 
 
 ```{r multiple}
-breastcancer_2exposures <- breastcancer %>%
+breastcancer_2exposures <- breastcancer |>
   mutate(
     exposure2 = case_when(
-      stage == "Stage I" | 
-        (stage == "Stage II" & receptor == "High") ~ 
+      stage == "Stage I" |
+        (stage == "Stage II" & receptor == "High") ~
         "Level 1",
-      stage == "Stage III" | 
-        (stage == "Stage II" & receptor == "Low") ~ 
-        "Level 2"))
+      stage == "Stage III" |
+        (stage == "Stage II" & receptor == "Low") ~
+        "Level 2"
+    )
+  )
 
 attr(breastcancer_2exposures$exposure2, which = "label") <- "Exposure"
 attr(breastcancer_2exposures$stage, which = "label") <- "Exposure"
 
 bind_rows(
-  design %>%
-    mutate(exposure = "exposure2") %>%
-    slice(2:5) %>%
+  design |>
+    mutate(exposure = "exposure2") |>
+    slice(2:5) |>
     rifttable(
-      data = breastcancer_2exposures, 
-      layout = "cols"),
-  design %>%
-    slice(2:5) %>%
+      data = breastcancer_2exposures,
+      layout = "cols"
+    ),
+  design |>
+    slice(2:5) |>
     rifttable(
-      data = breastcancer_2exposures, 
-      layout = "cols")) %>%
-  rt_gt()  # obtain formatted output
+      data = breastcancer_2exposures,
+      layout = "cols"
+    )
+) |>
+  rt_gt() # obtain formatted output
 ```
 
 
 # How do I change how results are rounded?
 
-By default, difference measures are being rounded to 2 decimal digits (`0.01`), such as `type = "diff"`, the mean difference, or `type = "quantreg"`, the median difference. The same goes for risk measures, such as `type = "risk"`, unless shown as percentage points. Ratio measures are also shown with 2 decimal digits, such as `type = "hr"`, the hazard ratio, or `type = "fold"`, a ratio of arithmetric means. 
+By default, difference measures are being rounded to 2 decimal digits (`0.01`), such as `type = "diff"`, the mean difference, or `type = "quantreg"`, the median difference. The same goes for risk measures, such as `type = "risk"`, unless shown as percentage points. Ratio measures are also shown with 2 decimal digits, such as `type = "hr"`, the hazard ratio, or `type = "fold"`, a ratio of arithmetic means. 
 
 Rounding can be changed by setting the `rifttable()` arguments `diff_digits`, `risk_digits`, and `ratio_digits` globally for the entire table. 
 
 ```{r rounding}
 design <- tribble(
   ~label,                     ~type,
-  "Deaths/N",                 "outcomes/total", 
-  "Risk",                     "risk",          
-  "Risk ratio (95% CI)",      "rr", 
-  "Odds ratio (95% CI)",      "or", 
-  "Risk difference (95% CI)", "rd") %>%
+  "Deaths/N",                 "outcomes/total",
+  "Risk",                     "risk",
+  "Risk ratio (95% CI)",      "rr",
+  "Odds ratio (95% CI)",      "or",
+  "Risk difference (95% CI)", "rd"
+) |>
   mutate(
     exposure = "stage",
-    outcome = "death")
+    outcome = "death"
+  )
 
 rifttable(
   design = design,
   data = breastcancer,
-  ratio_digits = 3,  # Many digits for ratios
-  risk_digits = 1) %>%  # Fewer digits for risks
-  rt_gt()  # obtain formatted output
+  ratio_digits = 3, # Many digits for ratios
+  risk_digits = 1
+) |> # Fewer digits for risks
+  rt_gt() # obtain formatted output
 ```
 
 As can be seen, ratios > 3 are still shown with 1 fewer decimal, and ratios > 10 are shown with 2 fewer decimals ([Wilcox, *Epidemiology* 2004](https://doi.org/10.1097/01.ede.0000101026.08873.14) motivates why). To disable such additional rounding of extremely high ratios:
@@ -259,9 +283,10 @@ rifttable(
   design = design,
   data = breastcancer,
   ratio_digits = 3,
-  ratio_digits_decrease = NULL,  # Do not round high ratios more
-  risk_digits = 1) %>%
-  rt_gt()  # obtain formatted output
+  ratio_digits_decrease = NULL, # Do not round high ratios more
+  risk_digits = 1
+) |>
+  rt_gt() # obtain formatted output
 ```
 
 Additionally, rounding can be changed for each row, adding a column `digits` to the rifttable `design`:
@@ -269,19 +294,22 @@ Additionally, rounding can be changed for each row, adding a column `digits` to 
 ```{r rounding_digits}
 tribble(
   ~label,                     ~type,            ~digits,
-  "Deaths/N",                 "outcomes/total", NA,  # Uses rifttable default
-  "Risk",                     "risk",           NA,  # Uses risk_digits below
+  "Deaths/N",                 "outcomes/total", NA, # Uses rifttable default
+  "Risk",                     "risk",           NA, # Uses risk_digits below
   "Risk ratio (95% CI)",      "",               NA,
   "  Rounded to 1 digit",     "rr",             1,
   "  Rounded to 2 digits",    "rr",             2,
-  "Risk difference (95% CI)", "rd",             3) %>%  # Overrides risk_digits
+  "Risk difference (95% CI)", "rd",             3
+) |> # Overrides risk_digits
   mutate(
     exposure = "stage",
-    outcome = "death") %>%
-rifttable(
-  data = breastcancer,
-  risk_digits = 1) %>%  # Fewer digits for risks, unless specified by "digits"
-  rt_gt()  # obtain formatted output
+    outcome = "death"
+  ) |>
+  rifttable(
+    data = breastcancer,
+    risk_digits = 1
+  ) |> # Fewer digits for risks, unless specified by "digits"
+  rt_gt() # obtain formatted output
 ```
 
 
@@ -297,21 +325,23 @@ Compare stratified models to joint models for risk differences (for simplicity o
 
 ```{r joint}
 tribble(
-  ~label,                       ~type,      ~stratum,         
-  "**Overall**",                "rd",       c("Low", "High"), 
-  "",                           "",         "",               
-  "**Stratified models**",      "",         "",               
-  "  Low hormone receptor",     "rd",       "Low",           
-  "  High hormone receptor",    "rd",       "High",           
-  "",                           "",         "",               
-  "**Joint models**",           "",         "",               
+  ~label,                       ~type,      ~stratum,
+  "**Overall**",                "rd",       c("Low", "High"),
+  "",                           "",         "",
+  "**Stratified models**",      "",         "",
+  "  Low hormone receptor",     "rd",       "Low",
+  "  High hormone receptor",    "rd",       "High",
+  "",                           "",         "",
+  "**Joint models**",           "",         "",
   "  Low hormone receptor",     "rd_joint", "Low",
-  "  High hormone receptor",    "rd_joint", "High") %>%
+  "  High hormone receptor",    "rd_joint", "High"
+) |>
   mutate(
     exposure = "stage",
     outcome = "death",
-    effect_modifier = "receptor") %>%
-  rifttable(data = breastcancer) %>%
+    effect_modifier = "receptor"
+  ) |>
+  rifttable(data = breastcancer) |>
   rt_gt()
 ```
 
@@ -322,20 +352,25 @@ The reference categories for exposure and effect modifier are always their first
 
 ```{r joint_reorder}
 tribble(
-  ~label,                       ~type,      ~stratum,         
-  "**Joint models**",           "",         "",               
+  ~label,                       ~type,      ~stratum,
+  "**Joint models**",           "",         "",
   "  Low hormone receptor",     "rd_joint", "Low",
-  "  High hormone receptor",    "rd_joint", "High") %>%
+  "  High hormone receptor",    "rd_joint", "High"
+) |>
   mutate(
     exposure = "stage",
     outcome = "death",
-    effect_modifier = "receptor") %>%
+    effect_modifier = "receptor"
+  ) |>
   rifttable(
-    data = breastcancer %>%
+    data = breastcancer |>
       mutate(
         receptor = relevel(
-          factor(receptor),  # Make "receptor" a factor in the first place
-          ref = "Low"))) %>%  # Set new reference category
+          factor(receptor), # Make "receptor" a factor in the first place
+          ref = "Low"
+        )
+      )
+  ) |> # Set new reference category
   rt_gt()
 ```
 
@@ -346,15 +381,19 @@ result_reordered <- tibble(
   label = "**RD (95% CI)**",
   type = "rd",
   exposure = "stage",
-  outcome = "death") %>%
+  outcome = "death"
+) |>
   rifttable(
-    data = breastcancer %>%
+    data = breastcancer |>
       mutate(
         stage = relevel(
           stage,
-          ref = "Stage II")))
+          ref = "Stage II"
+        )
+      )
+  )
 
-result_reordered %>%
+result_reordered |>
   rt_gt()
 ```
 
@@ -363,8 +402,8 @@ Using `forcats::fct_relevel()` may be preferable over `relevel()`, as it preserv
 That results for "Stage II" are now listed first is probably undesirable. Reorder the columns of the table that `rifttable()` produced to print results for "Stage I" first:
 
 ```{r reorder_middle2}
-result_reordered %>%
-  select(stage, "Stage I", everything()) %>%
+result_reordered |>
+  select(stage, "Stage I", everything()) |>
   rt_gt()
 ```
 
@@ -379,15 +418,18 @@ tribble(
   "Deaths/N (Risk)", "outcomes/total (risk)", NA,
   "Risk ratio",      "",                      NA,
   "  80% CI",        "rr",                    0.8,
-  "  95% CI",        "rr",                    NA,  # Defaults to 0.95
-  "  99% CI",        "rr",                    0.99) %>%
+  "  95% CI",        "rr",                    NA, # Defaults to 0.95
+  "  99% CI",        "rr",                    0.99
+) |>
   mutate(
     exposure = "stage",
-    outcome = "death") %>%
+    outcome = "death"
+  ) |>
   rifttable(
     data = breastcancer,
-    risk_percent = TRUE) %>%
-  rt_gt()  # obtain formatted output
+    risk_percent = TRUE
+  ) |>
+  rt_gt() # obtain formatted output
 ```
 
 
@@ -399,13 +441,15 @@ The subsequent example will reproduce the following basic rifttable, which shows
 
 ```{r custom, message = FALSE}
 data(cancer, package = "survival")
-cancer <- cancer %>%
-  tibble::as_tibble() %>%
+cancer <- cancer |>
+  tibble::as_tibble() |>
   mutate(
     sex = factor(
       sex,
       levels = 1:2,
-      labels = c("Male", "Female")))
+      labels = c("Male", "Female")
+    )
+  )
 
 design <- tibble::tibble(
   type = "mean",
@@ -413,12 +457,14 @@ design <- tibble::tibble(
   outcome = "age",
   effect_modifier = "ph.ecog",
   stratum = 1:2,
-  label = paste0("ECOG PS ", stratum, ": mean age"))
+  label = paste0("ECOG PS ", stratum, ": mean age")
+)
 
-design %>%
+design |>
   rifttable(
     data = cancer,
-    overall = TRUE) %>%
+    overall = TRUE
+  ) |>
   rt_gt()
 ```
 
@@ -426,27 +472,32 @@ Instead of relying on rifttable's built-in estimator `type = "mean"`, we will de
 
 ```{r custom_fn}
 estimate_my_mean <- function(data, ...) {
-  data %>%
-    group_by(.exposure) %>%
+  data |>
+    group_by(.exposure) |>
     summarize(
       res = paste(
         round(
           mean(.outcome),
-          digits = 3),
-        "yrs"))
+          digits = 3
+        ),
+        "yrs"
+      )
+    )
 }
 ```
 
 Use the custom function `my_mean` instead of the built-in `mean`:
 
 ```{r custom_use}
-design %>%  # Edit the previous design
+design |> # Edit the previous design
   mutate(
-    type = "my_mean",  # Replace built-in "mean" by custom "my_mean"
-    label = paste0(label, " (custom)")) %>%
+    type = "my_mean", # Replace built-in "mean" by custom "my_mean"
+    label = paste0(label, " (custom)")
+  ) |>
   rifttable(
     data = cancer,
-    overall = TRUE) %>%
+    overall = TRUE
+  ) |>
   rt_gt()
 ```
 

@@ -11,27 +11,27 @@ counts_per_stratum <- function(
     data,
     suppress = c("total", "binary", "event"),
     is_trend) {
-
   # Counts per stratum for nmin
   suppress <- match.arg(suppress)
-  if(is_trend == TRUE) {
-    data <- data %>%
+  if (is_trend == TRUE) {
+    data <- data |>
       dplyr::mutate(.exposure = "")
   }
 
-  if(suppress == "binary") {
-    data <- data %>%
+  if (suppress == "binary") {
+    data <- data |>
       dplyr::filter(as.logical(.data$.outcome))
   }
 
-  if(suppress == "event") {
-    data <- data %>%
+  if (suppress == "event") {
+    data <- data |>
       dplyr::filter(as.logical(.data$.event))
   }
 
-  data %>%
+  data |>
     dplyr::count(
       .data$.exposure,
       name = ".per_stratum",
-      .drop = FALSE)
+      .drop = FALSE
+    )
 }

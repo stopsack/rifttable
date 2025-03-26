@@ -38,14 +38,17 @@ tibble::tribble(
   "**Comparative estimates**", "",
   "Risk ratio (95% CI)",       "rr",
   "Risk difference (95% CI)",  "rd",
-  "Odds ratio (95% CI)",       "or") %>%
+  "Odds ratio (95% CI)",       "or"
+) |>
   mutate(
     exposure = "stage",
-    outcome = "death") %>%
+    outcome = "death"
+  ) |>
   rifttable(
     data = breastcancer,
-    overall = TRUE) %>%
-  rt_gt()  # Formatted output
+    overall = TRUE
+  ) |>
+  rt_gt() # Formatted output
 ```
 
 

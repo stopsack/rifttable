@@ -49,3 +49,6 @@ po/*~
 rsconnect/
 docs
 inst/doc
+
+# Mac
+.DS_Store

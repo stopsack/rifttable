@@ -28,118 +28,153 @@ estimate_outcome_binary <- function(
     to,
     is_trend,
     ...) {
-  if(is_trend)
+  if (is_trend) {
     return(tibble::tibble())
+  }
   check_outcome(
     data = data,
     type = type,
     outcome = outcome,
-    outcome_type = "binary")
+    outcome_type = "binary"
+  )
   digits <- find_rounding_digits(
     digits = digits,
-    default = risk_digits)
-  data <- data %>%
+    default = risk_digits
+  )
+  data <- data |>
     dplyr::group_by(
       .data$.exposure,
-      .drop = FALSE)
+      .drop = FALSE
+    )
   percent_symbol <- dplyr::if_else(
     risk_percent == TRUE,
     true = "%",
-    false = "")
+    false = ""
+  )
   percent_100 <- dplyr::if_else(
     risk_percent == TRUE,
     true = 100,
-    false = 1)
+    false = 1
+  )
 
   switch(
     EXPR = type,
     "outcomes" = {
-      data %>%
+      data |>
         dplyr::summarize(res = paste(sum(.data$.outcome)))
     },
     "outcomes/total" = {
-      data %>%
-        dplyr::summarize(res = paste(
-          sum(.data$.outcome),
-          dplyr::n(),
-          sep = "/"))
+      data |>
+        dplyr::summarize(
+          res = paste(
+            sum(.data$.outcome),
+            dplyr::n(),
+            sep = "/"
+          )
+        )
     },
     "cases/controls" = {
-      data %>%
-        dplyr::summarize(res = paste(
-          sum(.data$.outcome),
-          sum(!.data$.outcome),
-          sep = "/"))
+      data |>
+        dplyr::summarize(
+          res = paste(
+            sum(.data$.outcome),
+            sum(!.data$.outcome),
+            sep = "/"
+          )
+        )
     },
     "risk" = {
-      data %>%
-        dplyr::summarize(res = paste0(
-          format_round(
-            sum(.data$.outcome) /
-              dplyr::n() *
-              percent_100,
-            digits = digits),
-          percent_symbol))
+      data |>
+        dplyr::summarize(
+          res = paste0(
+            format_round(
+              sum(.data$.outcome) /
+                dplyr::n() *
+                percent_100,
+              digits = digits
+            ),
+            percent_symbol
+          )
+        )
     },
     "risk (ci)" = {
-      data %>%
-        dplyr::summarize(res = paste0(
-          format_round(
-                sum(.data$.outcome) /
-                  dplyr::n() *
-                  percent_100,
-                digits = digits),
-          percent_symbol,
-          " (",
-          format_round(
-            scoreci(
-              success = sum(.data$.outcome),
-              total = dplyr::n(),
-              level = ci)$conf.low *
-              percent_100,
-            digits = digits),
-          to,
-          format_round(
-            scoreci(
-              success = sum(.data$.outcome),
-              total = dplyr::n(),
-              level = ci)$conf.high *
-              percent_100,
-            digits = digits),
-          ")"))
+      data |>
+        dplyr::summarize(
+          res = paste0(
+            format_round(
+              sum(.data$.outcome) /
+                dplyr::n() *
+                percent_100,
+              digits = digits
+            ),
+            percent_symbol,
+            " (",
+            format_round(
+              scoreci(
+                success = sum(.data$.outcome),
+                total = dplyr::n(),
+                level = ci
+              )$conf.low *
+                percent_100,
+              digits = digits
+            ),
+            to,
+            format_round(
+              scoreci(
+                success = sum(.data$.outcome),
+                total = dplyr::n(),
+                level = ci
+              )$conf.high *
+                percent_100,
+              digits = digits
+            ),
+            ")"
+          )
+        )
     },
     "outcomes (risk)" = {
-      data %>%
-        dplyr::summarize(res = paste0(
-          sum(.data$.outcome),
-          " (",
-          format_round(
-            sum(.data$.outcome) /
-              dplyr::n() *
-              percent_100,
-            digits = digits),
-          percent_symbol,
-          ")"))
+      data |>
+        dplyr::summarize(
+          res = paste0(
+            sum(.data$.outcome),
+            " (",
+            format_round(
+              sum(.data$.outcome) /
+                dplyr::n() *
+                percent_100,
+              digits = digits
+            ),
+            percent_symbol,
+            ")"
+          )
+        )
     },
     "outcomes/total (risk)" = {
-      data %>%
-        dplyr::summarize(res = paste0(
-          sum(.data$.outcome),
-          "/",
-          dplyr::n(),
-          " (",
-          format_round(
-            sum(.data$.outcome) /
-              dplyr::n() *
-              percent_100,
-            digits = digits),
-          percent_symbol,
-          ")"))
-    }) %>%
+      data |>
+        dplyr::summarize(
+          res = paste0(
+            sum(.data$.outcome),
+            "/",
+            dplyr::n(),
+            " (",
+            format_round(
+              sum(.data$.outcome) /
+                dplyr::n() *
+                percent_100,
+              digits = digits
+            ),
+            percent_symbol,
+            ")"
+          )
+        )
+    },
+    stop(paste0("Invalid estimator type = '", type, "'."))
+  ) |>
     format_stratified_results(
       data = data,
       to = to,
       nmin = nmin,
       suppress = "binary",
-      is_trend = is_trend)
+      is_trend = is_trend
+    )
 }

@@ -34,55 +34,70 @@ format_regression_results <- function(
     to,
     reference_label,
     percent = FALSE,
-    conflimit_check = FALSE) {  # only needed for RR/RD models
-  fit <- fit %>%
+    conflimit_check = FALSE) { # only needed for RR/RD models
+  fit <- fit |>
     dplyr::select(
       "term",
       "estimate",
       "conf.low",
-      "conf.high") %>%
+      "conf.high"
+    ) |>
     dplyr::mutate(
       nonconverg = (.data$conf.low == 0 &
-                      .data$conf.high == Inf)) %>%
+        .data$conf.high == Inf)
+    ) |>
     dplyr::mutate_at(
       .vars = c(
         "estimate",
         "conf.low",
-        "conf.high"),
-      .funs = ~format_round(
-        . * multiply,
+        "conf.high"
+      ),
+      .funs = \(x) format_round(
+        x * multiply,
         digits = digits,
-        ratio_digits_decrease = ratio_digits_decrease)) %>%
+        ratio_digits_decrease = ratio_digits_decrease
+      )
+    ) |>
     dplyr::full_join(
       counts_per_stratum(
         data = data,
         suppress = suppress,
-        is_trend) %>%
+        is_trend
+      ) |>
         dplyr::mutate(
           .exposure = paste0(
             ".exposure",
-            .data$.exposure)),
-      by = c(term = ".exposure")) %>%
-    dplyr::filter(stringr::str_detect(
-      string = .data$term,
-      pattern = pattern)) %>%
+            .data$.exposure
+          )
+        ),
+      by = c(term = ".exposure")
+    ) |>
+    dplyr::filter(
+      stringr::str_detect(
+        string = .data$term,
+        pattern = pattern
+      )
+    ) |>
     dplyr::mutate(
       .exposure = stringr::str_remove(
         string = .data$term,
-        pattern = pattern))
+        pattern = pattern
+      )
+    )
 
-  if(is_trend == TRUE) {
-    fit <- fit %>%
-      dplyr::slice(1) %>%
+  if (is_trend == TRUE) {
+    fit <- fit |>
+      dplyr::slice(1) |>
       dplyr::mutate(.exposure = "Trend")
   } else {
-    fit <- fit %>%
+    fit <- fit |>
       dplyr::left_join(
         x = tibble::tibble(.exposure = xlevels),
-        by = ".exposure")
+        by = ".exposure"
+      )
   }
 
-  fit %>%
+  fit |>
     dplyr::mutate(
       res = dplyr::case_when(
         .data$nonconverg == TRUE |
@@ -95,23 +110,31 @@ format_regression_results <- function(
             dplyr::if_else(
               percent,
               true = "%",
-              false = ""),
+              false = ""
+            ),
             " (",
             .data$conf.low,
             to,
             .data$conf.high,
-            ")")),
+            ")"
+          )
+      ),
       res = dplyr::if_else(
-        (is.na(.data$estimate) |
-           (.data$conf.low == .data$conf.high &
-              .data$conf.low == .data$estimate &
-              conflimit_check == TRUE)) &
+        condition = (
+          is.na(.data$estimate) |
+            (.data$conf.low == .data$conf.high &
+               .data$conf.low == .data$estimate &
+               conflimit_check == TRUE)
+        ) &
           dplyr::row_number() == 1,
         true = paste(reference, reference_label),
-        false = .data$res),
+        false = .data$res
+      ),
       res = dplyr::if_else(
         .data$.per_stratum < nmin,
         true = paste0("-- (<", nmin, ")"),
-        false = .data$res)) %>%
+        false = .data$res
+      )
+    ) |>
     dplyr::select(".exposure", "res")
 }
