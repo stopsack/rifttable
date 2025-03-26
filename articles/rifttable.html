@@ -5,74 +5,58 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="rifttable">
 <title>Get started with rifttable • rifttable</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get started with rifttable">
-<meta property="og:description" content="rifttable">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get started with rifttable">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item">
-  <a class="nav-link" href="../articles/rifttable.html">Get started</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../articles/faq.html">FAQ</a>
+<li class="active nav-item"><a class="nav-link" href="../articles/rifttable.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/faq.html">FAQ</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-example-tables" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Example Tables</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-example-tables">
+<li><a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a></li>
+    <li><a class="dropdown-item" href="../articles/estimators_binary.html">Binary Outcomes</a></li>
+    <li><a class="dropdown-item" href="../articles/estimators_continuous.html">Continuous Outcomes</a></li>
+    <li><a class="dropdown-item" href="../articles/estimators_survival.html">Survival Outcomes</a></li>
+  </ul>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-example-tables">Example Tables</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-example-tables">
-    <a class="dropdown-item" href="../articles/table1.html">A Descriptive Table 1</a>
-    <a class="dropdown-item" href="../articles/estimators_binary.html">Binary Outcomes</a>
-    <a class="dropdown-item" href="../articles/estimators_continuous.html">Continuous Outcomes</a>
-    <a class="dropdown-item" href="../articles/estimators_survival.html">Survival Outcomes</a>
-  </div>
-</li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-more">More</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-more">
-    <a class="dropdown-item" href="../reference/index.html">Function reference</a>
-    <a class="dropdown-item" href="../news/index.html">Changelog</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-more" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">More</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-more">
+<li><a class="dropdown-item" href="../reference/index.html">Function reference</a></li>
+    <li><a class="dropdown-item" href="../news/index.html">Changelog</a></li>
+  </ul>
 </li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/stopsack/rifttable/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/stopsack/rifttable/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -81,10 +65,11 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Get started with rifttable</h1>
+
+      <h1>Get started with rifttable</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/stopsack/rifttable/blob/HEAD/vignettes/rifttable.Rmd" class="external-link"><code>vignettes/rifttable.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/stopsack/rifttable/blob/main/vignettes/rifttable.Rmd" class="external-link"><code>vignettes/rifttable.Rmd</code></a></small>
       <div class="d-none name"><code>rifttable.Rmd</code></div>
     </div>
 
@@ -107,16 +92,18 @@ here:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cancer</span>, package <span class="op">=</span> <span class="st">"survival"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cancer</span> <span class="op">&lt;-</span> <span class="va">cancer</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">cancer</span> <span class="op">&lt;-</span> <span class="va">cancer</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    <span class="co"># The exposure (here, 'sex') must be categorical</span></span>
 <span>    sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
 <span>      <span class="va">sex</span>,</span>
 <span>      levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
-<span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
 <span>    time <span class="op">=</span> <span class="va">time</span> <span class="op">/</span> <span class="fl">365.25</span>,</span>
-<span>    status <span class="op">=</span> <span class="va">status</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>    status <span class="op">=</span> <span class="va">status</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">cancer</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 228 × 10</span></span></span>
@@ -149,16 +136,20 @@ here:</p>
 <span>    <span class="st">"Outcomes (Risk)"</span>,</span>
 <span>    <span class="st">"Outcomes/Total (Risk)"</span>,</span>
 <span>    <span class="st">"RR"</span>,</span>
-<span>    <span class="st">"RD"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="st">"RD"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    type <span class="op">=</span> <span class="va">label</span>,</span>
 <span>    exposure <span class="op">=</span> <span class="st">"sex"</span>,</span>
-<span>    outcome <span class="op">=</span> <span class="st">"status"</span><span class="op">)</span></span></code></pre></div>
+<span>    outcome <span class="op">=</span> <span class="st">"status"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p>Generate rifttable:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
-<span>  design <span class="op">=</span> <span class="va">design1</span>, </span>
-<span>  data <span class="op">=</span> <span class="va">cancer</span><span class="op">)</span></span>
+<span>  design <span class="op">=</span> <span class="va">design1</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">cancer</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 3</span></span></span>
 <span><span class="co">#&gt;   sex                   Male              Female              </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
@@ -199,8 +190,9 @@ Quarto), <code><a href="../reference/rt_gt.html">rt_gt()</a></code> will automat
 output using the kable package.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
-<span>  design <span class="op">=</span> <span class="va">design1</span>, </span>
-<span>  data <span class="op">=</span> <span class="va">cancer</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  design <span class="op">=</span> <span class="va">design1</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">cancer</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rifttable table {
@@ -641,6 +633,15 @@ output using the kable package.</p>
 #rifttable .gt_indent_5 {
   text-indent: 25px;
 }
+
+#rifttable .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#rifttable div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
@@ -650,65 +651,47 @@ output using the kable package.</p>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Outcomes</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Outcomes</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">112</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">53</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Total</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Total</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">138</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">90</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Outcomes/Total</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Outcomes/Total</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">112/138</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">53/90</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Risk</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Risk</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0.81</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">0.59</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Risk (CI)</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Risk (CI)</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0.81 (0.74, 0.87)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">0.59 (0.49, 0.68)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Outcomes (Risk)</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Outcomes (Risk)</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">112 (0.81)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">53 (0.59)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Outcomes/Total (Risk)</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Outcomes/Total (Risk)</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">112/138 (0.81)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">53/90 (0.59)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>RR</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">RR</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">1 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">0.73 (0.60, 0.88)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>RD</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">RD</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">-0.22 (-0.34, -0.10)</td>
 </tr>
@@ -723,13 +706,15 @@ output using the kable package.</p>
 only three <code>type</code>s:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
-<span>  design <span class="op">=</span> <span class="va">design1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  design <span class="op">=</span> <span class="va">design1</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">label</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>      <span class="st">"Outcomes/Total (Risk)"</span>,</span>
-<span>      <span class="st">"RR"</span>, </span>
-<span>      <span class="st">"RD"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="st">"RR"</span>,</span>
+<span>      <span class="st">"RD"</span></span>
+<span>    <span class="op">)</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">cancer</span>,</span>
-<span>  layout <span class="op">=</span> <span class="st">"cols"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  layout <span class="op">=</span> <span class="st">"cols"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rifttable table {
@@ -1170,27 +1155,32 @@ only three <code>type</code>s:</p>
 #rifttable .gt_indent_5 {
   text-indent: 25px;
 }
+
+#rifttable .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#rifttable div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="sex">sex</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Outcomes/Total (Risk)">Outcomes/Total (Risk)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Outcomes/Total-(Risk)">Outcomes/Total (Risk)</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="RR">RR</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="RD">RD</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Male</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Male</span></td>
 <td headers="Outcomes/Total (Risk)" class="gt_row gt_right" style="text-align: left; vertical-align: top;">112/138 (0.81)</td>
 <td headers="RR" class="gt_row gt_left" style="text-align: left; vertical-align: top;">1 (reference)</td>
 <td headers="RD" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0 (reference)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Female</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Female</span></td>
 <td headers="Outcomes/Total (Risk)" class="gt_row gt_right" style="text-align: left; vertical-align: top;">53/90 (0.59)</td>
 <td headers="RR" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0.73 (0.60, 0.88)</td>
 <td headers="RD" class="gt_row gt_left" style="text-align: left; vertical-align: top;">-0.22 (-0.34, -0.10)</td>
@@ -1229,19 +1219,22 @@ continuous outcomes.</p>
 <span>  <span class="st">""</span>,                           <span class="cn">NULL</span>,     <span class="st">""</span>,           <span class="st">""</span>,</span>
 <span>  <span class="st">"**Joint model**, age-adj."</span>,  <span class="cn">NULL</span>,     <span class="st">""</span>,           <span class="st">""</span>,</span>
 <span>  <span class="st">"  ECOG PS1"</span>,                 <span class="fl">1</span>,        <span class="st">"+ age"</span>,      <span class="st">"hr_joint"</span>,</span>
-<span>  <span class="st">"  ECOG PS2"</span>,                 <span class="fl">2</span>,        <span class="st">"+ age"</span>,      <span class="st">"hr_joint"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="st">"  ECOG PS2"</span>,                 <span class="fl">2</span>,        <span class="st">"+ age"</span>,      <span class="st">"hr_joint"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># Elements that are the same for all rows:</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    exposure <span class="op">=</span> <span class="st">"sex"</span>,</span>
 <span>    event <span class="op">=</span> <span class="st">"status"</span>,</span>
 <span>    time <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>    effect_modifier <span class="op">=</span> <span class="st">"ph.ecog"</span><span class="op">)</span></span></code></pre></div>
+<span>    effect_modifier <span class="op">=</span> <span class="st">"ph.ecog"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p>Generate rifttable:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
 <span>  design <span class="op">=</span> <span class="va">design2</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">cancer</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ph.ecog</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  data <span class="op">=</span> <span class="va">cancer</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ph.ecog</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span>md <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rifttable table {
@@ -1682,6 +1675,15 @@ continuous outcomes.</p>
 #rifttable .gt_indent_5 {
   text-indent: 25px;
 }
+
+#rifttable .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#rifttable div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
@@ -1691,124 +1693,92 @@ continuous outcomes.</p>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p><strong>Overall</strong></p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md"><strong>Overall</strong></span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Events</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Events</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">82</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">44</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Person-years</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Person-years</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">70</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">59</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Rate/1000 py (95% CI)</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Rate/1000 py (95% CI)</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1164.8 (938.1, 1446.3)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">746.7 (555.7, 1003.4)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Unadjusted HR (95% CI)</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Unadjusted HR (95% CI)</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.60 (0.41, 0.86)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Age-adjusted HR (95% CI)</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Age-adjusted HR (95% CI)</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.60 (0.41, 0.86)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md"></div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md"></span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p><strong>Stratified models</strong></p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md"><strong>Stratified models</strong></span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p><em>ECOG PS1</em> (events/N)</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md"><em>ECOG PS1</em> (events/N)</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">54/71</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">28/42</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Unadjusted</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Unadjusted</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.53 (0.33, 0.85)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Age-adjusted</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Age-adjusted</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.53 (0.33, 0.85)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p><em>ECOG PS2</em> (events/N)</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md"><em>ECOG PS2</em> (events/N)</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">28/29</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">16/21</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Unadjusted</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Unadjusted</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.70 (0.37, 1.30)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Age-adjusted</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Age-adjusted</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.68 (0.34, 1.36)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md"></div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md"></span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p><strong>Joint model</strong>, age-adj.</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md"><strong>Joint model</strong>, age-adj.</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>ECOG PS1</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">ECOG PS1</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.55 (0.35, 0.88)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>ECOG PS2</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">ECOG PS2</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.54 (0.98, 2.44)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.10 (0.62, 1.98)</td>
 </tr>
@@ -1824,18 +1794,21 @@ continuous outcomes.</p>
 <code class="sourceCode R"><span><span class="va">design3</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">label</span>,     <span class="op">~</span><span class="va">stratum</span>, <span class="op">~</span><span class="va">type</span>,          <span class="op">~</span><span class="va">type2</span>,</span>
 <span>  <span class="st">"ECOG PS1"</span>, <span class="fl">1</span>,        <span class="st">"events/total"</span>, <span class="st">"hr"</span>,</span>
-<span>  <span class="st">"ECOG PS2"</span>, <span class="fl">2</span>,        <span class="st">"events/total"</span>, <span class="st">"hr"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="st">"ECOG PS2"</span>, <span class="fl">2</span>,        <span class="st">"events/total"</span>, <span class="st">"hr"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    exposure <span class="op">=</span> <span class="st">"sex"</span>,</span>
 <span>    event <span class="op">=</span> <span class="st">"status"</span>,</span>
 <span>    time <span class="op">=</span> <span class="st">"time"</span>,</span>
 <span>    confounders <span class="op">=</span> <span class="st">"+ age"</span>,</span>
-<span>    effect_modifier <span class="op">=</span> <span class="st">"ph.ecog"</span><span class="op">)</span></span>
+<span>    effect_modifier <span class="op">=</span> <span class="st">"ph.ecog"</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
 <span>  design <span class="op">=</span> <span class="va">design3</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">cancer</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ph.ecog</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  data <span class="op">=</span> <span class="va">cancer</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ph.ecog</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rifttable table {
@@ -2275,6 +2248,15 @@ continuous outcomes.</p>
 
 #rifttable .gt_indent_5 {
   text-indent: 25px;
+}
+
+#rifttable .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#rifttable div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
@@ -2285,26 +2267,22 @@ continuous outcomes.</p>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>ECOG PS1</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">ECOG PS1</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">54/71</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">28/42</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md"></div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md"></span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.53 (0.33, 0.85)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>ECOG PS2</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">ECOG PS2</span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top;">28/29</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top;">16/21</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md"></div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md"></span></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.68 (0.34, 1.36)</td>
 </tr>
@@ -2315,10 +2293,11 @@ continuous outcomes.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
 <span>  design <span class="op">=</span> <span class="va">design3</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">cancer</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  data <span class="op">=</span> <span class="va">cancer</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ph.ecog</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>,</span>
-<span>  layout <span class="op">=</span> <span class="st">"cols"</span>, </span>
-<span>  type2_layout <span class="op">=</span> <span class="st">"cols"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  layout <span class="op">=</span> <span class="st">"cols"</span>,</span>
+<span>  type2_layout <span class="op">=</span> <span class="st">"cols"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rifttable table {
@@ -2759,29 +2738,34 @@ continuous outcomes.</p>
 #rifttable .gt_indent_5 {
   text-indent: 25px;
 }
+
+#rifttable .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#rifttable div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="sex">sex</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ECOG PS1">ECOG PS1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ECOG PS1 ">ECOG PS1 </th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ECOG PS2">ECOG PS2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ECOG PS2 ">ECOG PS2 </th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ECOG-PS1">ECOG PS1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ECOG-PS1-">ECOG PS1 </th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ECOG-PS2">ECOG PS2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ECOG-PS2-">ECOG PS2 </th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Male</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Male</span></td>
 <td headers="ECOG PS1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">54/71</td>
 <td headers="ECOG PS1 " class="gt_row gt_left" style="text-align: left; vertical-align: top;">1 (reference)</td>
 <td headers="ECOG PS2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">28/29</td>
 <td headers="ECOG PS2 " class="gt_row gt_left" style="text-align: left; vertical-align: top;">1 (reference)</td>
 </tr>
 <tr>
-<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Female</p>
-</div></td>
+<td headers="sex" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Female</span></td>
 <td headers="ECOG PS1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">28/42</td>
 <td headers="ECOG PS1 " class="gt_row gt_left" style="text-align: left; vertical-align: top;">0.53 (0.33, 0.85)</td>
 <td headers="ECOG PS2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">16/21</td>
@@ -2810,16 +2794,19 @@ variable:</p>
 <span>  <span class="st">""</span>,                       <span class="cn">NULL</span>,     <span class="st">""</span>,           <span class="cn">NA</span>,</span>
 <span>  <span class="st">"Joint model"</span>,            <span class="cn">NULL</span>,     <span class="st">""</span>,           <span class="cn">NA</span>,</span>
 <span>  <span class="st">"  Male"</span>,                 <span class="st">"Male"</span>,   <span class="st">"diff_joint"</span>, <span class="cn">NA</span>,</span>
-<span>  <span class="st">"  Female"</span>,               <span class="st">"Female"</span>, <span class="st">"diff_joint"</span>, <span class="cn">NA</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="st">"  Female"</span>,               <span class="st">"Female"</span>, <span class="st">"diff_joint"</span>, <span class="cn">NA</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>    exposure <span class="op">=</span> <span class="st">"ph.ecog_factor"</span>,</span>
 <span>    trend <span class="op">=</span> <span class="st">"ph.ecog"</span>,</span>
 <span>    outcome <span class="op">=</span> <span class="st">"age"</span>,</span>
-<span>    effect_modifier <span class="op">=</span> <span class="st">"sex"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    effect_modifier <span class="op">=</span> <span class="st">"sex"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">cancer</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ph.ecog</span> <span class="op">&lt;</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ph.ecog_factor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ph.ecog</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>    data <span class="op">=</span> <span class="va">cancer</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ph.ecog</span> <span class="op">&lt;</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ph.ecog_factor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ph.ecog</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rt_gt.html">rt_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="rifttable" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#rifttable table {
@@ -3260,106 +3247,97 @@ variable:</p>
 #rifttable .gt_indent_5 {
   text-indent: 25px;
 }
+
+#rifttable .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#rifttable div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="ph.ecog_factor">ph.ecog_factor</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="0">0</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="1">1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="2">2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="a0">0</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="a1">1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="a2">2</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: left; vertical-align: bottom;" scope="col" id="Trend">Trend</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Marginal mean (95% CI)</p>
-</div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Marginal mean (95% CI)</span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">61.2 (58.8, 63.5)</td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">61.5 (59.8, 63.1)</td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">66.2 (64.0, 68.5)</td>
 <td headers="Trend" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Male</p>
-</div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Male</span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">63.00</td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">62.79</td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">65.00</td>
 <td headers="Trend" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 </tr>
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Female</p>
-</div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Female</span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">58.70</td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">59.19</td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">67.90</td>
 <td headers="Trend" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 </tr>
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md"></div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md"></span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 <td headers="Trend" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 </tr>
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Stratified model</p>
-</div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Stratified model</span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 <td headers="Trend" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Male</p>
-</div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Male</span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (reference)</td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">-0.2 (-3.9, 3.5)</td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">2.0 (-2.5, 6.5)</td>
 <td headers="Trend" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.9 (-1.3, 3.2)</td>
 </tr>
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Female</p>
-</div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Female</span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (reference)</td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.5 (-3.5, 4.5)</td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">9.2 (4.5, 13.9)</td>
 <td headers="Trend" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">4.4 (2.0, 6.7)</td>
 </tr>
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md"></div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md"></span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 <td headers="Trend" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 </tr>
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><div class="gt_from_md">
-<p>Joint model</p>
-</div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Joint model</span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 <td headers="Trend" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Male</p>
-</div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Male</span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (reference)</td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">-0.21 (-3.75, 3.33)</td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">2.00 (-2.32, 6.32)</td>
 <td headers="Trend" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.93 (-1.33, 3.19)</td>
 </tr>
 <tr>
-<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><div class="gt_from_md">
-<p>Female</p>
-</div></td>
+<td headers="ph.ecog_factor" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Female</span></td>
 <td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">-4.30 (-8.70, 0.11)</td>
 <td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">-3.81 (-7.74, 0.12)</td>
 <td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">4.90 (0.15, 9.66)</td>
@@ -3369,7 +3347,7 @@ variable:</p>
 </table>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -3380,15 +3358,15 @@ variable:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
