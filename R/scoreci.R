@@ -26,7 +26,7 @@
 #' @export
 #'
 #' @seealso
-#' \url{http://users.stat.ufl.edu/~aa/cda/R/one-sample/R1/index.html}
+#' \url{https://users.stat.ufl.edu/~aa/cda/R/one-sample/R1/index.html}
 #'
 #' Agresti A, Coull BA. Approximate is better than "exact" for
 #' interval estimation of binomial proportions, Am Stat 1998;52:119-126.

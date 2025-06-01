@@ -123,7 +123,7 @@
 * New vignette describing all estimators.
 * Internal:
   + Drop dependency on R >= 4.1 and native pipe.
-  + Require [{risks}](https://stopsack.github.io/risks) >= 0.4.0.
+  + Require [{risks}](https://stopsack.github.io/risks/) >= 0.4.0.
   + Remove dependency on {labelled} package. 
   + The {gt} and {quantreg} packages are now optional as soft dependencies.
   + Compatible with {dplyr} 1.1.0, {tidyselect} 1.2.0

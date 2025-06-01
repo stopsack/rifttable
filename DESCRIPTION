@@ -39,5 +39,5 @@ Suggests:
 Remotes:
     stopsack/risks
 VignetteBuilder: knitr
-URL: https://stopsack.github.io/rifttable, https://github.com/stopsack/rifttable
+URL: https://stopsack.github.io/rifttable/, https://github.com/stopsack/rifttable/
 Config/testthat/edition: 3
