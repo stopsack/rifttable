@@ -5,11 +5,16 @@ Version: 0.7.0
 Authors@R:
     person(given = "Konrad H.",
            family = "Stopsack",
-           role = c("aut", "cre"),
+           role = c("aut", "cre", "cph"),
            email = "stopsack@post.harvard.edu",
            comment = c(ORCID = "0000-0002-0722-1311"))
-Description: Presentation-ready stratified results tables for epidemiologists, 
-    containing both descriptive and inferential statistics.
+Description: Presentation-ready results tables for epidemiologists in an 
+    automated, reproducible fashion. The user provides the final analytical 
+    dataset and specifies the design of the table, with rows and/or columns 
+    defined by exposure(s), effect modifier(s), and estimands as desired, 
+    allowing to show descriptors and inferential estimates in one table -- 
+    bridging the rift between epidemiologists and their data, one table at a 
+    time.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -36,8 +41,6 @@ Suggests:
     rmarkdown,
     sandwich,
     testthat (>= 3.0.0)
-Remotes:
-    stopsack/risks
 VignetteBuilder: knitr
-URL: https://stopsack.github.io/rifttable, https://github.com/stopsack/rifttable
+URL: https://stopsack.github.io/rifttable/, https://github.com/stopsack/rifttable/
 Config/testthat/edition: 3

@@ -163,7 +163,7 @@ rifttable(
   data = cancer |>
     dplyr::filter(ph.ecog %in% 1:2)
 ) |>
-  rt_gt(md = 1)
+  rt_gt()
 ```
 
 
