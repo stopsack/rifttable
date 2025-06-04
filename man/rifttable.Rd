@@ -332,11 +332,6 @@ because there are no events, then \code{"--"} will be printed. Accompanying
 warnings need to be suppressed manually, if appropriate, using
 \code{suppressWarnings(rifttable(...))}.
 }
-\section{Example Output (see Example 5)}{
-
-\if{html}{\figure{rifttable.png}{options: width=70\%}}
-}
-
 \examples{
 # Load 'cancer' dataset from survival package (Used in all examples)
 data(cancer, package = "survival")
@@ -491,15 +486,13 @@ tibble::tribble(
   )
 
 
-# Example 5: Get formatted output for Example 2 (see above)
-\dontrun{
+# Example 5: Get formatted output for Example 2
 rifttable(
   design = design2,
   data = cancer |>
     dplyr::filter(ph.ecog \%in\% 1:2)
 ) |>
-  rt_gt(md = 1) # get markdown formatting in first column ('label')
-}
+  rt_gt()
 
 }
 \references{
