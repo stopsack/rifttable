@@ -64,26 +64,35 @@ cars <- tibble::as_tibble(mtcars) |>
       levels = 3:5,
       labels = c("Three", "Four", "Five")
     ),
+    # Categorical version of "hp", shows each category
     hp_categorical = dplyr::if_else(
-      hp > 200,
-      true = ">200 hp",
-      false = "<=200 hp"
-    )
+      hp >= 200,
+      true = "200+ hp",
+      false = "<200 hp"
+    ),
+    # Binary version of "hp", shows the TRUEs
+    hp_binary = hp >= 200
   )
 # Label some variables. Better alternative: labelled::set_variable_labels()
 attr(cars$hp, "label") <- "Horsepower"
 attr(cars$hp_categorical, "label") <- "Horsepower"
+attr(cars$hp_binary, "label") <- "200+ hp"
 attr(cars$am, "label") <- "Automatic transmission"
 attr(cars$gear, "label") <- "Gears"
 
 # Generate table "design"
 design <- cars |>
   table1_design(
-    hp, hp_categorical, mpg, am,
+    hp, hp_categorical, hp_binary, mpg, am,
     by = gear
   )
 
 # Use "design" to create a descriptive table.
 design |>
   rifttable(diff_digits = 0)
+
+# Obtain a formatted table
+design |>
+  rifttable(diff_digits = 0) |>
+  rt_gt()
 }
