@@ -1,3 +1,8 @@
+# rifttable 0.7.1
+
+* Housekeeping for CRAN release
+
+
 # rifttable 0.7.0
 
 * Breaking changes:
