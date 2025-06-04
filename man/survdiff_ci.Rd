@@ -106,11 +106,11 @@ survdiff_ci(
 \references{
 Com-Nougue C, Rodary C, Patte C. How to establish equivalence when data are
 censored: a randomized trial of treatments for B non-Hodgkin lymphoma.
-Stat Med 1993;12:1353–64. \doi{10.1002/sim.4780121407}.
+Stat Med 1993;12:1353–64. \doi{10.1002/sim.4780121407}
 
 Altman DG, Andersen PK. Calculating the number needed to treat for trials
 where the outcome is time to an event. BMJ 1999;319:1492–5.
-\doi{10.1136/bmj.319.7223.1492}.
+\doi{10.1136/bmj.319.7223.1492}
 
 Zou GY, Donner A. Construction of confidence limits about effect measures:
 A general approach. Statist Med 2008;27:1693–1702.
