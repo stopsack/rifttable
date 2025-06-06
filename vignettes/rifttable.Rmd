@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # Loading the package
 
-After installation (using `remotes::install_github("stopsack/rifttable")`), load the package with:
+After installation (using `install.packages("rifttable")` or `remotes::install_github("stopsack/rifttable")`), load the package with:
 
 ```{r setup}
 library(rifttable)

@@ -29,13 +29,20 @@ Tables are the key format in which epidemiologists present their results. Many r
 
 ## Installation
 
-You can install the development version of rifttable directly from GitHub:
+The rifttable package can be installed from CRAN:
 
-``` r
+```{r, eval = FALSE}
+install.packages("rifttable")
+```
+
+Development versions can be installed from 
+[GitHub](https://stopsack.github.io/rifttable/) using:
+
+```{r, eval = FALSE}
 remotes::install_github("stopsack/rifttable")
 ```
 
-The installation procedure requires the {remotes} package, obtainable via `install.packages("remotes")`.
+The latter installation procedure requires the remotes package, obtainable via `install.packages("remotes")`.
 
 
 ## Example

@@ -28,15 +28,21 @@ their data, one table at a time.
 
 ## Installation
 
-You can install the development version of rifttable directly from
-GitHub:
+The rifttable package can be installed from CRAN:
+
+``` r
+install.packages("rifttable")
+```
+
+Development versions can be installed from
+[GitHub](https://stopsack.github.io/rifttable/) using:
 
 ``` r
 remotes::install_github("stopsack/rifttable")
 ```
 
-The installation procedure requires the {remotes} package, obtainable
-via `install.packages("remotes")`.
+The latter installation procedure requires the remotes package,
+obtainable via `install.packages("remotes")`.
 
 ## Example
 
