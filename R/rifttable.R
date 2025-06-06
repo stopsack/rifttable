@@ -450,18 +450,14 @@
 #'   )
 #'
 #'
-#' # Example 5: Get formatted output for Example 2 (see above)
-#' \dontrun{
+#' # Example 5: Get formatted output for Example 2
 #' rifttable(
 #'   design = design2,
 #'   data = cancer |>
 #'     dplyr::filter(ph.ecog %in% 1:2)
 #' ) |>
-#'   rt_gt(md = 1) # get markdown formatting in first column ('label')
-#' }
+#'   rt_gt()
 #'
-#' @section Example Output (see Example 5):
-#' \if{html}{\figure{rifttable.png}{options: width=70\%}}
 rifttable <- function(
     design,
     data,

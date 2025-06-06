@@ -7,7 +7,7 @@
 
 [![R-CMD-check](https://github.com/stopsack/rifttable/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stopsack/rifttable/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/stopsack/rifttable/branch/main/graph/badge.svg)](https://app.codecov.io/gh/stopsack/rifttable?branch=main)
+coverage](https://codecov.io/gh/stopsack/rifttable/graph/badge.svg)](https://app.codecov.io/gh/stopsack/rifttable)
 <!-- badges: end -->
 
 Tables are the key format in which epidemiologists present their
@@ -28,15 +28,21 @@ their data, one table at a time.
 
 ## Installation
 
-You can install the development version of rifttable directly from
-GitHub:
+The rifttable package can be installed from CRAN:
+
+``` r
+install.packages("rifttable")
+```
+
+Development versions can be installed from
+[GitHub](https://stopsack.github.io/rifttable/) using:
 
 ``` r
 remotes::install_github("stopsack/rifttable")
 ```
 
-The installation procedure requires the {remotes} package, obtainable
-via `install.packages("remotes")`.
+The latter installation procedure requires the remotes package,
+obtainable via `install.packages("remotes")`.
 
 ## Example
 

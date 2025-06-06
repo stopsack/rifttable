@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/stopsack/rifttable/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stopsack/rifttable/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/stopsack/rifttable/branch/main/graph/badge.svg)](https://app.codecov.io/gh/stopsack/rifttable?branch=main)
+[![Codecov test coverage](https://codecov.io/gh/stopsack/rifttable/graph/badge.svg)](https://app.codecov.io/gh/stopsack/rifttable)
 <!-- badges: end -->
 
 Tables are the key format in which epidemiologists present their results. Many results tables in applied studies merely show point estimates and confidence intervals, or even p-values, from regression models: a “growing rift between epidemiologists and their data” ([Rothman 2017](https://doi.org/10.1007/s10654-017-0314-3)). “Actual,” descriptive data, such as counts stratified by exposure and a main confounder or effect modifier, are often lacking. 
@@ -29,13 +29,20 @@ Tables are the key format in which epidemiologists present their results. Many r
 
 ## Installation
 
-You can install the development version of rifttable directly from GitHub:
+The rifttable package can be installed from CRAN:
 
-``` r
+```{r, eval = FALSE}
+install.packages("rifttable")
+```
+
+Development versions can be installed from 
+[GitHub](https://stopsack.github.io/rifttable/) using:
+
+```{r, eval = FALSE}
 remotes::install_github("stopsack/rifttable")
 ```
 
-The installation procedure requires the {remotes} package, obtainable via `install.packages("remotes")`.
+The latter installation procedure requires the remotes package, obtainable via `install.packages("remotes")`.
 
 
 ## Example

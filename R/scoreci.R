@@ -29,10 +29,12 @@
 #' \url{https://users.stat.ufl.edu/~aa/cda/R/one-sample/R1/index.html}
 #'
 #' Agresti A, Coull BA. Approximate is better than "exact" for
-#' interval estimation of binomial proportions, Am Stat 1998;52:119-126.
+#' interval estimation of binomial proportions. Am Stat 1998;52:119-126.
+#' \doi{10.2307/2685469}
 #'
 #' Brown LD, Cai TT, DasGupta A. Interval estimation for a
-#' binomial proportion (with discussion), Stat Sci 2001;16:101-133.
+#' binomial proportion (with discussion). Stat Sci 2001;16:101-133.
+#' \doi{10.1214/ss/1009213286}
 #'
 #' @examples
 #' scoreci(success = 5, total = 10)

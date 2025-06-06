@@ -1,7 +1,7 @@
 Package: rifttable
 Type: Package
 Title: Results Tables to Bridge the Rift Between Epidemiologists and Their Data
-Version: 0.7.0
+Version: 0.7.1
 Authors@R:
     person(given = "Konrad H.",
            family = "Stopsack",
@@ -14,7 +14,7 @@ Description: Presentation-ready results tables for epidemiologists in an
     defined by exposure(s), effect modifier(s), and estimands as desired, 
     allowing to show descriptors and inferential estimates in one table -- 
     bridging the rift between epidemiologists and their data, one table at a 
-    time.
+    time. See Rothman (2017) <doi:10.1007/s10654-017-0314-3>.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

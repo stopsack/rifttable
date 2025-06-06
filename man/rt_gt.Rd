@@ -41,17 +41,10 @@ markdown, such as \code{format: gfm} in a Quarto document or
 markdown-formatted table (e.g., without footnotes) is returned via
 \code{\link[knitr]{kable}}.
 }
-\section{Example Output}{
-
-\if{html}{\figure{rt_gt.png}{options: width=50\%}}
-}
-
 \examples{
-\dontrun{
 data(mtcars)
 mtcars |>
   dplyr::slice(1:5) |>
   rt_gt()
-}
 
 }
