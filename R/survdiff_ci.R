@@ -121,7 +121,8 @@ survdiff_ci <- function(
       formula = formula,
       data = data,
       id = .id,
-      weights = .weights
+      weights = .weights,
+      conf.int = conf.level
     ),
     time = time,
     extend = TRUE
