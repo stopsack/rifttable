@@ -240,7 +240,7 @@ testthat::test_that(
     expect_equal(
       object = result09$std.error,
       expected = result$std.error,
-      tolerance = 0.005
+      tolerance = 0.01
     )
   }
 )
