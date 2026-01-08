@@ -202,6 +202,50 @@ testthat::test_that(
 
 
 testthat::test_that(
+  desc = "cum inc difference does not ignore confidence level",
+  code = {
+    result <- survdiff_ci(
+      formula = survival::Surv(
+        time = time,
+        event = status
+      ) ~
+        sex,
+      data = cancer,
+      time = 365.25
+    )
+
+    result09 <- survdiff_ci(
+      formula = survival::Surv(
+        time = time,
+        event = status
+      ) ~
+        sex,
+      data = cancer,
+      time = 365.25,
+      conf.level = 0.9
+    )
+
+    expect_gt(
+      object = result09$conf.low,
+      expected = result$conf.low
+    )
+    expect_lt(
+      object = result09$conf.high,
+      expected = result$conf.high
+    )
+    expect_equal(
+      object = result09$estimate,
+      expected = result$estimate
+    )
+    expect_equal(
+      object = result09$std.error,
+      expected = result$std.error,
+      tolerance = 0.01
+    )
+  }
+)
+
+testthat::test_that(
   desc = "Invalid ID variable is found",
   code = {
     expect_error(
