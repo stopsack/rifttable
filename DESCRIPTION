@@ -1,7 +1,7 @@
 Package: rifttable
 Type: Package
 Title: Results Tables to Bridge the Rift Between Epidemiologists and Their Data
-Version: 0.7.1
+Version: 0.7.1-9000
 Authors@R:
     person(given = "Konrad H.",
            family = "Stopsack",
