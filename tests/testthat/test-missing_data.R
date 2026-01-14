@@ -11,7 +11,7 @@ df <- breastcancer |>
     stage = dplyr::if_else(dplyr::row_number() %in% 29:31, NA, stage),
     death = {
       label <- attr(death, "label")
-      dplyr::if_else(dplyr::row_number() %in% 99:101, NA, death)
+      death <- dplyr::if_else(dplyr::row_number() %in% 99:101, NA, death)
       attr(death, "label") <- label
       death
     },
