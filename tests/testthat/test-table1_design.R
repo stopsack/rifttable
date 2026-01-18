@@ -2,8 +2,18 @@ data("breastcancer", package = "risks")
 df <- breastcancer |>
   dplyr::mutate(
     continuous = 1:dplyr::n(),
-    receptor = dplyr::if_else(dplyr::row_number() %in% 9:11, NA, receptor),
-    death = dplyr::if_else(dplyr::row_number() %in% 99:101, NA, death),
+    receptor = {
+      label <- attr(receptor, "label")
+      receptor <- dplyr::if_else(dplyr::row_number() %in% 9:11, NA, receptor)
+      attr(receptor, "label") <- label
+      receptor
+    },
+    death = {
+      label <- attr(death, "label")
+      death <- dplyr::if_else(dplyr::row_number() %in% 99:101, NA, death)
+      attr(death, "label") <- label
+      death
+    },
     allempty = NA_integer_,
     allempty_lgl = allempty == 1
   )

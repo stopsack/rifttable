@@ -1,3 +1,13 @@
+# rifttable 0.7.2
+
+* Bug fixes:
+  + `survdiff_ci()` now uses the `conf.level` argument correctly in confidence 
+    interval estimation using the MOVER approach (#8).
+* Internal:
+  + Anticipate changes in {dplyr} 1.2.0 in label handling in unit tests (thanks 
+    to @DavisVaughan, #10).
+    
+
 # rifttable 0.7.1
 
 * Housekeeping for CRAN release
