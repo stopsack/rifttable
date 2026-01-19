@@ -2,6 +2,8 @@
 
 ## rifttable 0.7.2
 
+CRAN release: 2026-01-18
+
 - Bug fixes:
   - [`survdiff_ci()`](https://stopsack.github.io/rifttable/reference/survdiff_ci.md)
     now uses the `conf.level` argument correctly in confidence interval
