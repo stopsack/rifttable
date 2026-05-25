@@ -122,3 +122,24 @@ test_that(
     )
   }
 )
+
+test_that(
+  desc = "Display of levels for all-NA factors is dropped",
+  code = {
+    df$death <- factor(NA)
+    object <- table1_design(
+      death,
+      data = df
+    )
+    attr(x = object, which = "rt_data") <- NULL
+    expect_equal(
+      object = object,
+      expected = tibble::tribble(
+        ~label, ~outcome, ~type,
+        "N", "", "total",
+        "death", "", "",
+        "  Unknown", "death@_NA_", "outcomes"
+      )
+    )
+  }
+)
