@@ -494,6 +494,7 @@ rifttable <- function(
   if (nrow(data) < 1) {
     stop("The data set is empty.")
   }
+  data <- tibble::as_tibble(data)
   if (missing(risk_percent) &
     !is.null(attr(
       x = design,
