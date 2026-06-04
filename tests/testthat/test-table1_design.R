@@ -143,3 +143,29 @@ test_that(
     )
   }
 )
+
+test_that(
+  desc = "Cateogory-to-binary conversion detects bogus input",
+  code = {
+    expect_error(
+      object = tibble::tibble(
+        outcome = "var@a",
+        type = "risk"
+      ) |>
+        rifttable(
+          data = tibble::tibble(var = "b")
+        ),
+      regexp = "Invalid variable level"
+    )
+    expect_error(
+      object = tibble::tibble(
+        outcome = "nonsense@a",
+        type = "risk"
+      ) |>
+        rifttable(
+          data = tibble::tibble(var = "b")
+        ),
+      regexp = "Invalid variable '"
+    )
+  }
+)

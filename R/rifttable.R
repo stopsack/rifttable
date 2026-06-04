@@ -678,6 +678,34 @@ rifttable <- function(
       .x = to_code$outcome,
       .y = to_code$var_level,
       .f = \(x, y) {
+        if (!(x %in% names(data))) {
+          stop(
+            paste0(
+              "Invalid variable '",
+              x,
+              "' in 'outcome = \"",
+              x,
+              "@",
+              y,
+              "\"'."
+            )
+          )
+        }
+        if (!(any(y %in% as.character(data[[x]]))) &
+          y != "_NA_") {
+          stop(
+            paste0(
+              "Invalid variable level '",
+              y,
+              "' in 'outcome = \"",
+              x,
+              "@",
+              y,
+              "\"'.\nAvailable levels are:\n",
+              unique(data[x])
+            )
+          )
+        }
         varname <- paste0(x, "@", y)
         if (y == "_NA_") {
           data |>
