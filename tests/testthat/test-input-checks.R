@@ -202,6 +202,15 @@ test_that(
       ),
       regexp = "must be numeric. 'a' is not numeric."
     )
+    expect_no_error(
+      object = rifttable(
+        design = tibble::tibble(
+          type = "total",
+          digits = 4
+        ),
+        data = tibble::tibble(x = 1)
+      )
+    )
   }
 )
 
@@ -246,6 +255,31 @@ testthat::test_that(
         data = cancer
       ),
       regexp = " The 'design' must contain 'event' and 'time' variables"
+    )
+  }
+)
+
+testthat::test_that(
+  desc = "event and outcome can be the same variable",
+  code = {
+    data(breastcancer, package = "risks")
+    expect_equal(
+      object = rifttable(
+        design = tibble::tibble(
+          type = c("rate", "risk"),
+          event = "death",
+          outcome = "death",
+          time = "time"
+        ),
+        data = breastcancer |>
+          dplyr::mutate(time = 1:nrow(breastcancer))
+      ),
+      expected =
+        tibble::tribble(
+          ~Summary, ~Overall,
+          "rate", "2.9",
+          "risk", "0.28"
+        )
     )
   }
 )
