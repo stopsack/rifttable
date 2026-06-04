@@ -532,7 +532,7 @@ rifttable <- function(
     if("weight" %in% names(design)) {
       design$weights <- design$weight
     } else {
-      design$weights     <- NA
+      design$weights <- NA
     }
   }
   if (
