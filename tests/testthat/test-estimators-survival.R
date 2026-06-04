@@ -99,5 +99,30 @@ testthat::test_that(
       object = object,
       expected = expected
     )
+
+    expect_equal(
+      object = tibble::tibble(
+        type = c("hr", "cuminc"),
+        time = "time",
+        event = "status",
+        exposure = "ph.ecog",
+        trend = "ph.ecog_num",
+        weights = "w"
+      ) |>
+        rifttable(
+          data = cancer |>
+            dplyr::filter(ph.ecog < 3) |>
+            dplyr::mutate(
+              w = 1 / age,
+              ph.ecog = factor(ph.ecog),
+              ph.ecog_num = as.numeric(ph.ecog)
+            )
+        ),
+      expected = tibble::tribble(
+        ~ph.ecog, ~`0`, ~`1`, ~`2`, ~Trend,
+        "hr", "1 (reference)", "1.53 (1.04, 2.24)", "2.69 (1.71, 4.2)", "1.65 (1.31, 2.07)",
+        "cuminc", "0.92", "0.93", "1.00", ""
+      )
+    )
   }
 )
