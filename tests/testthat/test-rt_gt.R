@@ -9,5 +9,14 @@ test_that(
         ) |>
           rt_gt()
     )
+    knitr::opts_knit$set(rmarkdown.pandoc.to = "gfm")
+    expect_visible(
+      call =
+        tibble::tibble(
+          a = "  a",
+          b = 1
+        ) |>
+        rt_gt()
+    )
   }
 )
