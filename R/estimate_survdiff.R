@@ -22,7 +22,7 @@
 #' @param time Name of time variable
 #' @param time2 Name of second time variable, if any
 #' @param event_type Level of event variable with competing risks, if any
-#' @param ...
+#' @param ... Additional arguments; not used
 #'
 #' @return Tibble
 #' @noRd
