@@ -267,10 +267,16 @@
 #'     \code{ratio_digits}, or \code{rate_digits}, as applicable.
 #'   * \code{digits2} Optional. As \code{digits}, for the second
 #'     estimate (\code{type2}).
-#'   * \code{nmin}. Optional. Suppress estimates with \code{"--"} if a cell
-#'     defined by exposure, and possibly the effect modifier, contains fewer
-#'     observations or, for survival analyses, fewer events than \code{nmin}.
-#'     Defaults to \code{NA}, i.e., to print all estimates.
+#'   * \code{nmin}. Optional.
+#'     Minimum count per cell below which data should be suppressed.
+#'     For example, if there are only 3 events in an exposure category and
+#'     \code{nmin = 5}, then \code{"-- (<5)"} will be printed for
+#'     that cell.
+#'     The \code{nmin} cut-off will be applied to the number of events for
+#'     survival-type outcomes, to the number of observations with the outcome
+#'     for binary outcomes, or to the number of observations for continuous
+#'     outcomes (and all other estimators).
+#'     Defaults to \code{NA}, i.e., to return all estimates.
 #'   * \code{na_rm}. Optional. Exclude observations with missing outcome.
 #'     Defaults to \code{FALSE}. Use with caution.
 #'   * \code{ci}. Optional. Confidence level. Defaults to \code{0.95}.
