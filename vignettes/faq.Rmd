@@ -203,7 +203,7 @@ rifttable(
 
 # How do I show multiple exposures in the same table?
 
-Our simple toy dataset just has one exposure variable. For demonstration,
+Our simple example dataset just has one exposure variable. For demonstration,
 we just create a second variable, with two categories, "Level 1" and "Level 2,"
 which is a simplified combination of the `stage` and `receptor` variables.
 
