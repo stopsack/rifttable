@@ -60,7 +60,7 @@ rifttable(
 R's error messages can be frustrating. When using rifttable, these are the typical sources of errors:
 
 * Clerical errors in variable names and arguments. There is no magic here except double-checking the code.
-* Missing data. See below: [How do I handle missing data?](#how-do-i-handle-missing-data).
+* Missing data. See below: [How do I handle missing data?](#how-do-i-handle-missing-data)
 * Discrepancy between estimator (`type`) and the data. For example, `type = "mean"` will not work on a categorical (factor) variable.
 * Models that fail to converge. For example, one may be trying to estimate a risk ratio with 0 outcomes in the reference category, or adjusting for 20 covariates in a Cox model with 5 events overall. (Sometimes such attempts will "just" return warning messages -- it is still worth rethinking the modeling strategy.)
 
