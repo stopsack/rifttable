@@ -76,76 +76,76 @@ The `design` can be constructed in many different ways. All lead to the same tab
 1. **A dataset (tibble) defined using `tribble()`**
 
     ```{r}
-design1 <- tribble(
-  ~label,   ~exposure, ~outcome, ~type,
-  "N",      "stage",   "death",  "total",
-  "Deaths", "stage",   "death",  "outcomes"
-)
-design1
-rifttable(
-  design = design1,
-  data = breastcancer
-) |>
-  rt_gt()
+    design1 <- tribble(
+      ~label,   ~exposure, ~outcome, ~type,
+      "N",      "stage",   "death",  "total",
+      "Deaths", "stage",   "death",  "outcomes"
+    )
+    design1
+    rifttable(
+      design = design1,
+      data = breastcancer
+    ) |>
+      rt_gt()
     ```
 
 2. **A dataset (tibble) defined using `tibble()`**
 
     ```{r}
-design2 <- tibble(
-  label = c("N", "Deaths"),
-  exposure = "stage",
-  outcome = "death",
-  type = c("total", "outcomes")
-)
-design2
-rifttable(
-  design = design2,
-  data = breastcancer
-) |>
-  rt_gt()
+    design2 <- tibble(
+      label = c("N", "Deaths"),
+      exposure = "stage",
+      outcome = "death",
+      type = c("total", "outcomes")
+    )
+    design2
+    rifttable(
+      design = design2,
+      data = breastcancer
+    ) |>
+      rt_gt()
     ```
 
 3. **Concatenating tibbles, then editing with `mutate()`**
 
     ```{r}
-design3 <- bind_rows(
-  tibble( # row 1
-    label = "N",
-    type = "total"
-  ),
-  tibble( # row 2
-    label = "Deaths",
-    type = "outcomes"
-  )
-) |>
-  mutate( # elements that are the same for all rows
-    exposure = "stage",
-    outcome = "death"
-  )
-design3
-rifttable(
-  design = design3,
-  data = breastcancer
-) |>
-  rt_gt()
+    design3 <- bind_rows(
+      tibble( # row 1
+        label = "N",
+        type = "total"
+      ),
+      tibble( # row 2
+        label = "Deaths",
+        type = "outcomes"
+      )
+    ) |>
+      mutate( # elements that are the same for all rows
+        exposure = "stage",
+        outcome = "death"
+      )
+    design3
+    rifttable(
+      design = design3,
+      data = breastcancer
+    ) |>
+      rt_gt()
     ```
 
 
 4. **For descriptive tables: Use `table1_design()`**
 
     ```{r}
-design4 <- breastcancer |>
-  table1_design(
-    death, # the total count will automatically be included
-    by = stage
-  )
-design4
-rifttable(
-  design = design4,
-  data = breastcancer
-) |>
-  rt_gt()
+    design4 <- breastcancer |>
+      table1_design(
+        death, # the total count will automatically be included
+        by = stage
+      )
+    design4
+    rifttable(
+      design = design4,
+      data = breastcancer
+    ) |>
+      rt_gt()
     ```
     
     See a separate overview about [a descriptive Table 1](table1.html).
