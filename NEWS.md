@@ -1,3 +1,12 @@
+# rifttable (development version)
+
+* Bug fixes:
+  + `survdiff_ci()` paired the confidence limits of the cumulative incidence 
+    the wrong way round after taking `1 - survival`, so the MOVER intervals 
+    of `type = "cumincdiff"` and `"cumincratio"` were mirrored about the 
+    estimate. They now mirror the survival contrasts, as they must.
+
+
 # rifttable 0.7.2
 
 * Bug fixes:
