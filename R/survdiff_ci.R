@@ -136,7 +136,11 @@ survdiff_ci <- function(
       uci = res$upper
     )
     if (estimand == "cuminc") {
+      # The limits swap roles: the lower limit of 1 - S is 1 minus the
+      # upper limit of S. Renaming before the subtraction keeps the two
+      # assignments below independent of each other.
       res <- res |>
+        dplyr::rename(lci = "uci", uci = "lci") |>
         dplyr::mutate(
           surv = 1 - .data$surv,
           lci = 1 - .data$lci,
