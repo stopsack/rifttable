@@ -574,6 +574,13 @@ rifttable <- function(
     )
     if (is.null(name)) {
       name <- exposure_nona[1]
+    } else {
+      if (is.na(name) | name == "") {
+        name <- exposure_nona[1]
+      }
+    }
+    if (name %in% data[[exposure_nona[1]]]) {
+      name <- paste0("By ", name)
     }
 
     if (overall == TRUE) {

@@ -12,6 +12,8 @@
     shifted intervals (thanks @tgerke for the bug report #13 and pull request).
   + All `data` are now kept as a `tibble` internally to address edge cases of 
     failing input checks on `data` provided as a `data.frame`.
+  + The `exposure` variable name or label can be now be identical to a category 
+    of this variable, and empty labels are better supported.
 
 
 # rifttable 0.7.2
