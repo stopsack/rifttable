@@ -1,12 +1,12 @@
 # rifttable 0.7.3
 
 * Bug fixes:
-  + `table1_design()`: omit empty row for categorical variables that are 
-    completely `NA` (thanks @tsurudak for the bug report)
-  + Address edge cases of failing input checks on `data` provided as 
-    `data.frame` by keeping all `data` as `tibble` internally
+  + `table1_design()` omits an empty row for categorical variables that are 
+    completely `NA` (thanks @tsurudak for the bug report).
   + `survdiff_ci()` now reports two-sided *p*-values (thanks @eribul for the 
     bug report #12).
+  + All `data` are kept as a `tibble` internally to address edge cases of 
+    failing input checks on `data` provided as a `data.frame`.
 
 
 # rifttable 0.7.2
