@@ -1,3 +1,12 @@
+# rifttable 0.7.3
+
+* Bug fixes:
+  + `table1_design()`: omit empty row for categorical variables that are 
+    completely `NA` (thanks @tsurudak for the bug report)
+  + Address edge cases of failing input checks on `data` provided as 
+    `data.frame` by keeping all `data` as `tibble` internally
+
+
 # rifttable 0.7.2
 
 * Bug fixes:
