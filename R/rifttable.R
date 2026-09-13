@@ -267,7 +267,7 @@
 #'     \code{ratio_digits}, or \code{rate_digits}, as applicable.
 #'   * \code{digits2} Optional. As \code{digits}, for the second
 #'     estimate (\code{type2}).
-#'   * \code{nmin}. Optional.
+#'   * \code{nmin} Optional.
 #'     Minimum count per cell below which data should be suppressed.
 #'     For example, if there are only 3 events in an exposure category and
 #'     \code{nmin = 5}, then \code{"-- (<5)"} will be printed for
@@ -277,9 +277,11 @@
 #'     for binary outcomes, or to the number of observations for continuous
 #'     outcomes (and all other estimators).
 #'     Defaults to \code{NA}, i.e., to return all estimates.
-#'   * \code{na_rm}. Optional. Exclude observations with missing outcome.
+#'   * \code{na_rm} Optional. Exclude observations with missing outcome.
 #'     Defaults to \code{FALSE}. Use with caution.
-#'   * \code{ci}. Optional. Confidence level. Defaults to \code{0.95}.
+#'   * \code{ci} Optional. Confidence level. Defaults to \code{0.95}.
+#'   * \code{arguments} Optional additional arguments for some estimators
+#'     (\code{type}), e.g., for \code{type = "rr"}. See vignettes.
 #'
 #' Use \code{\link[tibble]{tibble}}, \code{\link[tibble]{tribble}}, and
 #' \code{\link[dplyr]{mutate}} to construct the \code{design} dataset,

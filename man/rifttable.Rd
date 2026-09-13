@@ -313,7 +313,7 @@ digits will be determined based on \code{rifttable}'s arguments
 \code{ratio_digits}, or \code{rate_digits}, as applicable.
 \item \code{digits2} Optional. As \code{digits}, for the second
 estimate (\code{type2}).
-\item \code{nmin}. Optional.
+\item \code{nmin} Optional.
 Minimum count per cell below which data should be suppressed.
 For example, if there are only 3 events in an exposure category and
 \code{nmin = 5}, then \code{"-- (<5)"} will be printed for
@@ -323,9 +323,11 @@ survival-type outcomes, to the number of observations with the outcome
 for binary outcomes, or to the number of observations for continuous
 outcomes (and all other estimators).
 Defaults to \code{NA}, i.e., to return all estimates.
-\item \code{na_rm}. Optional. Exclude observations with missing outcome.
+\item \code{na_rm} Optional. Exclude observations with missing outcome.
 Defaults to \code{FALSE}. Use with caution.
-\item \code{ci}. Optional. Confidence level. Defaults to \code{0.95}.
+\item \code{ci} Optional. Confidence level. Defaults to \code{0.95}.
+\item \code{arguments} Optional additional arguments for some estimators
+(\code{type}), e.g., for \code{type = "rr"}. See vignettes.
 }
 
 Use \code{\link[tibble]{tibble}}, \code{\link[tibble]{tribble}}, and
