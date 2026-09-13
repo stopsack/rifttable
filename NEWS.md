@@ -5,6 +5,8 @@
     completely `NA` (thanks @tsurudak for the bug report)
   + Address edge cases of failing input checks on `data` provided as 
     `data.frame` by keeping all `data` as `tibble` internally
+  + `survdiff_ci()` now reports two-sided *p*-values (thanks @eribul for the 
+    bug report #12).
 
 
 # rifttable 0.7.2
