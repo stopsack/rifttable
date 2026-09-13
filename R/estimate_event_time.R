@@ -17,6 +17,7 @@
 #' @param to Separator character(s) for confidence interval bounds
 #' @param arguments List of optional arguments
 #' @param is_trend Whether estimate is a trend estimate (empty here)
+#' @param event_type Level of event variable with competing risks, if any
 #' @param ... Additional arguments
 #'
 #' @return Tibble
