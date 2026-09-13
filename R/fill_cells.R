@@ -165,6 +165,11 @@ fill_cells <- function(
   if (is.na(confounders)) {
     confounders <- ""
   }
+  if (!is.na(time2)) {
+    if (time2 == "") {
+      time2 <- NA
+    }
+  }
 
   data_prep <- prepare_data(
     data = data,
