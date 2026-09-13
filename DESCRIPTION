@@ -19,7 +19,6 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends:
     R (>= 4.1.0)
 Imports:
@@ -44,3 +43,4 @@ Suggests:
 VignetteBuilder: knitr
 URL: https://stopsack.github.io/rifttable/, https://github.com/stopsack/rifttable/
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0
