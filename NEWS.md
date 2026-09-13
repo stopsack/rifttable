@@ -1,10 +1,17 @@
-# rifttable (development version)
+# rifttable 0.7.3
 
 * Bug fixes:
-  + `survdiff_ci()` paired the confidence limits of the cumulative incidence 
-    the wrong way round after taking `1 - survival`, so the MOVER intervals 
-    of `type = "cumincdiff"` and `"cumincratio"` were mirrored about the 
-    estimate. They now mirror the survival contrasts, as they must.
+  + `table1_design()` omits an empty row for categorical variables that are 
+    completely `NA` (thanks @tsurudak for the bug report).
+  + `survdiff_ci()` now reports two-sided *p*-values (thanks @eribul for the 
+    bug report #12).
+  + Confidence limits for ratios and differences of cumulative incidence 
+    (`type = "cumincdiff"` and `"cumincratio"`) in settings without competing 
+    events have been fixed. Previously, upper and lower limits were swapped 
+    in intermediary steps when using the default MOVER method, leading to 
+    shifted intervals (thanks @tgerke for the bug report #13 and pull request).
+  + All `data` are now kept as a `tibble` internally to address edge cases of 
+    failing input checks on `data` provided as a `data.frame`.
 
 
 # rifttable 0.7.2

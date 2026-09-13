@@ -62,7 +62,7 @@
 #'    standard errors with log transformation are used, the default of the
 #'    survival package/\code{\link[survival]{survfit}}).
 #' * \code{statistic} z statistic.
-#' * \code{p.value} From the z statistic.
+#' * \code{p.value} From the z statistic, two-sided.
 #' * \code{conf.low} Lower confidence limit
 #' * \code{conf.high} Upper confidence limit
 #'
@@ -172,7 +172,7 @@ survdiff_ci <- function(
         estimate = .data$surv - .data$surv[1],
         std.error = sqrt(.data$se^2 + .data$se[1]^2),
         statistic = .data$estimate / .data$std.error,
-        p.value = 1 - stats::pnorm(abs(.data$statistic)),
+        p.value = 2 * stats::pnorm(-abs(.data$statistic)),
         conf.low = .data$estimate - zval * .data$std.error,
         conf.high = .data$estimate + zval * .data$std.error
       ) |>
@@ -198,7 +198,7 @@ survdiff_ci <- function(
           ),
         std.error = (.data$conf.high - .data$conf.low) / 2 / zval,
         statistic = .data$estimate / .data$std.error,
-        p.value = 1 - stats::pnorm(abs(.data$statistic))
+        p.value = 2 * stats::pnorm(-abs(.data$statistic))
       ) |>
       dplyr::select(
         "term", "estimate", "std.error", "statistic", "p.value",
@@ -235,7 +235,7 @@ survdiff_ci <- function(
         ),
         std.error = (log(.data$conf.high) - log(.data$conf.low)) / 2 / zval,
         statistic = .data$estimate / .data$std.error,
-        p.value = 1 - stats::pnorm(abs(.data$statistic)),
+        p.value = 2 * stats::pnorm(-abs(.data$statistic)),
         estimate = exp(.data$estimate)
       ) |>
       dplyr::select(

@@ -294,7 +294,7 @@
 #' @return Tibble. Get formatted output as a gt table by passing on to
 #'   \code{\link[rifttable]{rt_gt}}.
 #' @export
-#' @importFrom rlang .data `:=`
+#' @importFrom rlang .data ":="
 #'
 #' @references
 #' Greenland S, Rothman KJ (2008). Introduction to Categorical Statistics. In:
