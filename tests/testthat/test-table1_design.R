@@ -97,6 +97,28 @@ test_that(
 
 
 test_that(
+  desc = "Table 1: 'by =' drops variable when selecting 'by' variable",
+  code = {
+    object <- table1_design(
+      continuous,
+      receptor,
+      by = receptor,
+      data = df
+    )
+    attr(x = object, which = "rt_data") <- NULL
+    expect_equal(
+      object = object,
+      expected = tibble::tribble(
+        ~label,       ~outcome,     ~type,          ~exposure,
+        "N",          "",           "total",        "receptor",
+        "continuous", "continuous", "median (iqr)", "receptor"
+      )
+    )
+  }
+)
+
+
+test_that(
   desc = "Table 1 works without variables",
   code = {
     expect_equal(
