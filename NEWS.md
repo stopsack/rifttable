@@ -1,5 +1,10 @@
 # rifttable 0.7.3
 
+* New functionality:
+  + The `timepoint` for time-to-event analyses (e.g., `"cuminc"`, 
+    `"cumincdiff"`) can be directly provided as a variable in the `design`. 
+    The previous way of providing it via `arguments = list(timepoint = 365.25)`
+    remains functional as a second option.
 * Bug fixes:
   + `table1_design()` omits an empty row for categorical variables that are 
     completely `NA` (thanks @tsurudak for the bug report).

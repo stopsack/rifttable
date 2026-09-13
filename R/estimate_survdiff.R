@@ -22,6 +22,7 @@
 #' @param time Name of time variable
 #' @param time2 Name of second time variable, if any
 #' @param event_type Level of event variable with competing risks, if any
+#' @param timepoint Time point provided via the design
 #' @param ... Additional arguments; not used
 #'
 #' @return Tibble
@@ -48,6 +49,7 @@ estimate_survdiff <- function(
     xlevels,
     to,
     reference,
+    timepoint,
     arguments,
     event_type,
     ...) {
@@ -80,17 +82,19 @@ estimate_survdiff <- function(
       false = risk_digits
     )
   )
-  timepoint <- find_argument(
-    arguments = arguments,
-    which_argument = "timepoint",
-    is_numeric = TRUE,
-    default = NA
-  )
-  if (is.na(timepoint)) {
+  if (is.na(timepoint)) { # prefer new source directly in the 'design'
+    timepoint <- find_argument(
+      arguments = arguments,
+      which_argument = "timepoint",
+      is_numeric = TRUE,
+      default = NA
+    )
+  }
+  if (is.na(timepoint) | !is.numeric(timepoint)) {
     stop(
       paste0(
-        "Must provide a time horizon for survival analysis of type '",
-        type, "'. Example 'design': arguments = list(timepoint = 123)"
+        "Must provide a numeric time horizon for survival analysis of type '",
+        type, "' as a 'design' variable. Example: 'timepoint = 365.25'"
       )
     )
   }

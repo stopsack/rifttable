@@ -19,7 +19,7 @@ testthat::test_that(
         status = status - 1
       )
 
-    object <- tibble::tribble(
+    design <- tibble::tribble(
       ~label,                                  ~type,
       "**Absolute estimates**",                "",
       "*Counts and sums*",                     "",
@@ -54,12 +54,7 @@ testthat::test_that(
       dplyr::mutate(
         time = "time",
         event = "status",
-        exposure = "sex",
-        arguments = list(list(timepoint = 1))
-      ) |>
-      rifttable(
-        data = cancer,
-        overall = TRUE
+        exposure = "sex"
       )
 
     expected <- tibble::tribble(
@@ -96,7 +91,23 @@ testthat::test_that(
     )
 
     expect_equal(
-      object = object,
+      object = design |>
+        dplyr::mutate(timepoint = 1) |>
+        rifttable(
+          data = cancer,
+          overall = TRUE
+        ),
+      expected = expected
+    )
+
+    # expect same result with old timepoint notation
+    expect_equal(
+      object = design |>
+        dplyr::mutate(arguments = list(list(timepoint = 1))) |>
+        rifttable(
+          data = cancer,
+          overall = TRUE
+        ),
       expected = expected
     )
 

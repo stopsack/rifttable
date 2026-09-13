@@ -15,7 +15,7 @@
 #' @param id Optional. Name of an \code{id} variable in the \code{data} that
 #'   identifies clustered observations, for example if the data are in a
 #'   long format with rows encoding time-varying covariates.
-#'   See documentation for which estimators use this information.
+#'   See vignettes for which estimators use this information.
 #'   Defaults to \code{""}, i.e., each row is a unique individual.
 #' @param layout Optional. \code{"rows"} uses the \code{design} as rows and
 #'   exposure categories as columns. \code{"cols"} is the
@@ -260,6 +260,10 @@
 #'     \code{type = "events/times", type2 = "hr"} to get both event
 #'     counts/person-time and hazard ratios for the same data, exposure,
 #'     stratum, confounders, and outcome.
+#'   * \code{timepoint} Optional. The time point at which a time-to-event
+#'     statistic should be estimated. Used by \code{type} (estimators):
+#'     \code{"cuminc", "surv", "cumincdiff", "cumincratio", "survdiff",
+#'     "survratio"}; ignored otherwise.
 #'   * \code{digits} Optional. The number of digits for rounding an individual
 #'     line. Defaults to \code{NA}, where the number of
 #'     digits will be determined based on \code{rifttable}'s arguments
@@ -536,6 +540,7 @@ rifttable <- function(
   if(!("nmin"        %in% names(design))) design$nmin        <- NA
   if(!("na_rm"       %in% names(design))) design$na_rm       <- NA
   if(!("ci"          %in% names(design))) design$ci          <- NA
+  if(!("timepoint"   %in% names(design))) design$timepoint   <- NA
   if(!("arguments"   %in% names(design))) design$arguments   <- NA
   if(!("weights"     %in% names(design))) {
     if("weight" %in% names(design)) {
@@ -762,6 +767,7 @@ rifttable <- function(
           .data$na_rm,
           .data$ci,
           .data$to,
+          .data$timepoint,
           .data$arguments
         ),
         .f = fill_cells,
@@ -862,6 +868,7 @@ rifttable <- function(
             .data$na_rm,
             .data$ci,
             .data$to,
+            .data$timepoint,
             .data$arguments
           ),
           .f = fill_cells,

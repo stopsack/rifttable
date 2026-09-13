@@ -60,7 +60,7 @@ test_that(
         time = "time",
         event = "status@Event of interest",
         exposure = "sex",
-        arguments = list(list(timepoint = 1))
+        timepoint = 1
       ) |>
       rifttable(
         data = cancer,
@@ -140,7 +140,7 @@ test_that(
           time = "time",
           event = "status@Event of interest",
           exposure = "sex",
-          arguments = list(list(timepoint = 1))
+          timepoint = 1
         ) |>
         rifttable(
           data = cancer,
@@ -165,7 +165,7 @@ test_that(
           data = cancer,
           overall = TRUE
         ),
-      regexp = "Must provide a time horizon for survival analysis of type"
+      regexp = "Must provide a numeric time horizon for survival analysis of type"
     )
   }
 )

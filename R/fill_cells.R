@@ -24,6 +24,7 @@
 #' @param to Separator for mean/difference confidence intervals.
 #' @param outcome Outcome variable
 #' @param effect_modifier Effect modifier variable
+#' @param timepoint Time point for survival-type analyses
 #' @param arguments Optional list of arguments passed on to estimators
 #' @param reference Label of reference category
 #' @param exposure_levels How to handle empty or missing exposure levels
@@ -49,6 +50,7 @@ fill_cells <- function(
     ci,
     to,
     reference,
+    timepoint,
     arguments,
     factor,
     risk_percent,
@@ -303,6 +305,7 @@ fill_cells <- function(
       to = to,
       reference = reference,
       factor = factor,
+      timepoint = timepoint,
       arguments = arguments,
       event_type = data_prep$event_type,
       is_trend = FALSE
@@ -369,6 +372,7 @@ fill_cells <- function(
         to = to,
         reference = reference,
         factor = factor,
+        timepoint = timepoint,
         arguments = arguments,
         event_type = data_prep$event_type,
         is_trend = TRUE

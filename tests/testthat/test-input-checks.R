@@ -316,6 +316,26 @@ testthat::test_that(
 )
 
 testthat::test_that(
+  desc = "non-numeric timepoint gets caught even if not required",
+  code = {
+    data(breastcancer, package = "risks")
+    expect_error(
+      object = rifttable(
+        design = tibble::tibble(
+          type = "cuminc",
+          time = "death",
+          event = "death",
+          timepoint = "a"
+        ),
+        data = breastcancer
+      ),
+      regexp = "The timepoint provided must be numeric"
+    )
+  }
+)
+
+
+testthat::test_that(
   desc = "ratio digits decrease errors are found",
   code = {
     data(breastcancer, package = "risks")

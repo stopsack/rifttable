@@ -58,7 +58,7 @@ testthat::test_that(
         time2 = "time2",
         event = "status",
         exposure = "sex",
-        arguments = list(list(timepoint = 1))
+        timepoint = 1
       ) |>
       rifttable(
         data = cancer,
@@ -274,7 +274,7 @@ testthat::test_that(
           time = "time",
           time2 = "time2",
           event = "status",
-          arguments = list(list(timepoint = 1))
+          timepoint = 1
         ),
         data = cancer |>
           dplyr::mutate(
