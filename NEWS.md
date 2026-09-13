@@ -5,7 +5,12 @@
     completely `NA` (thanks @tsurudak for the bug report).
   + `survdiff_ci()` now reports two-sided *p*-values (thanks @eribul for the 
     bug report #12).
-  + All `data` are kept as a `tibble` internally to address edge cases of 
+  + Confidence limits for ratios and differences of cumulative incidence 
+    (`type = "cumincdiff"` and `"cumincratio"`) in settings without competing 
+    events have been fixed. Previously, upper and lower limits were swapped 
+    in intermediary steps when using the default MOVER method, leading to 
+    shifted intervals (thanks @tgerke for the bug report #13 and pull request).
+  + All `data` are now kept as a `tibble` internally to address edge cases of 
     failing input checks on `data` provided as a `data.frame`.
 
 
