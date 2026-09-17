@@ -521,6 +521,9 @@ rifttable <- function(
       "specifying the requested statistics."
     ))
   }
+  if (length(design$type) == 0) {
+    stop("The 'type' column of the 'design' must not be empty.")
+  }
   data$.id <- find_id(
     data = data,
     id_variable = id

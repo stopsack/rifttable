@@ -33,6 +33,15 @@ test_that(
       ),
       regexp = "The 'design' data frame must contain a 'type' column"
     )
+
+    data(breastcancer, package = "risks")
+    expect_error(
+      object = rifttable(
+        design = tibble::tribble(~type),
+        data = breastcancer
+      ),
+      regexp = "The 'type' column of the 'design' must not be empty."
+    )
   }
 )
 
