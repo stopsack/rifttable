@@ -5,6 +5,8 @@
     `"cumincdiff"`) can be directly provided as a variable in the `design`. 
     The previous way of providing it via `arguments = list(timepoint = 365.25)`
     remains functional as a second option.
+  + The spelling `strata` instead of `stratum` in the `design` is also accepted 
+    as a fallback.
 * Bug fixes:
   + `table1_design()` omits an empty row for categorical variables that are 
     completely `NA` (thanks @tsurudak for the bug report).

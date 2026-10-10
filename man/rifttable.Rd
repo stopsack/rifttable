@@ -155,6 +155,7 @@ Use \code{NA} to leave blank.
 \item \code{stratum} Optional. A stratum of the effect modifier.
 Use \code{NULL} to leave blank. \code{NA} will evaluate
 observations with missing data for the \code{effect_modifier}.
+The spelling \code{strata} is also accepted as a fallback.
 \item \code{confounders} Optional. A string in the format
 \code{"+ var1 + var2"} that will be substituted into
 into \code{formula = exposure + confounders}.
