@@ -141,6 +141,26 @@ testthat::test_that(
     )
 
     expect_equal(
+      object = tibble::tibble(
+        exposure = "sex",
+        trend = "sex_trend",
+        type = c("hr", "cumincdiff"),
+        time = "time",
+        event = "status",
+        timepoint = 1
+      ) |>
+        rifttable(
+          data = cancer |>
+            dplyr::mutate(sex_trend = as.numeric(sex))
+        ),
+      expected = tibble::tribble(
+        ~sex,         ~Male,           ~Female,                ~Trend,
+        "hr",         "1 (reference)", "0.59 (0.42, 0.82)",    "0.59 (0.42, 0.82)",
+        "cumincdiff", "0 (reference)", "-0.19 (-0.34, -0.05)", ""
+      )
+    )
+
+    expect_equal(
       object = design |>
         dplyr::mutate(weight = "w") |>
         rifttable(data = weighted_data),
