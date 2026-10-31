@@ -36,6 +36,13 @@ The rifttable package can be installed from CRAN:
 install.packages("rifttable")
 ```
 
+If working within a container that defaults to specific, possibly older
+package versions, obtain the latest version from CRAN like this:
+
+``` r
+install.packages("rifttable", repos = "https://cloud.r-project.org")
+```
+
 Development versions can be installed from
 [GitHub](https://stopsack.github.io/rifttable/) using:
 
