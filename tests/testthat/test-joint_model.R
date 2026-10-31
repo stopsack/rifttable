@@ -29,8 +29,7 @@ test_that(
     expect_equal(
       object = rifttable(
         design = design |>
-          dplyr::mutate(strata = stratum) |>
-          dplyr::select(!"stratum"),
+          dplyr::rename(strata = stratum),
         data = breastcancer
       ),
       expected = expected
