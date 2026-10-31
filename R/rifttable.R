@@ -15,7 +15,7 @@
 #' @param id Optional. Name of an \code{id} variable in the \code{data} that
 #'   identifies clustered observations, for example if the data are in a
 #'   long format with rows encoding time-varying covariates.
-#'   See documentation for which estimators use this information.
+#'   See vignettes for which estimators use this information.
 #'   Defaults to \code{""}, i.e., each row is a unique individual.
 #' @param layout Optional. \code{"rows"} uses the \code{design} as rows and
 #'   exposure categories as columns. \code{"cols"} is the
@@ -110,6 +110,7 @@
 #'   *  \code{stratum} Optional. A stratum of the effect modifier.
 #'        Use \code{NULL} to leave blank. \code{NA} will evaluate
 #'        observations with missing data for the \code{effect_modifier}.
+#'        The spelling \code{strata} is also accepted as a fallback.
 #'   *  \code{confounders} Optional. A string in the format
 #'        \code{"+ var1 + var2"} that will be substituted into
 #'        into \code{formula = exposure + confounders}.
@@ -260,6 +261,10 @@
 #'     \code{type = "events/times", type2 = "hr"} to get both event
 #'     counts/person-time and hazard ratios for the same data, exposure,
 #'     stratum, confounders, and outcome.
+#'   * \code{timepoint} Optional. The time point at which a time-to-event
+#'     statistic should be estimated. Used by \code{type} (estimators):
+#'     \code{"cuminc", "surv", "cumincdiff", "cumincratio", "survdiff",
+#'     "survratio"}; ignored otherwise.
 #'   * \code{digits} Optional. The number of digits for rounding an individual
 #'     line. Defaults to \code{NA}, where the number of
 #'     digits will be determined based on \code{rifttable}'s arguments
@@ -267,13 +272,21 @@
 #'     \code{ratio_digits}, or \code{rate_digits}, as applicable.
 #'   * \code{digits2} Optional. As \code{digits}, for the second
 #'     estimate (\code{type2}).
-#'   * \code{nmin}. Optional. Suppress estimates with \code{"--"} if a cell
-#'     defined by exposure, and possibly the effect modifier, contains fewer
-#'     observations or, for survival analyses, fewer events than \code{nmin}.
-#'     Defaults to \code{NA}, i.e., to print all estimates.
-#'   * \code{na_rm}. Optional. Exclude observations with missing outcome.
+#'   * \code{nmin} Optional.
+#'     Minimum count per cell below which data should be suppressed.
+#'     For example, if there are only 3 events in an exposure category and
+#'     \code{nmin = 5}, then \code{"-- (<5)"} will be printed for
+#'     that cell.
+#'     The \code{nmin} cut-off will be applied to the number of events for
+#'     survival-type outcomes, to the number of observations with the outcome
+#'     for binary outcomes, or to the number of observations for continuous
+#'     outcomes (and all other estimators).
+#'     Defaults to \code{NA}, i.e., to return all estimates.
+#'   * \code{na_rm} Optional. Exclude observations with missing outcome.
 #'     Defaults to \code{FALSE}. Use with caution.
-#'   * \code{ci}. Optional. Confidence level. Defaults to \code{0.95}.
+#'   * \code{ci} Optional. Confidence level. Defaults to \code{0.95}.
+#'   * \code{arguments} Optional additional arguments for some estimators
+#'     (\code{type}), e.g., for \code{type = "rr"}. See vignettes.
 #'
 #' Use \code{\link[tibble]{tibble}}, \code{\link[tibble]{tribble}}, and
 #' \code{\link[dplyr]{mutate}} to construct the \code{design} dataset,
@@ -288,7 +301,7 @@
 #' @return Tibble. Get formatted output as a gt table by passing on to
 #'   \code{\link[rifttable]{rt_gt}}.
 #' @export
-#' @importFrom rlang .data `:=`
+#' @importFrom rlang .data ":="
 #'
 #' @references
 #' Greenland S, Rothman KJ (2008). Introduction to Categorical Statistics. In:
@@ -494,6 +507,7 @@ rifttable <- function(
   if (nrow(data) < 1) {
     stop("The data set is empty.")
   }
+  data <- tibble::as_tibble(data)
   if (missing(risk_percent) &
     !is.null(attr(
       x = design,
@@ -507,6 +521,9 @@ rifttable <- function(
       "The 'design' data frame must contain a 'type' column",
       "specifying the requested statistics."
     ))
+  }
+  if (length(design$type) == 0) {
+    stop("The 'type' column of the 'design' must not be empty.")
   }
   data$.id <- find_id(
     data = data,
@@ -527,13 +544,18 @@ rifttable <- function(
   if(!("nmin"        %in% names(design))) design$nmin        <- NA
   if(!("na_rm"       %in% names(design))) design$na_rm       <- NA
   if(!("ci"          %in% names(design))) design$ci          <- NA
+  if(!("timepoint"   %in% names(design))) design$timepoint   <- NA
   if(!("arguments"   %in% names(design))) design$arguments   <- NA
   if(!("weights"     %in% names(design))) {
     if("weight" %in% names(design)) {
       design$weights <- design$weight
     } else {
-      design$weights     <- NA
+      design$weights <- NA
     }
+  }
+  if(!("stratum"    %in% names(design)) &
+     "strata" %in% names(design)) {
+      design$stratum <- design$strata
   }
   if (
     !("effect_modifier" %in% names(design) &
@@ -567,6 +589,13 @@ rifttable <- function(
     )
     if (is.null(name)) {
       name <- exposure_nona[1]
+    } else {
+      if (is.na(name) | name == "") {
+        name <- exposure_nona[1]
+      }
+    }
+    if (name %in% data[[exposure_nona[1]]]) {
+      name <- paste0("By ", name)
     }
 
     if (overall == TRUE) {
@@ -678,6 +707,34 @@ rifttable <- function(
       .x = to_code$outcome,
       .y = to_code$var_level,
       .f = \(x, y) {
+        if (!(x %in% names(data))) {
+          stop(
+            paste0(
+              "Invalid variable '",
+              x,
+              "' in 'outcome = \"",
+              x,
+              "@",
+              y,
+              "\"'."
+            )
+          )
+        }
+        if (!(any(y %in% as.character(data[[x]]))) &
+          y != "_NA_") {
+          stop(
+            paste0(
+              "Invalid variable level '",
+              y,
+              "' in 'outcome = \"",
+              x,
+              "@",
+              y,
+              "\"'.\nAvailable levels are:\n",
+              unique(data[x])
+            )
+          )
+        }
         varname <- paste0(x, "@", y)
         if (y == "_NA_") {
           data |>
@@ -718,6 +775,7 @@ rifttable <- function(
           .data$na_rm,
           .data$ci,
           .data$to,
+          .data$timepoint,
           .data$arguments
         ),
         .f = fill_cells,
@@ -818,6 +876,7 @@ rifttable <- function(
             .data$na_rm,
             .data$ci,
             .data$to,
+            .data$timepoint,
             .data$arguments
           ),
           .f = fill_cells,

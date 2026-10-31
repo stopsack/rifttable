@@ -60,7 +60,7 @@ rifttable(
 R's error messages can be frustrating. When using rifttable, these are the typical sources of errors:
 
 * Clerical errors in variable names and arguments. There is no magic here except double-checking the code.
-* Missing data. See below: [How do I handle missing data?](#how-do-i-handle-missing-data).
+* Missing data. See below: [How do I handle missing data?](#how-do-i-handle-missing-data)
 * Discrepancy between estimator (`type`) and the data. For example, `type = "mean"` will not work on a categorical (factor) variable.
 * Models that fail to converge. For example, one may be trying to estimate a risk ratio with 0 outcomes in the reference category, or adjusting for 20 covariates in a Cox model with 5 events overall. (Sometimes such attempts will "just" return warning messages -- it is still worth rethinking the modeling strategy.)
 
@@ -76,76 +76,76 @@ The `design` can be constructed in many different ways. All lead to the same tab
 1. **A dataset (tibble) defined using `tribble()`**
 
     ```{r}
-design1 <- tribble(
-  ~label,   ~exposure, ~outcome, ~type,
-  "N",      "stage",   "death",  "total",
-  "Deaths", "stage",   "death",  "outcomes"
-)
-design1
-rifttable(
-  design = design1,
-  data = breastcancer
-) |>
-  rt_gt()
+    design1 <- tribble(
+      ~label,   ~exposure, ~outcome, ~type,
+      "N",      "stage",   "death",  "total",
+      "Deaths", "stage",   "death",  "outcomes"
+    )
+    design1
+    rifttable(
+      design = design1,
+      data = breastcancer
+    ) |>
+      rt_gt()
     ```
 
 2. **A dataset (tibble) defined using `tibble()`**
 
     ```{r}
-design2 <- tibble(
-  label = c("N", "Deaths"),
-  exposure = "stage",
-  outcome = "death",
-  type = c("total", "outcomes")
-)
-design2
-rifttable(
-  design = design2,
-  data = breastcancer
-) |>
-  rt_gt()
+    design2 <- tibble(
+      label = c("N", "Deaths"),
+      exposure = "stage",
+      outcome = "death",
+      type = c("total", "outcomes")
+    )
+    design2
+    rifttable(
+      design = design2,
+      data = breastcancer
+    ) |>
+      rt_gt()
     ```
 
 3. **Concatenating tibbles, then editing with `mutate()`**
 
     ```{r}
-design3 <- bind_rows(
-  tibble( # row 1
-    label = "N",
-    type = "total"
-  ),
-  tibble( # row 2
-    label = "Deaths",
-    type = "outcomes"
-  )
-) |>
-  mutate( # elements that are the same for all rows
-    exposure = "stage",
-    outcome = "death"
-  )
-design3
-rifttable(
-  design = design3,
-  data = breastcancer
-) |>
-  rt_gt()
+    design3 <- bind_rows(
+      tibble( # row 1
+        label = "N",
+        type = "total"
+      ),
+      tibble( # row 2
+        label = "Deaths",
+        type = "outcomes"
+      )
+    ) |>
+      mutate( # elements that are the same for all rows
+        exposure = "stage",
+        outcome = "death"
+      )
+    design3
+    rifttable(
+      design = design3,
+      data = breastcancer
+    ) |>
+      rt_gt()
     ```
 
 
 4. **For descriptive tables: Use `table1_design()`**
 
     ```{r}
-design4 <- breastcancer |>
-  table1_design(
-    death, # the total count will automatically be included
-    by = stage
-  )
-design4
-rifttable(
-  design = design4,
-  data = breastcancer
-) |>
-  rt_gt()
+    design4 <- breastcancer |>
+      table1_design(
+        death, # the total count will automatically be included
+        by = stage
+      )
+    design4
+    rifttable(
+      design = design4,
+      data = breastcancer
+    ) |>
+      rt_gt()
     ```
     
     See a separate overview about [a descriptive Table 1](table1.html).
@@ -165,6 +165,7 @@ rifttable tries to make as few assumptions as possible about how the user wants 
 * Missing values in **outcome**: By default, descriptive statistics will be missing (e.g., results will be `--` or `NA`), and regression models will use the non-missing observations. To exclude observations with missing outcome values altogether, add `na_rm = TRUE` to (specific rows of) the `design`.
 * Missing values in **confounders**: Applies only to regression models, which typically exclude observations with missing values.
 * Missing values in the **effect modifier**: Stratified and joint models are only shown for the specified `stratum` of the `effect_modifier`. To include observations with the missing effect modifier, add `NA` to the requested stratum in the `design`, e.g., `effect_modifier = "bmi", stratum = c("<25", NA)`.
+* Note for `table1_design()`: Missing values (`NA`) for categorical variables in rows of a Table 1 are displayed by counts but without percentages. It is typically more reasonable to assume that observations with missing values fall into one of the existing categories than to assume that they fall into an entirely different category that otherwise does not exist. For example, in a study, `"Asia"` (*n* = 500; 50%) and `"Other continents"` (*n* = 500; 50%) may be possible values for `continent`. Study participants whose `continent` is `NA` (*n* = 200) likely belong into one of those two categories and not into another, separate category that did not apply to any of the participants with non-missing data ("extraterrestrial"?). Thus, a category for missing values should generally not be included in the denominator when calculating percentages, and rifttable operates accordingly. In unusual cases in which missingness is a real, informative category in the target population, not just the data at hand, use `forcats::fct_na_value_to_level()` to convert `NA` into a factor level before passing the `data` to `rifttable()`.
 
 
 # How do I add overall statistics?
@@ -202,7 +203,7 @@ rifttable(
 
 # How do I show multiple exposures in the same table?
 
-Our simple toy dataset just has one exposure variable. For demonstration,
+Our simple example dataset just has one exposure variable. For demonstration,
 we just create a second variable, with two categories, "Level 1" and "Level 2,"
 which is a simplified combination of the `stage` and `receptor` variables.
 

@@ -97,6 +97,28 @@ test_that(
 
 
 test_that(
+  desc = "Table 1: 'by =' drops variable when selecting 'by' variable",
+  code = {
+    object <- table1_design(
+      continuous,
+      receptor,
+      by = receptor,
+      data = df
+    )
+    attr(x = object, which = "rt_data") <- NULL
+    expect_equal(
+      object = object,
+      expected = tibble::tribble(
+        ~label,       ~outcome,     ~type,          ~exposure,
+        "N",          "",           "total",        "receptor",
+        "continuous", "continuous", "median (iqr)", "receptor"
+      )
+    )
+  }
+)
+
+
+test_that(
   desc = "Table 1 works without variables",
   code = {
     expect_equal(
@@ -119,6 +141,53 @@ test_that(
     expect_equal(
       object = nrow(object),
       expected = 6
+    )
+  }
+)
+
+test_that(
+  desc = "Display of levels for all-NA factors is dropped",
+  code = {
+    df$death <- factor(NA)
+    object <- table1_design(
+      death,
+      data = df
+    )
+    attr(x = object, which = "rt_data") <- NULL
+    expect_equal(
+      object = object,
+      expected = tibble::tribble(
+        ~label, ~outcome, ~type,
+        "N", "", "total",
+        "death", "", "",
+        "  Unknown", "death@_NA_", "outcomes"
+      )
+    )
+  }
+)
+
+test_that(
+  desc = "Cateogory-to-binary conversion detects bogus input",
+  code = {
+    expect_error(
+      object = tibble::tibble(
+        outcome = "var@a",
+        type = "risk"
+      ) |>
+        rifttable(
+          data = tibble::tibble(var = "b")
+        ),
+      regexp = "Invalid variable level"
+    )
+    expect_error(
+      object = tibble::tibble(
+        outcome = "nonsense@a",
+        type = "risk"
+      ) |>
+        rifttable(
+          data = tibble::tibble(var = "b")
+        ),
+      regexp = "Invalid variable '"
     )
   }
 )

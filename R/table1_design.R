@@ -155,11 +155,18 @@ table1_design <- function(
         ),
         .f = \(variable_type, variable, levels) {
           if (variable_type == "categorical") {
-            c(
-              "",
-              paste(variable, levels, sep = "@"),
-              paste0(variable, "@_NA_")
-            )
+            if (length(levels) == 0) {
+              c(
+                "",
+                paste0(variable, "@_NA_")
+              )
+            } else {
+              c(
+                "",
+                paste(variable, levels, sep = "@"),
+                paste0(variable, "@_NA_")
+              )
+            }
           } else {
             c(variable, paste0(variable, "@_NA_"))
           }

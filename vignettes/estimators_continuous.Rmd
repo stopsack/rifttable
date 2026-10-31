@@ -32,7 +32,7 @@ tribble(
   "**Absolute estimates**",                     "",
   "Observations",                               "total",
   "Sum",                                        "sum",
-  "Range",                                      "range",
+  "Range (i.e., min-max)",                      "range",
   "Mean",                                       "",
   "  Mean (i.e., arithmetic mean)",             "mean",
   "  Mean (95% CI)",                            "mean (ci)",

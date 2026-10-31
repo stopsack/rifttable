@@ -26,6 +26,15 @@ test_that(
       expected = expected
     )
 
+    expect_equal(
+      object = rifttable(
+        design = design |>
+          dplyr::rename(strata = stratum),
+        data = breastcancer
+      ),
+      expected = expected
+    )
+
     design <- design |>
       dplyr::mutate(type = "rr_joint")
 

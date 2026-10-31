@@ -58,7 +58,7 @@ testthat::test_that(
         time2 = "time2",
         event = "status",
         exposure = "sex",
-        arguments = list(list(timepoint = 1))
+        timepoint = 1
       ) |>
       rifttable(
         data = cancer,
@@ -94,7 +94,7 @@ testthat::test_that(
       "  1-year survival difference",         "",                     "0 (reference)",         "0.17 (0.02, 0.32)",
       "  1-year risk difference",             "",                     "0 (reference)",         "-0.17 (-0.32, -0.02)",
       "  1-year survival ratio",              "",                     "1 (reference)",         "1.47 (1.05, 2.05)",
-      "  1-year risk ratio",                  "",                     "1 (reference)",         "0.73 (0.56, 1.04)",
+      "  1-year risk ratio",                  "",                     "1 (reference)",         "0.73 (0.52, 0.96)",
       "  Hazard ratio (95% CI)",              "",                     "1 (reference)",         "0.63 (0.45, 0.87)"
     )
 
@@ -274,7 +274,7 @@ testthat::test_that(
           time = "time",
           time2 = "time2",
           event = "status",
-          arguments = list(list(timepoint = 1))
+          timepoint = 1
         ),
         data = cancer |>
           dplyr::mutate(

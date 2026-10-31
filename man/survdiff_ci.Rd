@@ -67,7 +67,7 @@ functions (see References). For each survival function, Greenwood
 standard errors with log transformation are used, the default of the
 survival package/\code{\link[survival]{survfit}}).
 \item \code{statistic} z statistic.
-\item \code{p.value} From the z statistic.
+\item \code{p.value} From the z statistic, two-sided.
 \item \code{conf.low} Lower confidence limit
 \item \code{conf.high} Upper confidence limit
 }

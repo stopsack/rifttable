@@ -33,6 +33,15 @@ test_that(
       ),
       regexp = "The 'design' data frame must contain a 'type' column"
     )
+
+    data(breastcancer, package = "risks")
+    expect_error(
+      object = rifttable(
+        design = tibble::tribble(~type),
+        data = breastcancer
+      ),
+      regexp = "The 'type' column of the 'design' must not be empty."
+    )
   }
 )
 
@@ -202,6 +211,15 @@ test_that(
       ),
       regexp = "must be numeric. 'a' is not numeric."
     )
+    expect_no_error(
+      object = rifttable(
+        design = tibble::tibble(
+          type = "total",
+          digits = 4
+        ),
+        data = tibble::tibble(x = 1)
+      )
+    )
   }
 )
 
@@ -251,6 +269,31 @@ testthat::test_that(
 )
 
 testthat::test_that(
+  desc = "event and outcome can be the same variable",
+  code = {
+    data(breastcancer, package = "risks")
+    expect_equal(
+      object = rifttable(
+        design = tibble::tibble(
+          type = c("rate", "risk"),
+          event = "death",
+          outcome = "death",
+          time = "time"
+        ),
+        data = breastcancer |>
+          dplyr::mutate(time = 1:nrow(breastcancer))
+      ),
+      expected =
+        tibble::tribble(
+          ~Summary, ~Overall,
+          "rate", "2.9",
+          "risk", "0.28"
+        )
+    )
+  }
+)
+
+testthat::test_that(
   desc = "extra arguments get checked",
   code = {
     data(breastcancer, package = "risks")
@@ -280,6 +323,26 @@ testthat::test_that(
     )
   }
 )
+
+testthat::test_that(
+  desc = "non-numeric timepoint gets caught even if not required",
+  code = {
+    data(breastcancer, package = "risks")
+    expect_error(
+      object = rifttable(
+        design = tibble::tibble(
+          type = "cuminc",
+          time = "death",
+          event = "death",
+          timepoint = "a"
+        ),
+        data = breastcancer
+      ),
+      regexp = "The timepoint provided must be numeric"
+    )
+  }
+)
+
 
 testthat::test_that(
   desc = "ratio digits decrease errors are found",

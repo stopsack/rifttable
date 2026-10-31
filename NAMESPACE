@@ -5,5 +5,7 @@ export(rt_gt)
 export(scoreci)
 export(survdiff_ci)
 export(table1_design)
-importFrom(rlang,.data)
-importFrom(rlang,`:=`)
+importFrom(rlang,
+  ":=",
+  .data
+)

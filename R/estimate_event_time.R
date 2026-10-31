@@ -17,6 +17,8 @@
 #' @param to Separator character(s) for confidence interval bounds
 #' @param arguments List of optional arguments
 #' @param is_trend Whether estimate is a trend estimate (empty here)
+#' @param event_type Level of event variable with competing risks, if any
+#' @param timepoint Time point provided via the design
 #' @param ... Additional arguments
 #'
 #' @return Tibble
@@ -37,6 +39,7 @@ estimate_event_time <- function(
     risk_percent,
     factor,
     to,
+    timepoint,
     arguments,
     is_trend,
     event_type = NULL,
@@ -87,11 +90,24 @@ estimate_event_time <- function(
     true = 100,
     false = 1
   )
-  timepoint <- find_argument(
-    arguments = arguments,
-    which_argument = "timepoint",
-    is_numeric = TRUE
-  ) # default: NA
+  if(is.na(timepoint)) { # prefer new source directly in the 'design'
+    timepoint <- find_argument(
+      arguments = arguments,
+      which_argument = "timepoint",
+      is_numeric = TRUE
+    ) # default: NA
+  }
+  if (!is.na(timepoint)) {
+    if (!is.numeric(timepoint)) {
+      stop(
+        paste0(
+          "The timepoint provided must be numeric. '",
+          timepoint,
+          "' is not."
+        )
+      )
+    }
+  }
 
   switch(
     EXPR = type,
