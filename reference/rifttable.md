@@ -47,9 +47,9 @@ rifttable(
 
   Optional. Name of an `id` variable in the `data` that identifies
   clustered observations, for example if the data are in a long format
-  with rows encoding time-varying covariates. See documentation for
-  which estimators use this information. Defaults to `""`, i.e., each
-  row is a unique individual.
+  with rows encoding time-varying covariates. See vignettes for which
+  estimators use this information. Defaults to `""`, i.e., each row is a
+  unique individual.
 
 - layout:
 
@@ -188,7 +188,8 @@ outcomes:
 
 - `stratum` Optional. A stratum of the effect modifier. Use `NULL` to
   leave blank. `NA` will evaluate observations with missing data for the
-  `effect_modifier`.
+  `effect_modifier`. The spelling `strata` is also accepted as a
+  fallback.
 
 - `confounders` Optional. A string in the format `"+ var1 + var2"` that
   will be substituted into into `formula = exposure + confounders`. Use
@@ -382,6 +383,11 @@ outcomes:
   counts/person-time and hazard ratios for the same data, exposure,
   stratum, confounders, and outcome.
 
+- `timepoint` Optional. The time point at which a time-to-event
+  statistic should be estimated. Used by `type` (estimators):
+  `"cuminc", "surv", "cumincdiff", "cumincratio", "survdiff", "survratio"`;
+  ignored otherwise.
+
 - `digits` Optional. The number of digits for rounding an individual
   line. Defaults to `NA`, where the number of digits will be determined
   based on `rifttable`'s arguments `risk_percent`, `risk_digits`,
@@ -389,15 +395,22 @@ outcomes:
 
 - `digits2` Optional. As `digits`, for the second estimate (`type2`).
 
-- `nmin`. Optional. Suppress estimates with `"--"` if a cell defined by
-  exposure, and possibly the effect modifier, contains fewer
-  observations or, for survival analyses, fewer events than `nmin`.
-  Defaults to `NA`, i.e., to print all estimates.
+- `nmin` Optional. Minimum count per cell below which data should be
+  suppressed. For example, if there are only 3 events in an exposure
+  category and `nmin = 5`, then `"-- (<5)"` will be printed for that
+  cell. The `nmin` cut-off will be applied to the number of events for
+  survival-type outcomes, to the number of observations with the outcome
+  for binary outcomes, or to the number of observations for continuous
+  outcomes (and all other estimators). Defaults to `NA`, i.e., to return
+  all estimates.
 
-- `na_rm`. Optional. Exclude observations with missing outcome. Defaults
+- `na_rm` Optional. Exclude observations with missing outcome. Defaults
   to `FALSE`. Use with caution.
 
-- `ci`. Optional. Confidence level. Defaults to `0.95`.
+- `ci` Optional. Confidence level. Defaults to `0.95`.
+
+- `arguments` Optional additional arguments for some estimators
+  (`type`), e.g., for `type = "rr"`. See vignettes.
 
 Use [`tibble`](https://tibble.tidyverse.org/reference/tibble.html),
 [`tribble`](https://tibble.tidyverse.org/reference/tribble.html), and
@@ -650,91 +663,3 @@ rifttable(
 
 sex
 ```
-
-Male
-
-Female
-
-**Overall**
-
-Events
-
-82
-
-44
-
-Person-years
-
-70
-
-59
-
-Rate/1000 py (95% CI)
-
-1164.8 (938.1, 1446.3)
-
-746.7 (555.7, 1003.4)
-
-Unadjusted HR (95% CI)
-
-1 (reference)
-
-0.60 (0.41, 0.86)
-
-Age-adjusted HR (95% CI)
-
-1 (reference)
-
-0.60 (0.41, 0.86)
-
-**Stratified models**
-
-*ECOG PS1* (events/N)
-
-54/71
-
-28/42
-
-Unadjusted
-
-1 (reference)
-
-0.53 (0.33, 0.85)
-
-Age-adjusted
-
-1 (reference)
-
-0.53 (0.33, 0.85)
-
-*ECOG PS2* (events/N)
-
-28/29
-
-16/21
-
-Unadjusted
-
-1 (reference)
-
-0.70 (0.37, 1.30)
-
-Age-adjusted
-
-1 (reference)
-
-0.68 (0.34, 1.36)
-
-**Joint model**, age-adj.
-
-ECOG PS1
-
-1 (reference)
-
-0.55 (0.35, 0.88)
-
-ECOG PS2
-
-1.54 (0.98, 2.44)
-
-1.10 (0.62, 1.98)

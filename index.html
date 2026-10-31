@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Results Tables to Bridge the Rift Between Epidemiologists and Their Data • rifttable</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Results Tables to Bridge the Rift Between Epidemiologists and Their Data">
 <meta name="description" content="Presentation-ready results tables for epidemiologists in an automated, reproducible fashion. The user provides the final analytical dataset and specifies the design of the table, with rows and/or columns defined by exposure(s), effect modifier(s), and estimands as desired, allowing to show descriptors and inferential estimates in one table -- bridging the rift between epidemiologists and their data, one table at a time. See Rothman (2017) &lt;doi:10.1007/s10654-017-0314-3&gt;.">
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,15 +75,18 @@
 <p>The rifttable package can be installed from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rifttable"</span><span class="op">)</span></span></code></pre></div>
-<p>Development versions can be installed from <a href="https://stopsack.github.io/rifttable/">GitHub</a> using:</p>
+<p>If working within a container that defaults to specific, possibly older package versions, obtain the latest version from CRAN like this:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rifttable"</span>, repos <span class="op">=</span> <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span></span></code></pre></div>
+<p>Development versions can be installed from <a href="https://stopsack.github.io/rifttable/">GitHub</a> using:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"stopsack/rifttable"</span><span class="op">)</span></span></code></pre></div>
 <p>The latter installation procedure requires the remotes package, obtainable via <code>install.packages("remotes")</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stopsack.github.io/rifttable/">rifttable</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">example_design</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
@@ -119,80 +122,80 @@
 <col width="25%">
 <col width="25%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th align="left">Stage</th>
 <th align="left">Stage I</th>
 <th align="left">Stage II</th>
 <th align="left">Stage III</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="left">Overall</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">– Deaths/N</td>
 <td align="left">7/67</td>
 <td align="left">26/96</td>
 <td align="left">21/29</td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">– Risk</td>
 <td align="left">0.10</td>
 <td align="left">0.27</td>
 <td align="left">0.72</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">– Risk ratio (95% CI)</td>
 <td align="left">1 (reference)</td>
 <td align="left">2.59 (1.20, 5.6)</td>
 <td align="left">6.9 (3.3, 14)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">– Risk difference (95% CI)</td>
 <td align="left">0 (reference)</td>
 <td align="left">0.17 (0.05, 0.28)</td>
 <td align="left">0.62 (0.44, 0.80)</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">Low hormone receptor</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">– Deaths/N (Risk)</td>
 <td align="left">2/12 (0.17)</td>
 <td align="left">9/22 (0.41)</td>
 <td align="left">12/14 (0.86)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">– Risk difference (95% CI)</td>
 <td align="left">0 (reference)</td>
 <td align="left">0.24 (-0.05, 0.54)</td>
 <td align="left">0.69 (0.41, 0.97)</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">High hormone receptor</td>
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="left">– Deaths/N (Risk)</td>
 <td align="left">5/55 (0.09)</td>
 <td align="left">17/74 (0.23)</td>
 <td align="left">9/15 (0.60)</td>
 </tr>
-<tr class="even">
+<tr>
 <td align="left">– Risk difference (95% CI)</td>
 <td align="left">0 (reference)</td>
 <td align="left">0.14 (0.02, 0.26)</td>
@@ -253,7 +256,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

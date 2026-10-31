@@ -101,7 +101,7 @@ format:
 
 - `statistic` z statistic.
 
-- `p.value` From the z statistic.
+- `p.value` From the z statistic, two-sided.
 
 - `conf.low` Lower confidence limit
 
@@ -146,7 +146,7 @@ survdiff_ci(
 #> # A tibble: 1 × 7
 #>   term   estimate std.error statistic p.value conf.low conf.high
 #>   <chr>     <dbl>     <dbl>     <dbl>   <dbl>    <dbl>     <dbl>
-#> 1 Female    0.190    0.0750      2.54 0.00557   0.0475     0.342
+#> 1 Female    0.190    0.0750      2.54  0.0111   0.0475     0.342
 # Females have 19 percentage points higher one-year survival than males
 # (95% CI, 5 to 34 percentage points).
 ```

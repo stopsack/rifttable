@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Survival outcomes • rifttable</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Survival outcomes">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,7 +122,7 @@ package and compares survival, defined by the time variable
 <span>  <span class="st">"  1-year risk/cumulative incidence"</span>,    <span class="st">"cuminc"</span>,</span>
 <span>  <span class="st">"  1-year risk (95% CI)"</span>,                <span class="st">"cuminc (ci)"</span>,</span>
 <span>  <span class="st">"  Median survival, years"</span>,              <span class="st">"medsurv"</span>,</span>
-<span>  <span class="st">"  Median survival (95 CI), years"</span>,      <span class="st">"medsurv (ci)"</span>,</span>
+<span>  <span class="st">"  Median survival (95% CI), years"</span>,     <span class="st">"medsurv (ci)"</span>,</span>
 <span>  <span class="st">""</span>,                                      <span class="st">""</span>,</span>
 <span>  <span class="st">"**Comparative estimates**"</span>,             <span class="st">""</span>,</span>
 <span>  <span class="st">"  1-year survival difference"</span>,          <span class="st">"survdiff"</span>,</span>
@@ -135,7 +135,7 @@ package and compares survival, defined by the time variable
 <span>    time <span class="op">=</span> <span class="st">"time"</span>,</span>
 <span>    event <span class="op">=</span> <span class="st">"status"</span>,</span>
 <span>    exposure <span class="op">=</span> <span class="st">"sex"</span>,</span>
-<span>    arguments <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>timepoint <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>    timepoint <span class="op">=</span> <span class="fl">1</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rifttable.html">rifttable</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">cancer</span>,</span>
@@ -726,7 +726,7 @@ package and compares survival, defined by the time variable
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.17</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Median survival (95 CI), years</span></td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Median survival (95% CI), years</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.85 (0.78, 0.99)</td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.74 (0.58, 0.85)</td>
 <td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.17 (0.95, 1.51)</td>
@@ -753,7 +753,7 @@ package and compares survival, defined by the time variable
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">1-year risk difference</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0 (reference)</td>
-<td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">-0.19 (-0.33, -0.04)</td>
+<td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">-0.19 (-0.34, -0.05)</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">1-year survival ratio</span></td>
@@ -765,7 +765,7 @@ package and compares survival, defined by the time variable
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">1-year risk ratio</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 <td headers="Male" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
-<td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.71 (0.55, 1.00)</td>
+<td headers="Female" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">0.71 (0.51, 0.92)</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Hazard ratio (95% CI)</span></td>
@@ -789,7 +789,7 @@ package and compares survival, defined by the time variable
 <thead><tr class="header">
 <th><code>type</code></th>
 <th>Description</th>
-<th>Options (<code>arguments =</code>)</th>
+<th>Options</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -802,7 +802,8 @@ the parameter <code>risk_percent</code> of
 <code><a href="../reference/rifttable.html">rifttable()</a></code>.</td>
 <td>
 <code>timepoint</code>, <code>id</code>. Example:
-<code>list(timepoint = 2.5)</code> to show 2.5-year risk.</td>
+<code>timepoint = 2.5</code> in <code>design</code> to show 2.5-year
+risk.</td>
 </tr>
 <tr class="even">
 <td><code>"cuminc (ci)"</code></td>
@@ -908,7 +909,7 @@ follow-up for the event of interest.</td>
 <thead><tr class="header">
 <th><code>type</code></th>
 <th>Description</th>
-<th>Options (<code>arguments =</code>)</th>
+<th>Options</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -918,8 +919,8 @@ Kaplan-Meier estimator or, if competing risks are present, its
 generalized form, the Aalen-Johansen estimator, with confidence interval
 (default: 95%). Uses <code><a href="../reference/survdiff_ci.html">rifttable::survdiff_ci()</a></code>.</td>
 <td>
-<code>timepoint</code>. Example: <code>list(timepoint = 2.5)</code>
-to calculate difference in 2.5-year risk.</td>
+<code>timepoint</code>. Example: <code>timepoint = 2.5</code> in
+<code>design</code> to calculate difference in 2.5-year risk.</td>
 </tr>
 <tr class="even">
 <td><code>"cumincratio"</code></td>
@@ -933,8 +934,8 @@ to calculate difference in 2.5-year risk.</td>
 confidence interval (default: 95%). If competing events are present,
 hazard ratios are cause-specific for the event of interest.</td>
 <td>
-<code>list(robust = TRUE)</code> for robust (sandwich) standard
-errors. Use <code>"+ cluster(id_variable)"</code> in
+<code>arguments = list(robust = TRUE)</code> for robust (sandwich)
+standard errors. Use <code>"+ cluster(id_variable)"</code> in
 <code>confounders</code> to obtain clustering specifically for Cox
 models, or use the <code>id</code> argument of the main
 <code><a href="../reference/rifttable.html">rifttable()</a></code> call.</td>
@@ -993,12 +994,13 @@ ignored otherwise.</p>
 <h2 id="clustering-and-robust-variance">Clustering and robust variance<a class="anchor" aria-label="anchor" href="#clustering-and-robust-variance"></a>
 </h2>
 <p>An <code>id</code> variable identifying individuals in the
-<code>data</code> must be provided when <code>time</code> and
-<code>time2</code> are used in the setting of competing events, or when
-non-integer weights are present. If no <code>id</code> variable is
-provided, each row is taken as one individual. Robust variance will then
-automatically be calculated by estimators of survival/cumulative
-incidence and Cox models.</p>
+<code>data</code> must be provided as an arugment to the
+<code><a href="../reference/rifttable.html">rifttable()</a></code> call when <code>time</code> and
+<code>time2</code> are used in the <code>design</code> in presence of
+competing events, or when non-integer weights are present. If no
+<code>id</code> variable is provided, each row is taken as one
+individual. Robust variance will then automatically be calculated by
+estimators of survival/cumulative incidence and Cox models.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -1011,7 +1013,7 @@ incidence and Cox models.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Continuous outcomes • rifttable</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Continuous outcomes">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rifttable</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,7 +96,7 @@ and exclude patients with rare elevated <code>ecog.ps</code>:</p>
 <span>  <span class="st">"**Absolute estimates**"</span>,                     <span class="st">""</span>,</span>
 <span>  <span class="st">"Observations"</span>,                               <span class="st">"total"</span>,</span>
 <span>  <span class="st">"Sum"</span>,                                        <span class="st">"sum"</span>,</span>
-<span>  <span class="st">"Range"</span>,                                      <span class="st">"range"</span>,</span>
+<span>  <span class="st">"Range (i.e., min-max)"</span>,                      <span class="st">"range"</span>,</span>
 <span>  <span class="st">"Mean"</span>,                                       <span class="st">""</span>,</span>
 <span>  <span class="st">"  Mean (i.e., arithmetic mean)"</span>,             <span class="st">"mean"</span>,</span>
 <span>  <span class="st">"  Mean (95% CI)"</span>,                            <span class="st">"mean (ci)"</span>,</span>
@@ -586,135 +586,135 @@ and exclude patients with rare elevated <code>ecog.ps</code>:</p>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md"><strong>Absolute estimates</strong></span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Observations</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">226</td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">63</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">113</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">50</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">63</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">113</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">50</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Sum</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">14108.0</td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">3853.0</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">6944.0</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">3311.0</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">3853.0</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">6944.0</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">3311.0</td>
 </tr>
 <tr>
-<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Range</span></td>
+<td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Range (i.e., min-max)</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">39.0, 82.0</td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">39.0, 82.0</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">40.0, 80.0</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">48.0, 77.0</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">39.0, 82.0</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">40.0, 80.0</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">48.0, 77.0</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Mean</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Mean (i.e., arithmetic mean)</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">62.4</td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.2</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.5</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">66.2</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.2</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.5</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">66.2</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Mean (95% CI)</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">62.4 (61.2, 63.6)</td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.2 (58.8, 63.5)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.5 (59.8, 63.1)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">66.2 (64.0, 68.5)</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.2 (58.8, 63.5)</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.5 (59.8, 63.1)</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">66.2 (64.0, 68.5)</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Mean (standard deviation)</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">62.4 (9.1)</td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.2 (9.6)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.5 (8.9)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">66.2 (8.1)</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.2 (9.6)</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.5 (8.9)</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">66.2 (8.1)</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">Geometric mean</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">61.7</td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">60.4</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">60.8</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">65.7</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">60.4</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">60.8</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">65.7</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Median</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">63.0</td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">61.0</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">63.0</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">68.0</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">61.0</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">63.0</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">68.0</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Median (interquartile range)</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;">63.0 (56.0, 69.0)</td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">61.0 (56.5, 68.0)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">63.0 (55.0, 68.0)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">68.0 (60.2, 73.0)</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">61.0 (56.5, 68.0)</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">63.0 (55.0, 68.0)</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">68.0 (60.2, 73.0)</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md"></span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md"><strong>Comparative estimates</strong></span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Mean difference (95% CI)</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0 (reference)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">0.3 (-2.5, 3.1)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">5.1 (1.7, 8.4)</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0 (reference)</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">0.3 (-2.5, 3.1)</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">5.1 (1.7, 8.4)</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Median difference (95% CI)</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0 (reference)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">2.0 (-4.8, 8.8)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">7.0 (1.3, 12.2)</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;">0 (reference)</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;">2.0 (-4.8, 8.8)</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;">7.0 (1.3, 12.2)</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top;"><span class="gt_from_md">Mean ratio</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top;"></td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top;"></td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">of arithmetic means</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.005 (0.961, 1.051)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.083 (1.028, 1.140)</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.005 (0.961, 1.051)</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.083 (1.028, 1.140)</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">of arithmetic means, empirical SE</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.005 (0.959, 1.053)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.083 (1.029, 1.139)</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.005 (0.959, 1.053)</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.083 (1.029, 1.139)</td>
 </tr>
 <tr>
 <td headers="Summary" class="gt_row gt_left" style="text-align: left; vertical-align: top; text-indent: 10px; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"><span class="gt_from_md">of geometric means</span></td>
 <td headers="Overall" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;"></td>
-<td headers="0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
-<td headers="1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.007 (0.961, 1.055)</td>
-<td headers="2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.088 (1.029, 1.151)</td>
+<td headers="a0" class="gt_row gt_left" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1 (reference)</td>
+<td headers="a1" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.007 (0.961, 1.055)</td>
+<td headers="a2" class="gt_row gt_right" style="text-align: left; vertical-align: top; border-top-width: 0; border-top-style: solid; border-top-color: #000000;">1.088 (1.029, 1.151)</td>
 </tr>
 </tbody>
 </table>
@@ -899,7 +899,7 @@ outcome.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

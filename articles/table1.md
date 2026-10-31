@@ -5,6 +5,7 @@
 After installation, load the package with:
 
 ``` r
+
 library(rifttable)
 ```
 
@@ -13,6 +14,7 @@ library(rifttable)
 This example uses the `cancer` dataset from the survival package.
 
 ``` r
+
 library(dplyr) # for data handling
 data(cancer, package = "survival")
 cancer <- cancer |>
@@ -35,6 +37,7 @@ generates the `design` table that can then be passed on to
 [`rifttable()`](https://stopsack.github.io/rifttable/reference/rifttable.md).
 
 ``` r
+
 design <- cancer |>
   table1_design(
     age, ph.ecog, ph.karno, pat.karno, # leave empty to include all variables
@@ -63,6 +66,7 @@ design
 ## Obtain Table 1
 
 ``` r
+
 design |>
   rifttable() |>
   rt_gt() # obtain formatted output
@@ -94,6 +98,7 @@ Label variables, set custom rounding, change estimands, and add
 “Overall” column.
 
 ``` r
+
 # Alternative: set_variable_labels() from the {labelled} package
 attr(cancer$age, "label") <- "Age, years" # At diagnosis? Unclear (Loprinzi 94)
 attr(cancer$ph.ecog, "label") <- "Physician-rated ECOG score"
@@ -126,21 +131,21 @@ design |>
   )
 ```
 
-| Summary                                                      | Overall    | Male       | Female     |
-|:-------------------------------------------------------------|:-----------|:-----------|:-----------|
-| N                                                            | 228        | 138        | 90         |
-| Age, years                                                   | 62.4 (9.1) | 63.3 (9.1) | 61.1 (8.8) |
-| Physician-rated ECOG score                                   |            |            |            |
-| 0                                                            | 63 (28%)   | 36 (26%)   | 27 (30%)   |
-| 1                                                            | 113 (50%)  | 71 (52%)   | 42 (47%)   |
-| 2                                                            | 50 (22%)   | 29 (21%)   | 21 (23%)   |
-| 3                                                            | 1 (0%)     | 1 (1%)     | 0 (0%)     |
-| Unknown                                                      | 1          | 1          | 0          |
-| Physician-rated Karnofsky score                              | 82 (12)    | 82 (12)    | 82 (12)    |
-| Unknown                                                      | 1          | 1          | 0          |
-| Patient-rated Karnofsky score                                | 80 (15)    | 79 (14)    | 81 (15)    |
-| Unknown                                                      | 3          | 2          | 1          |
-| Data shown are count (percent) or mean (standard deviation). |            |            |            |
+| Summary | Overall | Male | Female |
+|:---|:---|:---|:---|
+| N | 228 | 138 | 90 |
+| Age, years | 62.4 (9.1) | 63.3 (9.1) | 61.1 (8.8) |
+| Physician-rated ECOG score |  |  |  |
+| 0 | 63 (28%) | 36 (26%) | 27 (30%) |
+| 1 | 113 (50%) | 71 (52%) | 42 (47%) |
+| 2 | 50 (22%) | 29 (21%) | 21 (23%) |
+| 3 | 1 (0%) | 1 (1%) | 0 (0%) |
+| Unknown | 1 | 1 | 0 |
+| Physician-rated Karnofsky score | 82 (12) | 82 (12) | 82 (12) |
+| Unknown | 1 | 1 | 0 |
+| Patient-rated Karnofsky score | 80 (15) | 79 (14) | 81 (15) |
+| Unknown | 3 | 2 | 1 |
+| Data shown are count (percent) or mean (standard deviation). |  |  |  |
 
 ## Add more statistics per variable
 
@@ -149,6 +154,7 @@ but also the range. To this end, edit the `design` just like a regular
 dataset.
 
 ``` r
+
 design_new <- design |>
   mutate( # create three rows, not one, for "age"
     copy = if_else(
@@ -200,20 +206,20 @@ design_new |>
   )
 ```
 
-| Summary                                                     | Overall    | Male       | Female     |
-|:------------------------------------------------------------|:-----------|:-----------|:-----------|
-| N                                                           | 228        | 138        | 90         |
-| Age, years                                                  |            |            |            |
-| Mean (SD)                                                   | 62.4 (9.1) | 63.3 (9.1) | 61.1 (8.8) |
-| Range                                                       | 39.0, 82.0 | 39.0, 82.0 | 41.0, 77.0 |
-| Physician-rated ECOG score                                  |            |            |            |
-| 0                                                           | 63 (28%)   | 36 (26%)   | 27 (30%)   |
-| 1                                                           | 113 (50%)  | 71 (52%)   | 42 (47%)   |
-| 2                                                           | 50 (22%)   | 29 (21%)   | 21 (23%)   |
-| 3                                                           | 1 (0%)     | 1 (1%)     | 0 (0%)     |
-| Unknown                                                     | 1          | 1          | 0          |
-| Physician-rated Karnofsky score                             | 82 (12)    | 82 (12)    | 82 (12)    |
-| Unknown                                                     | 1          | 1          | 0          |
-| Patient-rated Karnofsky score                               | 80 (15)    | 79 (14)    | 81 (15)    |
-| Unknown                                                     | 3          | 2          | 1          |
-| Data shown are count (percent), unless indicated otherwise. |            |            |            |
+| Summary | Overall | Male | Female |
+|:---|:---|:---|:---|
+| N | 228 | 138 | 90 |
+| Age, years |  |  |  |
+| Mean (SD) | 62.4 (9.1) | 63.3 (9.1) | 61.1 (8.8) |
+| Range | 39.0, 82.0 | 39.0, 82.0 | 41.0, 77.0 |
+| Physician-rated ECOG score |  |  |  |
+| 0 | 63 (28%) | 36 (26%) | 27 (30%) |
+| 1 | 113 (50%) | 71 (52%) | 42 (47%) |
+| 2 | 50 (22%) | 29 (21%) | 21 (23%) |
+| 3 | 1 (0%) | 1 (1%) | 0 (0%) |
+| Unknown | 1 | 1 | 0 |
+| Physician-rated Karnofsky score | 82 (12) | 82 (12) | 82 (12) |
+| Unknown | 1 | 1 | 0 |
+| Patient-rated Karnofsky score | 80 (15) | 79 (14) | 81 (15) |
+| Unknown | 3 | 2 | 1 |
+| Data shown are count (percent), unless indicated otherwise. |  |  |  |

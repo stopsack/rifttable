@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/stopsack/rifttable/blob/main/DESCRIPTION)
 
 Stopsack K (2026). *rifttable: Results Tables to Bridge the Rift Between
-Epidemiologists and Their Data*. R package version 0.7.2,
+Epidemiologists and Their Data*. R package version 0.7.3,
 <https://stopsack.github.io/rifttable/>.
 
     @Manual{,
       title = {rifttable: Results Tables to Bridge the Rift Between Epidemiologists and Their Data},
       author = {Konrad H. Stopsack},
       year = {2026},
-      note = {R package version 0.7.2},
+      note = {R package version 0.7.3},
       url = {https://stopsack.github.io/rifttable/},
     }

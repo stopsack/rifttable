@@ -5,6 +5,7 @@
 Most subsequent examples build on this simple rifttable:
 
 ``` r
+
 library(rifttable)
 library(dplyr) # for data management, e.g., mutate()
 library(tibble) # for constructing a tibble, e.g. via tribble()
@@ -38,20 +39,20 @@ rifttable(
   rt_gt() # obtain formatted output
 ```
 
-| Stage                     | Stage I       | Stage II           | Stage III         |
-|:--------------------------|:--------------|:-------------------|:------------------|
-| **Overall**               |               |                    |                   |
-| Deaths/N                  | 7/67          | 26/96              | 21/29             |
-| Risk                      | 0.10          | 0.27               | 0.72              |
-| Risk ratio (95% CI)       | 1 (reference) | 2.59 (1.20, 5.6)   | 6.9 (3.3, 14)     |
-| Risk difference (95% CI)  | 0 (reference) | 0.17 (0.05, 0.28)  | 0.62 (0.44, 0.80) |
-|                           |               |                    |                   |
-| **Low hormone receptor**  |               |                    |                   |
-| Deaths/N (Risk)           | 2/12 (0.17)   | 9/22 (0.41)        | 12/14 (0.86)      |
-| Risk difference (95% CI)  | 0 (reference) | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) |
-| **High hormone receptor** |               |                    |                   |
-| Deaths/N (Risk)           | 5/55 (0.09)   | 17/74 (0.23)       | 9/15 (0.60)       |
-| Risk difference (95% CI)  | 0 (reference) | 0.14 (0.02, 0.26)  | 0.51 (0.25, 0.77) |
+| Stage | Stage I | Stage II | Stage III |
+|:---|:---|:---|:---|
+| **Overall** |  |  |  |
+| Deaths/N | 7/67 | 26/96 | 21/29 |
+| Risk | 0.10 | 0.27 | 0.72 |
+| Risk ratio (95% CI) | 1 (reference) | 2.59 (1.20, 5.6) | 6.9 (3.3, 14) |
+| Risk difference (95% CI) | 0 (reference) | 0.17 (0.05, 0.28) | 0.62 (0.44, 0.80) |
+|  |  |  |  |
+| **Low hormone receptor** |  |  |  |
+| Deaths/N (Risk) | 2/12 (0.17) | 9/22 (0.41) | 12/14 (0.86) |
+| Risk difference (95% CI) | 0 (reference) | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) |
+| **High hormone receptor** |  |  |  |
+| Deaths/N (Risk) | 5/55 (0.09) | 17/74 (0.23) | 9/15 (0.60) |
+| Risk difference (95% CI) | 0 (reference) | 0.14 (0.02, 0.26) | 0.51 (0.25, 0.77) |
 
 ## Why do I get an error?
 
@@ -61,7 +62,7 @@ the typical sources of errors:
 - Clerical errors in variable names and arguments. There is no magic
   here except double-checking the code.
 - Missing data. See below: [How do I handle missing
-  data?](#how-do-i-handle-missing-data).
+  data?](#how-do-i-handle-missing-data)
 - Discrepancy between estimator (`type`) and the data. For example,
   `type = "mean"` will not work on a categorical (factor) variable.
 - Models that fail to converge. For example, one may be trying to
@@ -95,6 +96,7 @@ same table:
     [`tribble()`](https://tibble.tidyverse.org/reference/tribble.html)**
 
     ``` r
+
     design1 <- tribble(
       ~label,   ~exposure, ~outcome, ~type,
       "N",      "stage",   "death",  "total",
@@ -122,6 +124,7 @@ same table:
     [`tibble()`](https://tibble.tidyverse.org/reference/tibble.html)**
 
     ``` r
+
     design2 <- tibble(
       label = c("N", "Deaths"),
       exposure = "stage",
@@ -150,19 +153,20 @@ same table:
     [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html)**
 
     ``` r
+
     design3 <- bind_rows(
       tibble( # row 1
-    label = "N",
-    type = "total"
+        label = "N",
+        type = "total"
       ),
       tibble( # row 2
-    label = "Deaths",
-    type = "outcomes"
+        label = "Deaths",
+        type = "outcomes"
       )
     ) |>
       mutate( # elements that are the same for all rows
-    exposure = "stage",
-    outcome = "death"
+        exposure = "stage",
+        outcome = "death"
       )
     design3
     #> # A tibble: 2 × 4
@@ -186,10 +190,11 @@ same table:
     [`table1_design()`](https://stopsack.github.io/rifttable/reference/table1_design.md)**
 
     ``` r
+
     design4 <- breastcancer |>
       table1_design(
-    death, # the total count will automatically be included
-    by = stage
+        death, # the total count will automatically be included
+        by = stage
       )
     design4
     #> # A tibble: 2 × 4
@@ -242,6 +247,26 @@ user wants to treat missing data.
   To include observations with the missing effect modifier, add `NA` to
   the requested stratum in the `design`, e.g.,
   `effect_modifier = "bmi", stratum = c("<25", NA)`.
+- Note for
+  [`table1_design()`](https://stopsack.github.io/rifttable/reference/table1_design.md):
+  Missing values (`NA`) for categorical variables in rows of a Table 1
+  are displayed by counts but without percentages. It is typically more
+  reasonable to assume that observations with missing values fall into
+  one of the existing categories than to assume that they fall into an
+  entirely different category that otherwise does not exist. For
+  example, in a study, `"Asia"` (*n* = 500; 50%) and
+  `"Other continents"` (*n* = 500; 50%) may be possible values for
+  `continent`. Study participants whose `continent` is `NA` (*n* = 200)
+  likely belong into one of those two categories and not into another,
+  separate category that did not apply to any of the participants with
+  non-missing data (“extraterrestrial”?). Thus, a category for missing
+  values should generally not be included in the denominator when
+  calculating percentages, and rifttable operates accordingly. In
+  unusual cases in which missingness is a real, informative category in
+  the target population, not just the data at hand, use
+  `forcats::fct_na_value_to_level()` to convert `NA` into a factor level
+  before passing the `data` to
+  [`rifttable()`](https://stopsack.github.io/rifttable/reference/rifttable.md).
 
 ## How do I add overall statistics?
 
@@ -250,6 +275,7 @@ Use the `overall` argument to show descriptive data for the entire
 categories will be blank there.
 
 ``` r
+
 rifttable(
   design = design,
   data = breastcancer,
@@ -258,20 +284,20 @@ rifttable(
   rt_gt() # obtain formatted output
 ```
 
-| Summary                   | Overall       | Stage I       | Stage II           | Stage III         |
-|:--------------------------|:--------------|:--------------|:-------------------|:------------------|
-| **Overall**               |               |               |                    |                   |
-| Deaths/N                  | 54/192        | 7/67          | 26/96              | 21/29             |
-| Risk                      | 0.28          | 0.10          | 0.27               | 0.72              |
-| Risk ratio (95% CI)       |               | 1 (reference) | 2.59 (1.20, 5.6)   | 6.9 (3.3, 14)     |
-| Risk difference (95% CI)  |               | 0 (reference) | 0.17 (0.05, 0.28)  | 0.62 (0.44, 0.80) |
-|                           |               |               |                    |                   |
-| **Low hormone receptor**  |               |               |                    |                   |
-| Deaths/N (Risk)           | 23/48 (0.48)  | 2/12 (0.17)   | 9/22 (0.41)        | 12/14 (0.86)      |
-| Risk difference (95% CI)  |               | 0 (reference) | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) |
-| **High hormone receptor** |               |               |                    |                   |
-| Deaths/N (Risk)           | 31/144 (0.22) | 5/55 (0.09)   | 17/74 (0.23)       | 9/15 (0.60)       |
-| Risk difference (95% CI)  |               | 0 (reference) | 0.14 (0.02, 0.26)  | 0.51 (0.25, 0.77) |
+| Summary | Overall | Stage I | Stage II | Stage III |
+|:---|:---|:---|:---|:---|
+| **Overall** |  |  |  |  |
+| Deaths/N | 54/192 | 7/67 | 26/96 | 21/29 |
+| Risk | 0.28 | 0.10 | 0.27 | 0.72 |
+| Risk ratio (95% CI) |  | 1 (reference) | 2.59 (1.20, 5.6) | 6.9 (3.3, 14) |
+| Risk difference (95% CI) |  | 0 (reference) | 0.17 (0.05, 0.28) | 0.62 (0.44, 0.80) |
+|  |  |  |  |  |
+| **Low hormone receptor** |  |  |  |  |
+| Deaths/N (Risk) | 23/48 (0.48) | 2/12 (0.17) | 9/22 (0.41) | 12/14 (0.86) |
+| Risk difference (95% CI) |  | 0 (reference) | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) |
+| **High hormone receptor** |  |  |  |  |
+| Deaths/N (Risk) | 31/144 (0.22) | 5/55 (0.09) | 17/74 (0.23) | 9/15 (0.60) |
+| Risk difference (95% CI) |  | 0 (reference) | 0.14 (0.02, 0.26) | 0.51 (0.25, 0.77) |
 
 ## How do I test for trend?
 
@@ -281,6 +307,7 @@ exposure. This is also called a linear slope. Here, we estimate the risk
 associated for stage that is one category higher.
 
 ``` r
+
 rifttable(
   design = design |>
     mutate(trend = "stage_numeric"),
@@ -290,24 +317,24 @@ rifttable(
   rt_gt() # obtain formatted output
 ```
 
-| Stage                     | Stage I       | Stage II           | Stage III         | Trend             |
-|:--------------------------|:--------------|:-------------------|:------------------|:------------------|
-| **Overall**               |               |                    |                   |                   |
-| Deaths/N                  | 7/67          | 26/96              | 21/29             |                   |
-| Risk                      | 0.10          | 0.27               | 0.72              |                   |
-| Risk ratio (95% CI)       | 1 (reference) | 2.59 (1.20, 5.6)   | 6.9 (3.3, 14)     | 2.50 (1.97, 3.2)  |
-| Risk difference (95% CI)  | 0 (reference) | 0.17 (0.05, 0.28)  | 0.62 (0.44, 0.80) | 0.26 (0.19, 0.33) |
-|                           |               |                    |                   |                   |
-| **Low hormone receptor**  |               |                    |                   |                   |
-| Deaths/N (Risk)           | 2/12 (0.17)   | 9/22 (0.41)        | 12/14 (0.86)      |                   |
-| Risk difference (95% CI)  | 0 (reference) | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) | 0.32 (0.21, 0.43) |
-| **High hormone receptor** |               |                    |                   |                   |
-| Deaths/N (Risk)           | 5/55 (0.09)   | 17/74 (0.23)       | 9/15 (0.60)       |                   |
-| Risk difference (95% CI)  | 0 (reference) | 0.14 (0.02, 0.26)  | 0.51 (0.25, 0.77) | 0.20 (0.11, 0.29) |
+| Stage | Stage I | Stage II | Stage III | Trend |
+|:---|:---|:---|:---|:---|
+| **Overall** |  |  |  |  |
+| Deaths/N | 7/67 | 26/96 | 21/29 |  |
+| Risk | 0.10 | 0.27 | 0.72 |  |
+| Risk ratio (95% CI) | 1 (reference) | 2.59 (1.20, 5.6) | 6.9 (3.3, 14) | 2.50 (1.97, 3.2) |
+| Risk difference (95% CI) | 0 (reference) | 0.17 (0.05, 0.28) | 0.62 (0.44, 0.80) | 0.26 (0.19, 0.33) |
+|  |  |  |  |  |
+| **Low hormone receptor** |  |  |  |  |
+| Deaths/N (Risk) | 2/12 (0.17) | 9/22 (0.41) | 12/14 (0.86) |  |
+| Risk difference (95% CI) | 0 (reference) | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) | 0.32 (0.21, 0.43) |
+| **High hormone receptor** |  |  |  |  |
+| Deaths/N (Risk) | 5/55 (0.09) | 17/74 (0.23) | 9/15 (0.60) |  |
+| Risk difference (95% CI) | 0 (reference) | 0.14 (0.02, 0.26) | 0.51 (0.25, 0.77) | 0.20 (0.11, 0.29) |
 
 ## How do I show multiple exposures in the same table?
 
-Our simple toy dataset just has one exposure variable. For
+Our simple example dataset just has one exposure variable. For
 demonstration, we just create a second variable, with two categories,
 “Level 1” and “Level 2,” which is a simplified combination of the
 `stage` and `receptor` variables.
@@ -318,6 +345,7 @@ variable the same label as `stage` to make sure results appear in the
 same column.
 
 ``` r
+
 breastcancer_2exposures <- breastcancer |>
   mutate(
     exposure2 = case_when(
@@ -375,6 +403,7 @@ arguments `diff_digits`, `risk_digits`, and `ratio_digits` globally for
 the entire table.
 
 ``` r
+
 design <- tribble(
   ~label,                     ~type,
   "Deaths/N",                 "outcomes/total",
@@ -397,13 +426,13 @@ rifttable(
   rt_gt() # obtain formatted output
 ```
 
-| Stage                    | Stage I       | Stage II            | Stage III         |
-|:-------------------------|:--------------|:--------------------|:------------------|
-| Deaths/N                 | 7/67          | 26/96               | 21/29             |
-| Risk                     | 0.1           | 0.3                 | 0.7               |
-| Risk ratio (95% CI)      | 1 (reference) | 2.592 (1.195, 5.62) | 6.93 (3.32, 14.5) |
-| Odds ratio (95% CI)      | 1 (reference) | 3.18 (1.351, 8.43)  | 22.5 (7.69, 75.0) |
-| Risk difference (95% CI) | 0 (reference) | 0.2 (0.1, 0.3)      | 0.6 (0.4, 0.8)    |
+| Stage | Stage I | Stage II | Stage III |
+|:---|:---|:---|:---|
+| Deaths/N | 7/67 | 26/96 | 21/29 |
+| Risk | 0.1 | 0.3 | 0.7 |
+| Risk ratio (95% CI) | 1 (reference) | 2.592 (1.195, 5.62) | 6.93 (3.32, 14.5) |
+| Odds ratio (95% CI) | 1 (reference) | 3.18 (1.351, 8.43) | 22.5 (7.69, 75.0) |
+| Risk difference (95% CI) | 0 (reference) | 0.2 (0.1, 0.3) | 0.6 (0.4, 0.8) |
 
 As can be seen, ratios \> 3 are still shown with 1 fewer decimal, and
 ratios \> 10 are shown with 2 fewer decimals ([Wilcox, *Epidemiology*
@@ -411,6 +440,7 @@ ratios \> 10 are shown with 2 fewer decimals ([Wilcox, *Epidemiology*
 why). To disable such additional rounding of extremely high ratios:
 
 ``` r
+
 rifttable(
   design = design,
   data = breastcancer,
@@ -421,18 +451,19 @@ rifttable(
   rt_gt() # obtain formatted output
 ```
 
-| Stage                    | Stage I       | Stage II             | Stage III              |
-|:-------------------------|:--------------|:---------------------|:-----------------------|
-| Deaths/N                 | 7/67          | 26/96                | 21/29                  |
-| Risk                     | 0.1           | 0.3                  | 0.7                    |
-| Risk ratio (95% CI)      | 1 (reference) | 2.592 (1.195, 5.621) | 6.931 (3.320, 14.471)  |
-| Odds ratio (95% CI)      | 1 (reference) | 3.184 (1.351, 8.427) | 22.500 (7.691, 74.976) |
-| Risk difference (95% CI) | 0 (reference) | 0.2 (0.1, 0.3)       | 0.6 (0.4, 0.8)         |
+| Stage | Stage I | Stage II | Stage III |
+|:---|:---|:---|:---|
+| Deaths/N | 7/67 | 26/96 | 21/29 |
+| Risk | 0.1 | 0.3 | 0.7 |
+| Risk ratio (95% CI) | 1 (reference) | 2.592 (1.195, 5.621) | 6.931 (3.320, 14.471) |
+| Odds ratio (95% CI) | 1 (reference) | 3.184 (1.351, 8.427) | 22.500 (7.691, 74.976) |
+| Risk difference (95% CI) | 0 (reference) | 0.2 (0.1, 0.3) | 0.6 (0.4, 0.8) |
 
 Additionally, rounding can be changed for each row, adding a column
 `digits` to the rifttable `design`:
 
 ``` r
+
 tribble(
   ~label,                     ~type,            ~digits,
   "Deaths/N",                 "outcomes/total", NA, # Uses rifttable default
@@ -453,13 +484,13 @@ tribble(
   rt_gt() # obtain formatted output
 ```
 
-| Stage                    | Stage I       | Stage II             | Stage III            |
-|:-------------------------|:--------------|:---------------------|:---------------------|
-| Deaths/N                 | 7/67          | 26/96                | 21/29                |
-| Risk                     | 0.1           | 0.3                  | 0.7                  |
-| Risk ratio (95% CI)      |               |                      |                      |
-| Rounded to 1 digit       | 1 (reference) | 2.6 (1.2, 6)         | 7 (3, 14)            |
-| Rounded to 2 digits      | 1 (reference) | 2.59 (1.20, 5.6)     | 6.9 (3.3, 14)        |
+| Stage | Stage I | Stage II | Stage III |
+|:---|:---|:---|:---|
+| Deaths/N | 7/67 | 26/96 | 21/29 |
+| Risk | 0.1 | 0.3 | 0.7 |
+| Risk ratio (95% CI) |  |  |  |
+| Rounded to 1 digit | 1 (reference) | 2.6 (1.2, 6) | 7 (3, 14) |
+| Rounded to 2 digits | 1 (reference) | 2.59 (1.20, 5.6) | 6.9 (3.3, 14) |
 | Risk difference (95% CI) | 0 (reference) | 0.166 (0.051, 0.282) | 0.620 (0.441, 0.798) |
 
 ## How can I create joint models?
@@ -480,6 +511,7 @@ Compare stratified models to joint models for risk differences (for
 simplicity of presentation, count data are omitted):
 
 ``` r
+
 tribble(
   ~label,                       ~type,      ~stratum,
   "**Overall**",                "rd",       c("Low", "High"),
@@ -501,17 +533,17 @@ tribble(
   rt_gt()
 ```
 
-| Stage                 | Stage I            | Stage II           | Stage III         |
-|:----------------------|:-------------------|:-------------------|:------------------|
-| **Overall**           | 0 (reference)      | 0.17 (0.05, 0.28)  | 0.62 (0.44, 0.80) |
-|                       |                    |                    |                   |
-| **Stratified models** |                    |                    |                   |
-| Low hormone receptor  | 0 (reference)      | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) |
-| High hormone receptor | 0 (reference)      | 0.14 (0.02, 0.26)  | 0.51 (0.25, 0.77) |
-|                       |                    |                    |                   |
-| **Joint models**      |                    |                    |                   |
-| Low hormone receptor  | 0.08 (-0.15, 0.30) | 0.32 (0.10, 0.54)  | 0.77 (0.57, 0.96) |
-| High hormone receptor | 0 (reference)      | 0.14 (0.02, 0.26)  | 0.51 (0.25, 0.77) |
+| Stage | Stage I | Stage II | Stage III |
+|:---|:---|:---|:---|
+| **Overall** | 0 (reference) | 0.17 (0.05, 0.28) | 0.62 (0.44, 0.80) |
+|  |  |  |  |
+| **Stratified models** |  |  |  |
+| Low hormone receptor | 0 (reference) | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) |
+| High hormone receptor | 0 (reference) | 0.14 (0.02, 0.26) | 0.51 (0.25, 0.77) |
+|  |  |  |  |
+| **Joint models** |  |  |  |
+| Low hormone receptor | 0.08 (-0.15, 0.30) | 0.32 (0.10, 0.54) | 0.77 (0.57, 0.96) |
+| High hormone receptor | 0 (reference) | 0.14 (0.02, 0.26) | 0.51 (0.25, 0.77) |
 
 ## How can I change the reference category?
 
@@ -524,6 +556,7 @@ alphabetically, before `"Low"`. To change the reference category, use
 [`rifttable()`](https://stopsack.github.io/rifttable/reference/rifttable.md):
 
 ``` r
+
 tribble(
   ~label,                       ~type,      ~stratum,
   "**Joint models**",           "",         "",
@@ -547,16 +580,17 @@ tribble(
   rt_gt()
 ```
 
-| Stage                 | Stage I             | Stage II           | Stage III         |
-|:----------------------|:--------------------|:-------------------|:------------------|
-| **Joint models**      |                     |                    |                   |
-| Low hormone receptor  | 0 (reference)       | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) |
+| Stage | Stage I | Stage II | Stage III |
+|:---|:---|:---|:---|
+| **Joint models** |  |  |  |
+| Low hormone receptor | 0 (reference) | 0.24 (-0.05, 0.54) | 0.69 (0.41, 0.97) |
 | High hormone receptor | -0.08 (-0.30, 0.15) | 0.06 (-0.17, 0.29) | 0.43 (0.11, 0.76) |
 
 If a middle category of the exposure `stage` is desired as the
 reference:
 
 ``` r
+
 result_reordered <- tibble(
   label = "**RD (95% CI)**",
   type = "rd",
@@ -592,6 +626,7 @@ undesirable. Reorder the columns of the table that
 produced to print results for “Stage I” first:
 
 ``` r
+
 result_reordered |>
   select(stage, "Stage I", everything()) |>
   rt_gt()
@@ -606,6 +641,7 @@ result_reordered |>
 Add a `ci` column to the `design`:
 
 ``` r
+
 tribble(
   ~label,            ~type,                   ~ci,
   "Deaths/N (Risk)", "outcomes/total (risk)", NA,
@@ -645,6 +681,7 @@ which shows the mean age by sex, stratified by ECOG performance status,
 in the `cancer` data set:
 
 ``` r
+
 data(cancer, package = "survival")
 cancer <- cancer |>
   tibble::as_tibble() |>
@@ -682,6 +719,7 @@ Instead of relying on rifttable’s built-in estimator `type = "mean"`, we
 will define a custom function that calculates the mean:
 
 ``` r
+
 estimate_my_mean <- function(data, ...) {
   data |>
     group_by(.exposure) |>
@@ -700,6 +738,7 @@ estimate_my_mean <- function(data, ...) {
 Use the custom function `my_mean` instead of the built-in `mean`:
 
 ``` r
+
 design |> # Edit the previous design
   mutate(
     type = "my_mean", # Replace built-in "mean" by custom "my_mean"

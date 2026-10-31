@@ -1,5 +1,37 @@
 # Changelog
 
+## rifttable 0.7.3
+
+- New functionality:
+  - The `timepoint` for time-to-event analyses (e.g., `"cuminc"`,
+    `"cumincdiff"`) can be directly provided as a variable in the
+    `design`. The previous way of providing it via
+    `arguments = list(timepoint = 365.25)` remains functional as a
+    second option.
+  - The spelling `strata` instead of `stratum` in the `design` is also
+    accepted as a fallback.
+- Bug fixes:
+  - [`table1_design()`](https://stopsack.github.io/rifttable/reference/table1_design.md)
+    omits an empty row for categorical variables that are completely
+    `NA` (thanks [@tsurudak](https://github.com/tsurudak) for the bug
+    report).
+  - [`survdiff_ci()`](https://stopsack.github.io/rifttable/reference/survdiff_ci.md)
+    now reports two-sided *p*-values (thanks
+    [@eribul](https://github.com/eribul) for the bug report
+    [\#12](https://github.com/stopsack/rifttable/issues/12)).
+  - Confidence limits for ratios and differences of cumulative incidence
+    (`type = "cumincdiff"` and `"cumincratio"`) in settings without
+    competing events have been fixed. Previously, upper and lower limits
+    were swapped in intermediary steps when using the default MOVER
+    method, leading to shifted intervals (thanks
+    [@tgerke](https://github.com/tgerke) for the bug report
+    [\#13](https://github.com/stopsack/rifttable/issues/13) and pull
+    request).
+  - All `data` are now kept as a `tibble` internally to address edge
+    cases of failing input checks on `data` provided as a `data.frame`.
+  - The `exposure` variable name or label can be now be identical to a
+    category of this variable, and empty labels are better supported.
+
 ## rifttable 0.7.2
 
 CRAN release: 2026-01-18

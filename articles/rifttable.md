@@ -6,6 +6,7 @@ After installation (using `install.packages("rifttable")` or
 `remotes::install_github("stopsack/rifttable")`), load the package with:
 
 ``` r
+
 library(rifttable)
 ```
 
@@ -14,6 +15,7 @@ library(rifttable)
 The `cancer` dataset from survival package is used here:
 
 ``` r
+
 data(cancer, package = "survival")
 
 cancer <- cancer |>
@@ -51,6 +53,7 @@ cancer
 Set the table design:
 
 ``` r
+
 design1 <- tibble::tibble(
   label = c(
     "Outcomes",
@@ -74,6 +77,7 @@ design1 <- tibble::tibble(
 Generate rifttable:
 
 ``` r
+
 rifttable(
   design = design1,
   data = cancer
@@ -119,6 +123,7 @@ RMarkdown) or `gfm` (in Quarto),
 will automatically provide plain table output using the kable package.
 
 ``` r
+
 rifttable(
   design = design1,
   data = cancer
@@ -144,6 +149,7 @@ To use the `design` as columns instead of rows, showing only three
 `type`s:
 
 ``` r
+
 rifttable(
   design = design1 |>
     dplyr::filter(label %in% c(
@@ -173,6 +179,7 @@ continuous outcomes.
 Set table design:
 
 ``` r
+
 design2 <- tibble::tribble(
   # Elements that vary by row:
   ~label,                       ~stratum, ~confounders, ~type,
@@ -207,6 +214,7 @@ design2 <- tibble::tribble(
 Generate rifttable:
 
 ``` r
+
 rifttable(
   design = design2,
   data = cancer |>
@@ -239,6 +247,7 @@ rifttable(
 ## Example 5: Two estimates using `type` and `type2`
 
 ``` r
+
 design3 <- tibble::tribble(
   ~label,     ~stratum, ~type,          ~type2,
   "ECOG PS1", 1,        "events/total", "hr",
@@ -270,6 +279,7 @@ rifttable(
 With estimate `type` as columns:
 
 ``` r
+
 rifttable(
   design = design3,
   data = cancer |>
@@ -291,6 +301,7 @@ Request rounding to 1 decimal digit in some cases; add a continuous
 trend, *i.e.*, the slope per one unit of the `trend` variable:
 
 ``` r
+
 tibble::tribble(
   ~label,                   ~stratum, ~type,        ~digits,
   "Marginal mean (95% CI)", NULL,     "mean (ci)",  1,
@@ -319,16 +330,16 @@ tibble::tribble(
   rt_gt()
 ```
 
-| ph.ecog_factor         | 0                   | 1                   | 2                  | Trend              |
-|:-----------------------|:--------------------|:--------------------|:-------------------|:-------------------|
-| Marginal mean (95% CI) | 61.2 (58.8, 63.5)   | 61.5 (59.8, 63.1)   | 66.2 (64.0, 68.5)  |                    |
-| Male                   | 63.00               | 62.79               | 65.00              |                    |
-| Female                 | 58.70               | 59.19               | 67.90              |                    |
-|                        |                     |                     |                    |                    |
-| Stratified model       |                     |                     |                    |                    |
-| Male                   | 0 (reference)       | -0.2 (-3.9, 3.5)    | 2.0 (-2.5, 6.5)    | 0.9 (-1.3, 3.2)    |
-| Female                 | 0 (reference)       | 0.5 (-3.5, 4.5)     | 9.2 (4.5, 13.9)    | 4.4 (2.0, 6.7)     |
-|                        |                     |                     |                    |                    |
-| Joint model            |                     |                     |                    |                    |
-| Male                   | 0 (reference)       | -0.21 (-3.75, 3.33) | 2.00 (-2.32, 6.32) | 0.93 (-1.33, 3.19) |
-| Female                 | -4.30 (-8.70, 0.11) | -3.81 (-7.74, 0.12) | 4.90 (0.15, 9.66)  | 4.36 (1.97, 6.75)  |
+| ph.ecog_factor | 0 | 1 | 2 | Trend |
+|:---|:---|:---|:---|:---|
+| Marginal mean (95% CI) | 61.2 (58.8, 63.5) | 61.5 (59.8, 63.1) | 66.2 (64.0, 68.5) |  |
+| Male | 63.00 | 62.79 | 65.00 |  |
+| Female | 58.70 | 59.19 | 67.90 |  |
+|  |  |  |  |  |
+| Stratified model |  |  |  |  |
+| Male | 0 (reference) | -0.2 (-3.9, 3.5) | 2.0 (-2.5, 6.5) | 0.9 (-1.3, 3.2) |
+| Female | 0 (reference) | 0.5 (-3.5, 4.5) | 9.2 (4.5, 13.9) | 4.4 (2.0, 6.7) |
+|  |  |  |  |  |
+| Joint model |  |  |  |  |
+| Male | 0 (reference) | -0.21 (-3.75, 3.33) | 2.00 (-2.32, 6.32) | 0.93 (-1.33, 3.19) |
+| Female | -4.30 (-8.70, 0.11) | -3.81 (-7.74, 0.12) | 4.90 (0.15, 9.66) | 4.36 (1.97, 6.75) |
